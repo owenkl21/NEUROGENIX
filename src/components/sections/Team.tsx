@@ -1,38 +1,29 @@
 import { team } from "@/content/site";
-import { SectionTitle } from "@/components/ui";
 import { Reveal } from "@/components/motion/primitives";
 import { TeamProfile } from "./team/TeamProfile";
 
 /**
- * Our team. An editorial statement on the left and, set lower on the right for
- * an asymmetric rhythm, the practitioner profile in its awaiting-approval
- * state. Below 1024px it is a single column with the profile at full width. *
- * On an inner page that opens with PageIntro, pass `labelledBy` (the page H1
- * id): the section then drops its own headline and sits closer to the intro.
- * The intro carries the first paragraph, so only the scope note remains here.
+ * The body of /our-team, labelled by the page H1 (`labelledBy`). It keeps the
+ * intro's two columns: the practitioner profile under the headline on the
+ * left, and the scope note as a margin note on the right, in line with the
+ * intro's lede above it. The intro carries the first paragraph, so only the
+ * scope note is set here. Below 1024px the profile comes first at full width
+ * and the note follows it.
  */
-export function Team({ labelledBy }: { labelledBy?: string } = {}) {
-  const lead = Boolean(labelledBy);
+export function Team({ labelledBy }: { labelledBy: string }) {
   return (
-    <section id="clinical-team" aria-labelledby={labelledBy ?? "team-heading"} className={`section-y ${lead ? "pt-16 md:pt-24" : ""}`}>
-      <div className="container-x grid gap-y-16 sm:gap-y-20 lg:grid-cols-12 lg:gap-x-12">
-        <div className="lg:col-span-6">
-          {!lead && (
-            <>
-              <SectionTitle id="team-heading" lines={team.title} />
-              <Reveal as="p" className="lede mt-7 max-w-[52ch] text-muted">
-                {team.body[0]}
-              </Reveal>
-            </>
-          )}
-          <Reveal as="p" delay={0.1} className={`${lead ? "" : "mt-10"} max-w-[48ch] border-l border-brass-ink pl-6 text-[0.9375rem] text-muted`}>
-            {team.body[1]}
-          </Reveal>
-        </div>
-
-        <div className={`lg:col-span-5 lg:col-start-8 ${lead ? "" : "lg:pt-36"}`}>
+    <section id="clinical-team" aria-labelledby={labelledBy} className="section-y pt-12 md:pt-16">
+      <div className="container-x grid grid-cols-1 gap-y-12 lg:grid-cols-12 lg:gap-x-8">
+        <div className="lg:col-span-7">
           <TeamProfile />
         </div>
+        <Reveal
+          as="p"
+          delay={0.1}
+          className="max-w-[48ch] border-l border-brass-ink pl-6 text-[0.9375rem] text-muted lg:col-span-5 lg:col-start-8 lg:mt-2 lg:self-start xl:col-span-4 xl:col-start-9"
+        >
+          {team.body[1]}
+        </Reveal>
       </div>
     </section>
   );

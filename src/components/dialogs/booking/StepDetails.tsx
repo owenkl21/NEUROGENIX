@@ -3,7 +3,7 @@
 import { useState, type Ref } from "react";
 import { booking } from "@/content/site";
 import { Button } from "@/components/ui";
-import { Checkbox, Field, FieldError, Select, TextInput, errorId } from "./fields";
+import { ActionBar, Checkbox, Field, FieldError, Select, TextInput, errorId } from "./fields";
 import { PHONE_PATTERN, todayInJohannesburg, type BookingErrors, type BookingForm } from "./model";
 
 type DetailsKey = "name" | "phone" | "email" | "date" | "method";
@@ -61,6 +61,7 @@ export function StepDetails({
             placeholder={s.name.placeholder}
             maxLength={100}
             autoComplete="off"
+            aria-required
             invalid={Boolean(errors.name)}
           />
         </Field>
@@ -75,6 +76,7 @@ export function StepDetails({
             pattern={PHONE_PATTERN}
             maxLength={25}
             autoComplete="off"
+            aria-required
             invalid={Boolean(errors.phone)}
           />
         </Field>
@@ -89,6 +91,7 @@ export function StepDetails({
             maxLength={150}
             autoComplete="off"
             spellCheck={false}
+            aria-required
             invalid={Boolean(errors.email)}
           />
         </Field>
@@ -103,18 +106,20 @@ export function StepDetails({
       <p className="mt-6 text-[0.875rem] leading-relaxed text-muted">{s.hint}</p>
 
       <div className="mt-4">
-        <Checkbox id="booking-ack" inputRef={ackRef} checked={form.ack} onChange={onAck} label={s.ack} invalid={Boolean(errors.ack)} />
+        <Checkbox id="booking-ack" inputRef={ackRef} checked={form.ack} onChange={onAck} label={s.ack} invalid={Boolean(errors.ack)} required />
         <FieldError id={errorId("booking-ack")} message={errors.ack} />
       </div>
 
-      <div className="mt-8 flex flex-col-reverse gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <Button variant="outline" icon={null} onClick={onBack} className="w-full sm:w-auto">
+      {/* Back and the next step share one row from 360px, the primary
+          filling what Back leaves; narrower than that they stack. */}
+      <ActionBar className="flex flex-col-reverse gap-3 min-[360px]:flex-row min-[360px]:items-center min-[360px]:justify-between">
+        <Button variant="outline" icon={null} onClick={onBack}>
           {s.back}
         </Button>
-        <Button type="submit" className="w-full sm:w-auto">
+        <Button type="submit" className="min-[360px]:flex-1 sm:flex-none">
           {s.submit}
         </Button>
-      </div>
+      </ActionBar>
     </form>
   );
 }

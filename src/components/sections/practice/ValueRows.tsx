@@ -4,7 +4,7 @@ import { motion, type Variants } from "motion/react";
 import { useReducedMotion } from "@/components/motion/useReducedMotion";
 import { DURATION, EASE } from "@/components/motion/primitives";
 
-type Value = { number: string; title: string; body: string };
+type Value = { title: string; body: string };
 
 const list: Variants = {
   hidden: {},
@@ -28,27 +28,40 @@ const content: Variants = {
   show: { opacity: 1, y: 0, transition: { duration: DURATION.base, ease: EASE } },
 };
 
-/** The practice's three values as ruled rows: numeral, title, one line of body. */
+/* Reduced motion: the same states, reached at once. The initial and target
+   props never change between the server and the client, only the timing. */
+const still = { duration: 0 };
+const listStill: Variants = { hidden: {}, show: {} };
+const ruleStill: Variants = { hidden: rule.hidden, show: { scaleX: 1, transition: still } };
+const contentStill: Variants = { hidden: content.hidden, show: { opacity: 1, y: 0, transition: still } };
+
+/**
+ * The practice's values as ruled rows: a title and one line of body. They are
+ * not a sequence, so they carry no numerals and sit in an unordered list.
+ */
 export function ValueRows({ values }: { values: Value[] }) {
   const reduce = useReducedMotion();
+  const ruleV = reduce ? ruleStill : rule;
+  const contentV = reduce ? contentStill : content;
 
   return (
-    <motion.div variants={list} initial={reduce ? false : "hidden"} whileInView="show" viewport={{ once: true, amount: 0.35 }}>
-      <ol>
+    <motion.div
+      variants={reduce ? listStill : list}
+      initial="hidden"
+      {...(reduce ? { animate: "show" } : { whileInView: "show", viewport: { once: true, amount: 0.35 } })}
+    >
+      <ul>
         {values.map((value) => (
-          <motion.li key={value.number} variants={row} className="relative grid grid-cols-[2.75rem_1fr] gap-x-3 py-6 md:py-7">
-            <motion.span aria-hidden="true" variants={rule} className="absolute inset-x-0 top-0 h-px origin-left bg-line" />
-            <motion.span variants={content} className="numeral pt-[0.3rem] text-[0.8125rem] leading-none text-brass-ink">
-              {value.number}
-            </motion.span>
-            <motion.div variants={content}>
+          <motion.li key={value.title} variants={reduce ? listStill : row} className="relative py-6 md:py-7">
+            <motion.span data-reveal="" aria-hidden="true" variants={ruleV} className="absolute inset-x-0 top-0 h-px origin-left bg-line" />
+            <motion.div data-reveal="" variants={contentV}>
               <h3 className="text-[1.0625rem] font-medium leading-snug tracking-[-0.01em] text-ink md:text-[1.125rem]">{value.title}</h3>
               <p className="mt-1.5 max-w-[46ch] text-[0.9375rem] leading-relaxed text-muted md:text-base">{value.body}</p>
             </motion.div>
           </motion.li>
         ))}
-      </ol>
-      <motion.span aria-hidden="true" variants={rule} className="block h-px origin-left bg-line" />
+      </ul>
+      <motion.span data-reveal="" aria-hidden="true" variants={ruleV} className="block h-px origin-left bg-line" />
     </motion.div>
   );
 }

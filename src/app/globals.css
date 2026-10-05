@@ -47,8 +47,8 @@
     --line: #22404c;
     --line-strong: #2e5261;
 
-    --navy: #10252f;
-    --navy-2: #163240;
+    --navy: #183a4b;
+    --navy-2: #1f4659;
     --navy-3: #081419;
     --on-navy: #eef0ea;
     --on-navy-muted: #a9b8bd;
@@ -92,6 +92,12 @@
   --ease-swift: var(--ease-swift);
 }
 
+/* The header shows its inline nav from here (logo, five links and the CTA
+   need about 1064px); below it the full-screen menu takes over. */
+@theme {
+  --breakpoint-nav: 67.5rem;
+}
+
 @layer base {
   html {
     background: var(--paper);
@@ -100,7 +106,15 @@
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    scroll-padding-top: calc(var(--header-h) + 24px);
+  }
+
+  /* Anchored sections and focused controls stop clear of the sticky header.
+     Set on the targets, not as scroll-padding on html: the header sits inside
+     any html padding band, so focusing a header control would scroll the page.
+     Lenis reads this margin too, so glides and native jumps land together. */
+  main :where(*),
+  footer :where(*) {
+    scroll-margin-top: calc(var(--header-h) + 24px);
   }
 
   html,
@@ -173,7 +187,13 @@
   }
 
   /* Type scale. Display sizes are fluid; italic second lines use 1.08 leading
-     minimum so descenders (g, p, y) never clip inside reveal masks. */
+     minimum so descenders (g, p, y) never clip inside reveal masks. Display
+     lines balance, so a short last word never sits alone. */
+  .display-1,
+  .display-2,
+  .display-3 {
+    text-wrap: balance;
+  }
   .display-1 {
     font-size: clamp(2.75rem, 1.05rem + 5.4vw, 6rem);
     line-height: 1.02;
@@ -298,6 +318,10 @@
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+  /* Headline lines are visible from the first paint, before hydration. */
+  .mask-line {
+    transform: none !important;
   }
 }
 

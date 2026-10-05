@@ -7,9 +7,14 @@ import { useReducedMotion } from "@/components/motion/useReducedMotion";
 import { useLenis } from "lenis/react";
 import { ArrowRight } from "@phosphor-icons/react";
 import { nav, routes, site } from "@/content/site";
-import { BookButton, SmartLink } from "@/components/ui";
+import { BookButton, Button, SmartLink } from "@/components/ui";
+import { useDialogs } from "@/components/dialogs/DialogProvider";
+import { resumeSmoothScroll } from "@/components/dialogs/Modal";
 import { EASE } from "@/components/motion/primitives";
 import { Wordmark } from "./Wordmark";
+
+/** Where the inline nav takes over from the menu. Matches `--breakpoint-nav` in globals.css. */
+const NAV_QUERY = "(min-width: 67.5rem)";
 
 /**
  * Sticky header. Transparent over the hero, then settles onto a frosted paper
@@ -26,7 +31,22 @@ export function Header() {
   const [hidden, setHidden] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [servicesInView, setServicesInView] = useState(false);
+  const [shownPath, setShownPath] = useState(pathname);
   const lastY = useRef(0);
+  const headerRef = useRef<HTMLElement>(null);
+  // Where the header sits when the menu opens (below the preview bar at the
+  // top of the page), so the close button lands exactly on the menu button.
+  const [menuTop, setMenuTop] = useState(0);
+
+  // Every page opens with the header in place, whatever the last one did.
+  if (shownPath !== pathname) {
+    setShownPath(pathname);
+    setHidden(false);
+  }
+
+  useEffect(() => {
+    lastY.current = window.scrollY;
+  }, [pathname]);
 
   useMotionValueEvent(scrollY, "change", (y) => {
     const delta = y - lastY.current;
@@ -34,7 +54,12 @@ export function Header() {
     const nextScrolled = y > 24;
     if (nextScrolled !== scrolled) setScrolled(nextScrolled);
     if (menuOpen) return;
-    const nextHidden = y > 480 && delta > 4 ? true : delta < -4 || y < 480 ? false : hidden;
+    // Near the top the header is always there. Further down it follows the
+    // reading direction, except for a jump this large: that is the page being
+    // placed (an anchor, a route change), not someone reading, so it leaves
+    // the header as it was.
+    const jump = Math.abs(delta) > 300;
+    const nextHidden = y < 480 ? false : jump ? hidden : delta > 4 ? true : delta < -4 ? false : hidden;
     if (nextHidden !== hidden) setHidden(nextHidden);
   });
 
@@ -56,6 +81,7 @@ export function Header() {
   return (
     <>
       <motion.header
+        ref={headerRef}
         className={`sticky top-0 z-40 transition-[background-color,border-color,backdrop-filter] duration-500 ${
           scrolled ? "border-b border-line bg-paper/80 backdrop-blur-xl backdrop-saturate-150" : "border-b border-transparent"
         }`}
@@ -67,7 +93,7 @@ export function Header() {
             <Wordmark />
           </SmartLink>
 
-          <nav aria-label="Main navigation" className="hidden items-center gap-0.5 xl:flex">
+          <nav aria-label="Main navigation" className="hidden items-center gap-0.5 nav:flex">
             {nav.map((item) => {
               const isActive = activeHref === item.href;
               return (
@@ -92,11 +118,14 @@ export function Header() {
             </span>
             <button
               type="button"
-              className="group grid size-11 place-items-center rounded-full border border-line xl:hidden"
+              className="group grid size-11 place-items-center rounded-full border border-line nav:hidden"
               aria-label="Open navigation"
               aria-expanded={menuOpen}
               aria-controls="mobile-navigation"
-              onClick={() => setMenuOpen(true)}
+              onClick={() => {
+                setMenuTop(Math.max(0, Math.round(headerRef.current?.getBoundingClientRect().top ?? 0)));
+                setMenuOpen(true);
+              }}
             >
               <span aria-hidden="true" className="flex w-[18px] flex-col gap-[5px]">
                 <span className="h-px w-full bg-ink" />
@@ -106,14 +135,15 @@ export function Header() {
           </div>
         </div>
       </motion.header>
-      <MobileMenu open={menuOpen} onClose={() => setMenuOpen(false)} />
+      <MobileMenu open={menuOpen} top={menuTop} onClose={() => setMenuOpen(false)} />
     </>
   );
 }
 
-function MobileMenu({ open, onClose }: { open: boolean; onClose: () => void }) {
+function MobileMenu({ open, top, onClose }: { open: boolean; top: number; onClose: () => void }) {
   const ref = useRef<HTMLDialogElement>(null);
   const lenis = useLenis();
+  const { openBooking } = useDialogs();
   const reduce = useReducedMotion();
 
   useEffect(() => {
@@ -126,7 +156,7 @@ function MobileMenu({ open, onClose }: { open: boolean; onClose: () => void }) {
   }, [open, lenis]);
 
   useEffect(() => {
-    const mq = window.matchMedia("(min-width: 1280px)");
+    const mq = window.matchMedia(NAV_QUERY);
     const onChange = () => mq.matches && onClose();
     mq.addEventListener("change", onChange);
     return () => mq.removeEventListener("change", onChange);
@@ -144,14 +174,14 @@ function MobileMenu({ open, onClose }: { open: boolean; onClose: () => void }) {
       }}
       onClose={() => {
         if (open) onClose();
-        lenis?.start();
+        resumeSmoothScroll(lenis);
       }}
       className="fixed inset-0 m-0 h-dvh max-h-none w-full max-w-none bg-transparent p-0 text-ink open:block"
     >
       <AnimatePresence
         onExitComplete={() => {
           if (ref.current?.open) ref.current.close();
-          lenis?.start();
+          resumeSmoothScroll(lenis);
         }}
       >
         {open && (
@@ -163,7 +193,8 @@ function MobileMenu({ open, onClose }: { open: boolean; onClose: () => void }) {
             exit={reduce ? { opacity: 0 } : { clipPath: "inset(0 0 100% 0)" }}
             transition={{ duration: 0.7, ease: EASE }}
           >
-            <div className="container-x flex h-[var(--header-h)] shrink-0 items-center justify-between">
+            <div className="sticky top-0 z-10 shrink-0 bg-paper" style={{ paddingTop: top }}>
+            <div className="container-x flex h-[var(--header-h)] items-center justify-between">
               <SmartLink href="/" onClick={onClose} aria-label={`${site.name} home`}>
                 <Wordmark />
               </SmartLink>
@@ -174,8 +205,10 @@ function MobileMenu({ open, onClose }: { open: boolean; onClose: () => void }) {
                 </span>
               </button>
             </div>
+            </div>
             <nav aria-label="Main navigation" className="container-x flex flex-1 flex-col justify-center py-10">
-              <ul className="flex flex-col">
+              {/* Phones fill the width; from sm the list keeps a reading column and the CTA its own size. */}
+              <ul className="flex flex-col sm:max-w-[560px]">
                 {nav.map((item, i) => (
                   <motion.li
                     key={item.href}
@@ -192,7 +225,17 @@ function MobileMenu({ open, onClose }: { open: boolean; onClose: () => void }) {
                 ))}
               </ul>
               <motion.div className="mt-10" initial={reduce ? false : { opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, ease: EASE, delay: 0.5 }}>
-                <BookButton size="lg" className="w-full justify-between" />
+                {/* Close the menu first so the request opens on its own, not stacked over the menu. */}
+                <Button
+                  size="lg"
+                  className="w-full justify-between! sm:w-auto"
+                  onClick={() => {
+                    onClose();
+                    openBooking();
+                  }}
+                >
+                  {site.bookLabel}
+                </Button>
               </motion.div>
             </nav>
           </motion.div>

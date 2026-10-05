@@ -4,6 +4,11 @@
  * copy, so practice-approved changes happen in one place.
  *
  * House rule: no em or en dashes anywhere in user-facing copy.
+ *
+ * Headline arrays hold whole sentences, one per entry. A two-sentence
+ * headline renders its second sentence in the soft italic; a one-sentence
+ * headline is a single entry and wraps on its own. Never split a sentence
+ * across entries to force a line break.
  */
 
 export type TestSlug = "eeg" | "ncs" | "emg";
@@ -72,7 +77,7 @@ export const pages: Record<PageKey, { path: string; crumb: string; metaTitle: st
     crumb: "Our team",
     metaTitle: "Our team | Neurogenix",
     eyebrow: "The clinical team",
-    title: ["Know who is", "involved in your test."],
+    title: ["Know who is involved in your test."],
     body: "Practitioner profiles will identify each team member’s registered profession, qualifications, role in testing and relevant clinical experience.",
     trace: "eeg",
   },
@@ -94,7 +99,6 @@ export const hero = {
   title: ["Understanding the signals.", "Caring for the person."],
   body: "Brain, nerve and muscle testing, explained simply. Discover what your test involves and take the next step with confidence.",
   secondary: { label: "Explore our services", href: routes.services },
-  note: "Information for patients and referring clinicians.",
   image: {
     src: "/images/waiting-room.jpg",
     width: 1280,
@@ -147,9 +151,6 @@ export const services = {
 };
 
 export const referral = {
-  eyebrow: "For referring doctors",
-  title: ["A clear referral.", "A coordinated next step."],
-  body: "Information for clinicians arranging EEG, nerve conduction studies or EMG. Final services, eligibility and referral arrangements require practice confirmation.",
   steps: [
     {
       number: "01",
@@ -169,10 +170,10 @@ export const referral = {
   ],
   pack: {
     label: "Referral resources",
-    title: ["Start with the", "right information."],
+    title: ["Start with the right information."],
     body: "Review the proposed one-page referral form. The practice must approve its fields and submission instructions before clinical use.",
     download: { label: "Download draft referral form", href: "/documents/neurogenix-referral-draft.pdf" },
-    contact: { label: "Professional contact details", href: `${routes.locations}#contact` },
+    contact: { label: "Professional contact details", href: `${routes.locations}#locations` },
     note: "Draft for review only. Do not enter or send real patient information using this preview.",
   },
   facts: [
@@ -183,7 +184,6 @@ export const referral = {
 };
 
 export const team = {
-  title: ["Know who is", "involved in your test."],
   body: [
     "Practitioner profiles will identify each team member’s registered profession, qualifications, role in testing and relevant clinical experience.",
     "Clinical neurophysiology testing and a neurology consultation are different services. The practice’s precise scope will be stated here once confirmed.",
@@ -206,13 +206,6 @@ export const practice = {
     "Neurophysiology testing helps your referring clinician assess how your brain, nerves and muscles are working.",
     "Find information about your test before your visit. Your care team will give you the instructions appropriate to your referral and explain the procedure.",
   ],
-  image: {
-    src: "/images/reception.jpg",
-    width: 1280,
-    height: 960,
-    alt: "Neurogenix reception with natural light, navy accents and warm wood furniture",
-  },
-  caption: ["The Neurogenix environment", "Reception and testing spaces."],
   values: [
     { number: "01", title: "Testing guided by your referral", body: "The requested assessment determines the examination." },
     { number: "02", title: "Understand each step", body: "Explore how testing works before you arrive." },
@@ -287,30 +280,14 @@ export const guides: Record<TestSlug, Guide> = {
 };
 
 export const patientGuide = {
-  eyebrow: "Patient guide",
-  title: ["A little preparation.", "A lot more peace of mind."],
-  body: "Select your test for a simple guide to what happens and how to prepare. Always follow the specific instructions given by your care team.",
   tabsLabel: "Test preparation",
   beforeHeading: "Before your visit",
   duringHeading: "During the test",
-  printLabel: "Print this guide",
-  printTitle: "Neurogenix · Patient preparation guide",
-  printDisclaimer:
-    "General information. Always follow your care team’s specific instructions. The practice’s services and instructions are awaiting confirmation.",
   visit: {
     label: "For every visit",
-    title: ["Your appointment", "essentials."],
+    title: ["Your appointment essentials."],
     items: ["Your referral letter", "A list of current medicines", "Relevant previous test results", "Any questions you’d like to ask"],
     body: "Ask the practice to confirm your appointment length and any additional documents needed.",
-  },
-  sources: {
-    before: "General patient information, adapted from ",
-    links: [
-      { label: "Mayo Clinic: EEG", href: "https://www.mayoclinic.org/tests-procedures/eeg/about/pac-20393875" },
-      { label: "Cleveland Clinic: EMG and NCS", href: "https://my.clevelandclinic.org/health/diagnostics/4825-emg-electromyography" },
-    ],
-    joiner: " and ",
-    after: ". Practice-specific instructions take priority.",
   },
 };
 
@@ -367,7 +344,7 @@ export const gallery = {
 };
 
 export const faq = {
-  title: ["It’s okay", "to ask."],
+  title: ["It’s okay to ask."],
   body: "Knowing what to expect makes a difference. Here are a few good places to start.",
   items: [
     {
@@ -410,8 +387,6 @@ export const fees = {
 };
 
 export const locations = {
-  title: ["Find the right practice.", "Plan your arrival."],
-  body: "Confirm which location performs your test. Location details will be added once the practice supplies and verifies them.",
   image: {
     src: "/images/reception.jpg",
     width: 1280,
@@ -433,28 +408,25 @@ export const locations = {
 };
 
 export const contact = {
-  title: ["Let’s make your", "visit feel simpler."],
+  title: ["Let’s make your visit feel simpler."],
   body: "Already have a referral? Start with the test listed on it. The team will need to confirm the appropriate appointment and any preparation instructions.",
   info: {
-    heading: "Practice information",
-    body: "The practice’s locations, telephone number, email address and opening hours are awaiting confirmation.",
-    statusLabel: "For this review version",
-    status: "Appointments are demonstrated only. No request is sent or booked.",
     link: { label: "Read the patient guide", href: routes.visit },
   },
 };
 
 export const footer = {
-  links: [
-    { label: "Services", href: routes.services },
-    { label: "Your visit", href: routes.visit },
-    { label: "For doctors", href: routes.doctors },
-    { label: "Our team", href: routes.team },
-    { label: "Locations", href: routes.locations },
-  ],
+  /** The same pages in the same order as the header, defined once. */
+  links: nav,
   privacy: "Privacy information",
   rights: "Neurogenix. All rights reserved.",
   disclaimer: "General information · Individual care comes from your clinician.",
+};
+
+/** The 404 page. The headline is awaiting practice approval. */
+export const notFound = {
+  title: ["This page has no signal.", "Let’s get you back."],
+  cta: { label: "Return to the practice website", href: routes.home },
 };
 
 export const privacy = {
@@ -549,7 +521,7 @@ const testShared = {
   print: "Print this page",
   after: {
     label: "After your test",
-    title: ["Understanding", "your results."],
+    title: ["Understanding your results."],
     body: "The results are considered alongside your symptoms, history and other investigations. Confirm the report arrangements and discuss the findings with your referring clinician.",
     cta: { label: "Information for doctors", href: routes.doctors },
   },

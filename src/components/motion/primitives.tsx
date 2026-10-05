@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, type ReactNode } from "react";
+import { useRef, useState, type ReactNode } from "react";
 import Image from "next/image";
 import { motion, useMotionValue, useScroll, useSpring, useTransform, type Variants } from "motion/react";
 import { useReducedMotion } from "@/components/motion/useReducedMotion";
@@ -11,6 +11,9 @@ import { useReducedMotion } from "@/components/motion/useReducedMotion";
  * - Headlines: each sentence slides up out of a mask.
  * - Media: images unclip from a soft inset, then drift with the scroll.
  * Everything collapses to static under prefers-reduced-motion.
+ * Reveals carry `data-reveal` and headline lines `mask-line`, so the layout
+ * can show them when JS never runs. A reveal also shows the moment anything
+ * inside it takes keyboard focus, so focus never lands on faded content.
  */
 export const EASE = [0.22, 1, 0.36, 1] as const;
 export const DURATION = { base: 0.9, slow: 1.2 };
@@ -30,12 +33,16 @@ type RevealProps = {
 
 export function Reveal({ as = "div", children, className, delay = 0, y = 28, amount = 0.2, id }: RevealProps) {
   const reduce = useReducedMotion();
+  const [focused, setFocused] = useState(false);
   const Comp = motion[as as "div"];
   return (
     <Comp
       id={id}
+      data-reveal=""
       className={className}
       initial={reduce ? false : { opacity: 0, y }}
+      animate={focused ? { opacity: 1, y: 0 } : undefined}
+      onFocusCapture={focused ? undefined : () => setFocused(true)}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount }}
       transition={{ duration: DURATION.base, delay, ease: EASE }}
@@ -58,9 +65,18 @@ const itemVariants: Variants = {
 /** Parent for staggered children. Children must be RevealItem. */
 export function RevealGroup({ as = "div", children, className, amount = 0.2 }: Omit<RevealProps, "delay" | "y">) {
   const reduce = useReducedMotion();
+  const [focused, setFocused] = useState(false);
   const Comp = motion[as as "div"];
   return (
-    <Comp className={className} variants={groupVariants} initial={reduce ? false : "hidden"} whileInView="show" viewport={{ once: true, amount }}>
+    <Comp
+      className={className}
+      variants={groupVariants}
+      initial={reduce ? false : "hidden"}
+      animate={focused ? "show" : undefined}
+      onFocusCapture={focused ? undefined : () => setFocused(true)}
+      whileInView="show"
+      viewport={{ once: true, amount }}
+    >
       {children}
     </Comp>
   );
@@ -69,7 +85,7 @@ export function RevealGroup({ as = "div", children, className, amount = 0.2 }: O
 export function RevealItem({ as = "div", children, className }: Omit<RevealProps, "delay" | "y" | "amount">) {
   const Comp = motion[as as "div"];
   return (
-    <Comp className={className} variants={itemVariants}>
+    <Comp data-reveal="" className={className} variants={itemVariants}>
       {children}
     </Comp>
   );
@@ -92,17 +108,31 @@ const lineVariants: Variants = {
   show: (i: number) => ({ y: "0%", transition: { duration: DURATION.slow, ease: EASE, delay: i * 0.1 } }),
 };
 
+/** Same end state, reached at once. */
+const lineVariantsStill: Variants = {
+  hidden: { y: "112%" },
+  show: { y: "0%", transition: { duration: 0 } },
+};
+
 /**
  * A headline whose sentences slide up out of masks. Lines are block spans so
  * each sentence keeps its own line on wide screens and wraps naturally on
  * narrow ones. The mask reserves descender room so italic g, p and y never clip.
+ *
+ * Each entry in `lines` is a whole sentence. A one-sentence headline is a
+ * single entry and wraps on its own; never split a sentence across entries.
+ *
+ * Every render, on the server and after hydration, keeps the hidden initial
+ * state and a target to animate to, so the hidden state is never stranded.
+ * Reduced motion only changes the timing: the lines show at once, without
+ * waiting for the viewport, and the `mask-line` class keeps them visible
+ * before hydration (and without JS, see the layout).
  */
 export function MaskLines({ lines, as = "h2", className = "", softFrom = 1, delay = 0, trigger = "view", id }: MaskLinesProps) {
   const reduce = useReducedMotion();
   const Comp = motion[as];
-  const animateProps = reduce
-    ? {}
-    : trigger === "mount"
+  const animateProps =
+    trigger === "mount" || reduce
       ? { initial: "hidden", animate: "show" }
       : { initial: "hidden", whileInView: "show", viewport: { once: true, amount: 0.5 } };
 
@@ -111,8 +141,8 @@ export function MaskLines({ lines, as = "h2", className = "", softFrom = 1, dela
       {lines.map((line, i) => (
         <span key={i} className="-mb-[0.14em] block overflow-hidden pb-[0.14em]">
           <motion.span
-            className={`block ${i >= softFrom ? "headline-soft" : ""}`}
-            variants={reduce ? undefined : lineVariants}
+            className={`mask-line block ${i >= softFrom ? "headline-soft" : ""}`}
+            variants={reduce ? lineVariantsStill : lineVariants}
             custom={i + delay * 10}
           >
             {line}

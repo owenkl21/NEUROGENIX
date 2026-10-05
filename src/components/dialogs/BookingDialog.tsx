@@ -55,6 +55,12 @@ export function BookingDialog({ open, initialTest, onClose }: { open: boolean; i
   const emailRef = useRef<HTMLInputElement>(null);
   const ackRef = useRef<HTMLInputElement>(null);
 
+  // Laptop screens are often 800px tall or less once the browser has taken
+  // its share, so from md on a short viewport the panel tightens its rhythm
+  // (the md:[@media(max-height:860px)] classes here and in the steps) until
+  // the first step fits whole. The action bar covers anything that still
+  // runs long.
+
   // The step area eases between heights instead of snapping, so the panel
   // breathes rather than jumps as steps and messages come and go.
   const height = useMotionValue<number | string>("auto");
@@ -143,26 +149,32 @@ export function BookingDialog({ open, initialTest, onClose }: { open: boolean; i
 
   return (
     <Modal open={open} onClose={onClose} labelledBy="booking-title" describedBy="booking-description" panelClassName="md:max-w-[760px]">
-      <div ref={rootRef} className="px-6 pb-[calc(2rem+env(safe-area-inset-bottom))] md:px-10 md:pb-10">
-        <div className="sticky top-0 z-10 -mx-6 flex items-center justify-between gap-6 bg-surface px-6 pb-2 pt-5 md:-mx-10 md:px-10 md:pt-7">
+      {/* No bottom padding: every step ends in its action bar, which is the panel's footer. */}
+      <div ref={rootRef} className="px-6 md:px-10">
+        <div className="sticky top-0 z-10 -mx-6 flex items-center justify-between gap-6 bg-surface px-6 pb-2 pt-5 md:-mx-10 md:px-10 md:pt-7 md:[@media(max-height:860px)]:pt-5">
           <p className="label text-brass-ink">{booking.label}</p>
           <CloseButton onClick={onClose} label={booking.closeLabel} />
         </div>
 
-        <h2 id="booking-title" className="display-3 mt-3">
+        <h2 id="booking-title" className="display-3 mt-3 md:[@media(max-height:860px)]:mt-2">
           {booking.title}
         </h2>
-        <Inset id="booking-description" icon={Info} className="mt-5">
+        <Inset id="booking-description" icon={Info} className="mt-5 md:[@media(max-height:860px)]:mt-4">
           {booking.notice}
         </Inset>
 
-        <div className="mt-8">
+        <div className="mt-8 md:[@media(max-height:860px)]:mt-5">
           <Progress step={step} />
         </div>
 
-        <div className="mt-7 border-t border-line pt-7">
-          <motion.div style={{ height }} className="-m-2 overflow-clip">
-            <div ref={contentRef} className="p-2">
+        <div className="mt-7 border-t border-line pt-7 md:[@media(max-height:860px)]:mt-5 md:[@media(max-height:860px)]:pt-5">
+          {/* The clip spans the panel edge to edge: it hides the sideways
+              slide between steps and the height easing, and leaves room for
+              the action bar to run under the panel's side padding. Clip does
+              not create a scroll container, so that bar still sticks to the
+              panel's scrollport. */}
+          <motion.div style={{ height }} className="-mx-6 overflow-clip md:-mx-10">
+            <div ref={contentRef} className="px-6 md:px-10">
               <AnimatePresence mode="wait" initial={false} custom={{ dir: direction, reduce }}>
                 <motion.div
                   key={step}

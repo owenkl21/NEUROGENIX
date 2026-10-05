@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
-import { pages, site } from "@/content/site";
-import { PageIntro } from "@/components/layout/PageIntro";
+import { PageIntro, pageMetadata } from "@/components/layout/PageIntro";
 import { Team } from "@/components/sections/Team";
 
-export const metadata: Metadata = { title: pages.team.metaTitle, description: site.metaDescription };
+export const metadata: Metadata = pageMetadata("team");
 
 export default function OurTeamPage() {
   return (

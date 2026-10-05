@@ -1,10 +1,9 @@
 import type { Metadata } from "next";
-import { pages, site } from "@/content/site";
-import { PageIntro } from "@/components/layout/PageIntro";
+import { PageIntro, pageMetadata } from "@/components/layout/PageIntro";
 import { Locations } from "@/components/sections/Locations";
 import { Contact } from "@/components/sections/Contact";
 
-export const metadata: Metadata = { title: pages.locations.metaTitle, description: site.metaDescription };
+export const metadata: Metadata = pageMetadata("locations");
 
 export default function LocationsPage() {
   return (

@@ -4,10 +4,11 @@ import { useLayoutEffect, useRef, type FocusEvent } from "react";
 import Image from "next/image";
 import { cubicBezier, motion, useMotionValue, useScroll, useTransform } from "motion/react";
 import { useLenis } from "lenis/react";
-import { gallery, lookInside } from "@/content/site";
+import { lookInside } from "@/content/site";
 import { useDialogs } from "@/components/dialogs/DialogProvider";
 import { SectionTitle, TextLink } from "@/components/ui";
 import { GalleryThumb } from "./GalleryThumb";
+import { thumbIndexes } from "./photos";
 
 /** Insets of the resting card inside the pinned stage, in px, the pan that
     centres the photograph's subject inside that card, and the starting zoom. */
@@ -19,12 +20,14 @@ const CARD_SHOWS = 0.42;
 const ZOOM: [number, number] = [1.04, 1.15];
 const IMAGE_RATIO = lookInside.image.width / lookInside.image.height;
 
-/* Scroll choreography, as fractions of the pinned distance.
-   A short hold so the copy can be read, then the room opens up around the
-   reader (clip, pan and scale share one curve), then the photo row arrives. */
-const OPEN: [number, number] = [0.04, 0.6];
-const COPY_OUT: [number, number] = [0.06, 0.32];
-const ROW_IN: [number, number] = [0.6, 0.8];
+/* Scroll choreography, as fractions of the pinned distance. The copy is read
+   while the section scrolls in, then steps back first and is gone before the
+   photograph's left edge reaches its column, so the room never cuts across
+   words that are still legible. Then the room opens up around the reader
+   (clip, pan and scale share one curve), then the photo row arrives. */
+const COPY_OUT: [number, number] = [0.03, 0.15];
+const OPEN: [number, number] = [0.08, 0.62];
+const ROW_IN: [number, number] = [0.62, 0.82];
 /* Responds the moment the reader scrolls, then settles slowly into full bleed. */
 const opening = cubicBezier(0.4, 0, 0.25, 1);
 const swift = cubicBezier(0.65, 0, 0.35, 1);
@@ -33,8 +36,9 @@ const swift = cubicBezier(0.65, 0, 0.35, 1);
  * Desktop with motion allowed. The section is 240vh tall (set on the section
  * itself so the page height is right before hydration); this stage pins for
  * the extra 140vh. The testing room starts as a rounded card right of centre
- * and grows until it fills the viewport, the copy steps back as it does, and a
- * scrim brings in the four practice photos and the gallery link.
+ * and grows until it fills the viewport, the copy steps back just ahead of it,
+ * and a scrim brings in the other practice photos and the gallery link (the
+ * scene's only link to the gallery, so it is never offered twice).
  */
 export function InsidePinned() {
   const rootRef = useRef<HTMLDivElement>(null);
@@ -87,12 +91,11 @@ export function InsidePinned() {
   });
 
   const copyOpacity = useTransform(scrollYProgress, COPY_OUT, [1, 0]);
-  const copyX = useTransform(scrollYProgress, COPY_OUT, [0, -56]);
-  const copyEvents = useTransform(scrollYProgress, (v) => (v < 0.24 ? "auto" : "none"));
+  const copyX = useTransform(scrollYProgress, COPY_OUT, [0, -80]);
 
   const rowOpacity = useTransform(scrollYProgress, ROW_IN, [0, 1]);
   const rowY = useTransform(scrollYProgress, ROW_IN, [24, 0], { ease: swift });
-  const rowEvents = useTransform(scrollYProgress, (v) => (v > 0.68 ? "auto" : "none"));
+  const rowEvents = useTransform(scrollYProgress, (v) => (v > ROW_IN[0] + 0.08 ? "auto" : "none"));
 
   // Keyboard users: focusing something that is faded out scrolls the scene to
   // the moment where it is visible, so focus is never on an invisible control.
@@ -109,24 +112,15 @@ export function InsidePinned() {
   const revealRow = (event: FocusEvent<HTMLElement>) => {
     if (byKeyboard(event) && scrollYProgress.get() < ROW_IN[1]) scrollToProgress(0.92);
   };
-  const revealCopy = (event: FocusEvent<HTMLElement>) => {
-    if (byKeyboard(event) && scrollYProgress.get() > 0.1) scrollToProgress(0);
-  };
 
   return (
     <div ref={rootRef} className="relative h-full">
       <div ref={stageRef} className="sticky top-0 h-dvh overflow-hidden">
         {/* Copy and the card's resting slot share the page grid. */}
         <div className="container-x grid h-full grid-cols-12 items-center gap-x-10">
-          <motion.div className="col-span-6 xl:col-span-5" style={{ opacity: copyOpacity, x: copyX, pointerEvents: copyEvents }}>
+          <motion.div className="col-span-6 xl:col-span-5" style={{ opacity: copyOpacity, x: copyX }}>
             <SectionTitle id="inside-heading" lines={lookInside.title} />
             <p className="lede mt-8 max-w-[40ch] text-on-navy-muted">{lookInside.body}</p>
-            {/* React focus events bubble, so the wrapper hears the link's focus. */}
-            <div className="mt-9" onFocus={revealCopy}>
-              <TextLink tone="light" onClick={() => openGallery(0)} className="min-h-11">
-                {lookInside.cta}
-              </TextLink>
-            </div>
           </motion.div>
           <div ref={slotRef} aria-hidden="true" className="col-span-6 col-start-7 aspect-[5/4] max-h-[76dvh] xl:col-span-7 xl:col-start-6" />
         </div>
@@ -147,12 +141,13 @@ export function InsidePinned() {
         <motion.div className="absolute inset-x-0 bottom-0" style={{ opacity: rowOpacity, y: rowY, pointerEvents: rowEvents }}>
           <div className="container-x flex items-center justify-between gap-10 pb-12 xl:pb-14">
             <ul className="flex gap-3">
-              {gallery.photos.map((photo, i) => (
-                <li key={photo.src + i}>
-                  <GalleryThumb index={i} sizes="128px" className="h-[84px] w-28" onFocus={revealRow} />
+              {thumbIndexes.map((index) => (
+                <li key={index}>
+                  <GalleryThumb index={index} sizes="128px" className="h-[84px] w-28" onFocus={revealRow} />
                 </li>
               ))}
             </ul>
+            {/* React focus events bubble, so the wrapper hears the link's focus. */}
             <div className="shrink-0" onFocus={revealRow}>
               <TextLink tone="light" onClick={() => openGallery(0)} className="min-h-11 whitespace-nowrap">
                 {lookInside.cta}

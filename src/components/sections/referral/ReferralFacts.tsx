@@ -1,34 +1,23 @@
 "use client";
 
-import { ClipboardText, LockKey, Phone } from "@phosphor-icons/react";
 import { RevealGroup, RevealItem } from "@/components/motion/primitives";
 import { referral } from "@/content/site";
 
-const icons = [ClipboardText, LockKey, Phone];
-
 /**
- * Three open questions for referrers, set as columns divided by hairlines
- * rather than cards. Phones stack them, each under its own top hairline.
+ * The three open questions for referrers, as a ruled definition list: what
+ * the question is on the left, where it stands on the right. From 768px the
+ * two columns follow the twelve-column grid, so the terms sit under the pack
+ * and the answers under the steps. Phones stack term over answer.
  */
 export function ReferralFacts() {
   return (
-    <RevealGroup as="ul" className="grid md:grid-cols-3">
-      {referral.facts.map((fact, i) => {
-        const Icon = icons[i] ?? ClipboardText;
-        return (
-          <RevealItem
-            as="li"
-            key={fact.title}
-            className="flex gap-5 border-t border-line py-7 md:flex-col md:gap-7 md:border-l md:border-t-0 md:px-8 md:py-1 md:first:border-l-0 md:first:pl-0 lg:px-12"
-          >
-            <Icon size={28} weight="light" aria-hidden="true" className="mt-0.5 shrink-0 text-ink-2 md:mt-0" />
-            <div>
-              <h3 className="font-medium text-ink">{fact.title}</h3>
-              <p className="mt-1.5 text-[0.9375rem] text-muted">{fact.body}</p>
-            </div>
-          </RevealItem>
-        );
-      })}
+    <RevealGroup as="dl" className="border-b border-line">
+      {referral.facts.map((fact) => (
+        <RevealItem key={fact.title} className="grid grid-cols-1 gap-1.5 border-t border-line py-6 md:grid-cols-12 md:items-baseline md:gap-x-12 md:py-7">
+          <dt className="font-medium text-ink md:col-span-5">{fact.title}</dt>
+          <dd className="text-muted md:col-span-7 lg:col-span-6 lg:col-start-7">{fact.body}</dd>
+        </RevealItem>
+      ))}
     </RevealGroup>
   );
 }

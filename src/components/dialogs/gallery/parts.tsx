@@ -99,11 +99,11 @@ export function NavButton({ direction, onClick, className = "" }: { direction: "
 export function Thumbnails({ photos, current, onSelect }: { photos: readonly Photo[]; current: number; onSelect: (index: number) => void }) {
   const reduce = useReducedMotion();
   return (
-    <ul className="flex items-center gap-2 md:gap-3">
+    <ul className="flex min-w-0 items-center gap-2 md:gap-3">
       {photos.map((photo, i) => {
         const active = i === current;
         return (
-          <li key={`${photo.src}-${i}`} className="relative">
+          <li key={`${photo.src}-${i}`} className="relative min-w-0 basis-12 min-[400px]:basis-14 md:basis-16">
             {active ? (
               <motion.span
                 layoutId="gallery-thumb-ring"
@@ -117,7 +117,7 @@ export function Thumbnails({ photos, current, onSelect }: { photos: readonly Pho
               onClick={() => onSelect(i)}
               aria-label={photo.caption}
               aria-current={active ? "true" : undefined}
-              className={`relative block h-11 w-12 overflow-hidden rounded-[12px] min-[400px]:w-14 transition-opacity duration-500 ease-calm md:h-12 md:w-16 ${
+              className={`relative block h-11 w-full overflow-hidden rounded-[12px] transition-opacity duration-500 ease-calm md:h-12 ${
                 active ? "opacity-100" : "opacity-45 hover:opacity-85"
               }`}
             >

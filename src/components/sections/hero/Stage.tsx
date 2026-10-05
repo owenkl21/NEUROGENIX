@@ -50,16 +50,14 @@ type StageProps = {
   /** Cue in seconds from mount. */
   cue?: number;
   effect?: Effect;
-  as?: "div" | "figcaption";
   className?: string;
 };
 
-export function Stage({ children, cue = 0, effect = "rise", as = "div", className }: StageProps) {
+export function Stage({ children, cue = 0, effect = "rise", className }: StageProps) {
   const reduce = useReducedMotion();
   const mountedAt = useRef(0);
   const [delay, setDelay] = useState<number | null>(null);
   const { from, to, duration, fade } = states[effect];
-  const Comp = motion[as];
 
   useEffect(() => {
     mountedAt.current = performance.now();
@@ -75,7 +73,8 @@ export function Stage({ children, cue = 0, effect = "rise", as = "div", classNam
   const inner = effect === "wipe";
 
   return (
-    <Comp
+    <motion.div
+      data-reveal={inner ? undefined : ""}
       className={className}
       initial={inner ? undefined : from}
       animate={inner ? undefined : target}
@@ -91,12 +90,12 @@ export function Stage({ children, cue = 0, effect = "rise", as = "div", classNam
       }}
     >
       {inner ? (
-        <motion.div initial={from} animate={target} transition={transition}>
+        <motion.div data-reveal="" initial={from} animate={target} transition={transition}>
           {children}
         </motion.div>
       ) : (
         children
       )}
-    </Comp>
+    </motion.div>
   );
 }

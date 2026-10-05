@@ -3,17 +3,21 @@
 import { useEffect, useRef, useState, type KeyboardEvent } from "react";
 import { AnimatePresence, animate, motion, useInView, useMotionValue, useTransform, type AnimationPlaybackControls, type Variants } from "motion/react";
 import { useReducedMotion } from "@/components/motion/useReducedMotion";
-import { CheckCircle, Info, Printer } from "@phosphor-icons/react";
-import { guides, patientGuide, testSlugs, type Guide, type TestSlug } from "@/content/site";
+import { guides, patientGuide, services, testSlugs, type Guide, type TestSlug } from "@/content/site";
 import { EASE } from "@/components/motion/primitives";
+import { Button } from "@/components/ui";
 import { SignalTrace } from "@/components/signal/SignalTrace";
-import { printGuide } from "./printGuide";
+
+/** Each test's own page holds its full preparation guide; the tab hands over to it. */
+const testLink = Object.fromEntries(services.items.map((item) => [item.slug, item.link])) as Record<TestSlug, string>;
 
 /**
- * The test preparation guide: a WAI-ARIA tab set with automatic activation.
- * A navy pill slides behind the chosen test, the outgoing guide lifts away,
- * the sheet eases to the new guide's height (so the page below never jumps)
- * and the incoming guide settles in while its own signal draws.
+ * Choose your test: a WAI-ARIA tab set with automatic activation. Each panel
+ * is a short summary of the test (what it is and what it records) that hands
+ * over to the test's own page, where the full preparation guide lives once.
+ * A navy pill slides behind the chosen test, the outgoing summary lifts away,
+ * the sheet eases to the new summary's height (so the page below never jumps)
+ * and the incoming summary settles in while its own signal draws.
  */
 export function GuideTabs() {
   const reduce = useReducedMotion() ?? false;
@@ -45,7 +49,8 @@ export function GuideTabs() {
   };
 
   return (
-    <div>
+    // From 1024px the panel stretches to the essentials card beside it, so both end on one line.
+    <div className="flex flex-col lg:flex-1">
       {/* Fits one row at 390px; scrolls sideways only as a last resort. */}
       <div className="overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         <div
@@ -65,7 +70,8 @@ export function GuideTabs() {
                 type="button"
                 role="tab"
                 aria-selected={selected}
-                aria-controls={`guide-${slug}`}
+                // Only the chosen panel is rendered, so only its tab may point at it.
+                aria-controls={selected ? `guide-${slug}` : undefined}
                 tabIndex={selected ? 0 : -1}
                 onClick={() => setActive(slug)}
                 onKeyDown={(event) => onKeyDown(event, index)}
@@ -99,6 +105,7 @@ export function GuideTabs() {
  * cannot, so any branch in the markup would break hydration.
  */
 const INSTANT = { duration: 0 };
+const FADE = { duration: 0.3, ease: EASE };
 
 const sheetVariants = (reduce: boolean): Variants => ({
   enter: {},
@@ -156,10 +163,10 @@ function GuidePanel({ guide, reduce }: { guide: Guide; reduce: boolean }) {
       id={`guide-${guide.slug}`}
       aria-labelledby={`tab-${guide.slug}`}
       tabIndex={0}
-      className="@container mt-5 rounded-surface border border-line bg-surface md:mt-6"
+      className="mt-5 flex flex-col rounded-surface border border-line bg-surface md:mt-6 lg:flex-1"
     >
       <motion.div style={{ height }} className="overflow-hidden">
-        <div ref={inner} className="px-6 pb-7 pt-8 sm:px-10 sm:pb-9 sm:pt-11 xl:px-12 xl:pt-12">
+        <div ref={inner} className="px-6 pt-8 sm:px-10 sm:pt-11 xl:px-12 xl:pt-12">
           <AnimatePresence mode="wait" initial={false}>
             <motion.div key={guide.slug} variants={reduce ? SHEET.still : SHEET.motion} initial="enter" animate="show" exit="exit">
               <GuideContent guide={guide} reduce={reduce} />
@@ -167,65 +174,50 @@ function GuidePanel({ guide, reduce }: { guide: Guide; reduce: boolean }) {
           </AnimatePresence>
         </div>
       </motion.div>
+
+      {/*
+       * The foot of the panel: the test's own signal, written like a recording
+       * strip, then the way on to the full guide. From 1024px it rests on the
+       * panel's bottom edge, level with the essentials card's button.
+       */}
+      <div className="mt-auto px-6 pb-7 sm:px-10 sm:pb-9 xl:px-12">
+        <AnimatePresence mode="wait" initial={false}>
+          <motion.div key={guide.slug} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={reduce ? INSTANT : FADE}>
+            <p className="label mt-10 text-brass-ink">{guide.meta}</p>
+            <TraceWrite slug={guide.slug} reduce={reduce} />
+          </motion.div>
+        </AnimatePresence>
+        <div className="mt-7 border-t border-line pt-7">
+          <AnimatePresence mode="wait" initial={false}>
+            <motion.div key={guide.slug} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={reduce ? INSTANT : FADE}>
+              <Button variant="outline" href={`/tests/${guide.slug}`}>
+                {testLink[guide.slug]}
+              </Button>
+            </motion.div>
+          </AnimatePresence>
+        </div>
+      </div>
     </div>
   );
 }
 
-/* Columns follow the sheet's own width (container queries), not the viewport,
-   so the 528px sheet beside the card at 1024px stays a single column. */
 function GuideContent({ guide, reduce }: { guide: Guide; reduce: boolean }) {
   const v = reduce ? PART.still : PART.motion;
   return (
     <>
-      <motion.h3 variants={v} className="display-3">
+      <motion.h2 variants={v} className="display-3">
         {guide.title}
-      </motion.h3>
-
-      <motion.div variants={v} className="mt-7">
-        <p className="label text-brass-ink">{guide.meta}</p>
-        <TraceWrite slug={guide.slug} reduce={reduce} />
-      </motion.div>
-
-      <motion.p variants={v} className="lede mt-7 max-w-[56ch] text-ink-2">
+      </motion.h2>
+      <motion.p variants={v} className="lede mt-6 max-w-[56ch] text-ink-2">
         {guide.intro}
       </motion.p>
-
-      <motion.div variants={v} className="mt-11 grid gap-10 @2xl:grid-cols-2 @2xl:gap-12">
-        <div>
-          <h4 className="title-3">{patientGuide.beforeHeading}</h4>
-          <ul className="mt-5 space-y-4">
-            {guide.before.map((item) => (
-              <li key={item} className="flex gap-3.5">
-                <CheckCircle size={20} aria-hidden="true" className="mt-[0.18em] shrink-0 text-brass-ink" />
-                <span>{item}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-        <div>
-          <h4 className="title-3">{patientGuide.duringHeading}</h4>
-          <div className="mt-5 space-y-4 text-muted">
-            {guide.during.map((paragraph) => (
-              <p key={paragraph}>{paragraph}</p>
-            ))}
-          </div>
-        </div>
-      </motion.div>
-
-      <motion.div variants={v} className="mt-11 flex flex-col gap-6 border-t border-line pt-7 @xl:flex-row @xl:items-center @xl:justify-between @xl:gap-10">
-        <p className="flex max-w-[52ch] gap-3 text-[0.9375rem] leading-relaxed text-muted">
-          <Info size={20} aria-hidden="true" className="mt-[0.12em] shrink-0 text-brass-ink" />
-          <span>{guide.bottom}</span>
-        </p>
-        <PrintButton onClick={() => printGuide(guide)} />
-      </motion.div>
     </>
   );
 }
 
 /**
  * The test's own signal, written left to right like a chart recorder each time
- * its guide opens. A still trace revealed by a clip keeps the full line exact
+ * its tab opens. A still trace revealed by a clip keeps the full line exact
  * at any width.
  */
 const HIDDEN = "inset(-20% 100% -20% 0%)";
@@ -243,31 +235,8 @@ function TraceWrite({ slug, reduce }: { slug: TestSlug; reduce: boolean }) {
         animate={{ clipPath: inView ? SHOWN : HIDDEN }}
         transition={reduce ? INSTANT : { duration: 1.8, delay: 0.15, ease: [0.65, 0, 0.35, 1] }}
       >
-        <SignalTrace kind={slug} mode="still" height={44} color="var(--brass-ink)" strokeWidth={1.25} />
+        <SignalTrace kind={slug} mode="still" height={72} color="var(--brass-ink)" strokeWidth={1.25} />
       </motion.div>
     </div>
-  );
-}
-
-/** Mirrors the house outline Button (rolling label, icon disc) with a printer icon. */
-function PrintButton({ onClick }: { onClick: () => void }) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      className="group relative inline-flex h-12 shrink-0 items-center justify-center gap-3 self-start whitespace-nowrap rounded-full border border-line-strong pl-6 pr-2 text-[0.9375rem] font-medium text-ink transition-[border-color,transform] duration-300 ease-calm hover:border-ink active:translate-y-px @xl:self-auto"
-    >
-      <span className="relative block overflow-hidden leading-none">
-        <span className="block py-1 transition-transform duration-500 ease-calm group-hover:-translate-y-full motion-reduce:group-hover:translate-y-0">
-          {patientGuide.printLabel}
-        </span>
-        <span aria-hidden="true" className="absolute inset-0 block translate-y-full py-1 transition-transform duration-500 ease-calm group-hover:translate-y-0 motion-reduce:hidden">
-          {patientGuide.printLabel}
-        </span>
-      </span>
-      <span className="grid size-8 shrink-0 place-items-center rounded-full bg-ink/5 transition-transform duration-500 ease-calm group-hover:-translate-y-0.5 motion-reduce:group-hover:translate-y-0">
-        <Printer size={16} aria-hidden="true" />
-      </span>
-    </button>
   );
 }

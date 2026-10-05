@@ -2,7 +2,7 @@ import { Fragment, type CSSProperties } from "react";
 import { guides, patientGuide, services, testPages, type TestSlug } from "@/content/site";
 import type { SignalKind } from "@/lib/signals";
 import { Magnetic, MaskLines, Reveal, RevealGroup, RevealItem } from "@/components/motion/primitives";
-import { BookButton, Button, Eyebrow, SmartLink, TextLink } from "@/components/ui";
+import { BookButton, Eyebrow, SmartLink, TextLink } from "@/components/ui";
 import { SignalTrace } from "@/components/signal/SignalTrace";
 import { GiantAbbr } from "./GiantAbbr";
 import { PrintButton } from "./PrintButton";
@@ -85,7 +85,7 @@ export function TestPageView({ slug }: { slug: TestSlug }) {
               </Reveal>
               <Reveal delay={0.35} y={20} className="print-hide mt-10 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
                 <Magnetic className="w-full sm:w-auto">
-                  <BookButton test={slug} size="lg" className="w-full justify-between sm:w-auto" />
+                  <BookButton test={slug} size="lg" className="w-full justify-between! sm:w-auto" />
                 </Magnetic>
                 <PrintButton label={page.print} />
               </Reveal>
@@ -97,10 +97,14 @@ export function TestPageView({ slug }: { slug: TestSlug }) {
         </div>
       </section>
 
-      {/* b) Signal band: this test's own recording, the page's hero visual */}
+      {/*
+       * b) Signal band: this test's own recording, the page's hero visual. Its
+       * caption is set in sentence case like the home focus band label, not as
+       * a mono caps label: the eyebrow above already uses that voice.
+       */}
       <div className="print-hide mt-16 border-y border-line md:mt-24">
         <div className="container-x pt-5 md:pt-6">
-          <p className="label text-muted">{guide.meta}</p>
+          <p className="text-[0.875rem] leading-normal text-muted lowercase first-letter:uppercase">{guide.meta}</p>
         </div>
         <SignalTrace
           kind={signalKind[slug]}
@@ -172,14 +176,15 @@ export function TestPageView({ slug }: { slug: TestSlug }) {
           </section>
 
           <aside aria-labelledby="after-title" className="lg:col-span-5 xl:col-span-4">
-            <Reveal className="on-navy rounded-surface bg-navy p-8 text-on-navy md:p-10 lg:top-28 lg:motion-safe:sticky print:rounded-none print:border-t print:border-line print:bg-transparent print:px-0 print:pb-0 print:pt-8 print:text-ink print:[&_.headline-soft]:text-ink-2">
+            <Reveal className="on-navy rounded-surface bg-navy p-8 text-on-navy dark:ring-1 dark:ring-on-navy-line md:p-10 lg:top-28 lg:motion-safe:sticky print:rounded-none print:border-t print:border-line print:bg-transparent print:px-0 print:pb-0 print:pt-8 print:text-ink print:[&_.headline-soft]:text-ink-2">
               <p className="label text-brass print:text-brass-ink">{page.after.label}</p>
               <MaskLines as="h2" id="after-title" lines={page.after.title} className="display-3 mt-6" />
               <p className="mt-5 text-on-navy-muted print:text-muted">{page.after.body}</p>
-              <div className="print-hide mt-9">
-                <Button variant="brass" href={page.after.cta.href}>
+              {/* A quiet way on, not a second primary action: the card is written for patients. */}
+              <div className="print-hide mt-7">
+                <TextLink tone="light" href={page.after.cta.href}>
                   {page.after.cta.label}
-                </Button>
+                </TextLink>
               </div>
             </Reveal>
           </aside>

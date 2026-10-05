@@ -29,7 +29,7 @@ export function GalleryDialog({ open, index, onIndexChange, onClose }: { open: b
   const next = () => goTo(current + 1, 1);
   const previous = () => goTo(current - 1, -1);
 
-  const onKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
+  const onKeyDown = (e: KeyboardEvent<HTMLDialogElement>) => {
     if (e.altKey || e.ctrlKey || e.metaKey) return;
     if (e.key === "ArrowRight") {
       e.preventDefault();
@@ -46,15 +46,17 @@ export function GalleryDialog({ open, index, onIndexChange, onClose }: { open: b
   const description = rest.join(" · ");
 
   return (
-    <Modal open={open} onClose={onClose} labelledBy="gallery-title" variant="fullscreen" panelClassName="on-navy bg-navy-3 text-on-navy">
-      <div className="flex h-full flex-col" onKeyDown={onKeyDown}>
-        <div className="container-x flex h-[72px] shrink-0 items-center justify-between gap-6">
-          <h2 id="gallery-title" className="title-3">
+    <Modal open={open} onClose={onClose} onKeyDown={onKeyDown} labelledBy="gallery-title" variant="fullscreen" panelClassName="on-navy bg-navy-3 text-on-navy">
+      <div className="flex h-full flex-col">
+        <div className="container-x flex h-[72px] shrink-0 items-center justify-between gap-4 sm:gap-6">
+          <h2 id="gallery-title" className="title-3 min-w-0">
             {gallery.title}
           </h2>
-          <div className="flex items-center gap-5 md:gap-7">
-            <p aria-live="polite" aria-atomic="true" className="numeral text-[0.875rem] text-on-navy-muted">
+          <div className="flex items-center gap-4 sm:gap-5 md:gap-7">
+            {/* Announces the position and the room, so a turn by key or swipe is heard as well as seen. */}
+            <p aria-live="polite" aria-atomic="true" className="numeral whitespace-nowrap text-[0.875rem] text-on-navy-muted">
               <span className="text-brass">{current + 1}</span> / {count}
+              <span className="sr-only">{`, ${place}`}</span>
             </p>
             <CloseButton onClick={onClose} label={gallery.close} tone="light" />
           </div>
@@ -98,6 +100,9 @@ export function GalleryDialog({ open, index, onIndexChange, onClose }: { open: b
           </figcaption>
         </figure>
 
+        {/* Phones: the round controls hold the edges and the thumbnails take
+            what is left, narrowing on the smallest screens rather than
+            pushing Next off the side. */}
         <div className="container-x flex shrink-0 items-center justify-between gap-3 pb-6 pt-5 md:justify-center md:pb-8">
           <NavButton direction="previous" onClick={previous} className="grid md:hidden" />
           <Thumbnails photos={photos} current={current} onSelect={(i) => goTo(i, i > current ? 1 : -1)} />

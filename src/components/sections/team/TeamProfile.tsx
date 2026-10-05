@@ -22,7 +22,7 @@ export function TeamProfile() {
         {profile.status}
       </p>
 
-      <h3 className="title-3 mt-6">{profile.title}</h3>
+      <h2 className="title-3 mt-6">{profile.title}</h2>
       <p className="mt-3 max-w-[42ch] text-muted">{profile.body}</p>
 
       <RevealGroup as="dl" className="@container mt-9">

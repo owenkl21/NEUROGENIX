@@ -6,9 +6,10 @@ and the clinicians who refer them. The site has to feel calm, exact and
 expensive, the way the practice itself looks: a deep navy feature wall, brass
 signage, linen chairs, warm light.
 
-**Design read:** a visual overhaul of an existing wireframe. Content and
-information architecture are preserved exactly; the visual language is new.
-Trust first, premium second, motion everywhere but never loud.
+**Design read:** a visual overhaul of an existing wireframe. The content is
+preserved exactly; the wireframe's single long page has been split into a
+home page and four inner pages (see section 8), and the visual language is
+new. Trust first, premium second, motion everywhere but never loud.
 
 **Dials:** variance 6, motion 7, density 3.
 
@@ -77,12 +78,19 @@ for small instrument labels and numerals.
 | `lede` | the paragraph directly under a section headline |
 | `label` | mono uppercase label (rationed, see eyebrows) |
 | `numeral` | mono tabular numerals (01, 02, 03) |
-| `headline-soft` | italic second sentence of a two-part headline |
+| `headline-soft` | italic second sentence of a two-sentence headline |
 
-Every section headline in the content is two sentences
-(`["Different tests.", "One clearer picture."]`). Render them with
-`<SectionTitle lines={...} />`: first sentence plain, second sentence the soft
-italic of the same family. Never a different typeface.
+Headlines are stored as arrays of whole sentences, one sentence per entry.
+Most are two sentences (`["Different tests.", "One clearer picture."]`).
+Render them with `<SectionTitle lines={...} />`: first sentence plain, second
+sentence the soft italic of the same family. Never a different typeface.
+
+A one-sentence headline is a single entry (`["It’s okay to ask."]`) and is
+set plain, wrapping on its own. Never split one sentence across entries to
+force a break or to get the italic on its tail.
+
+Display classes balance their lines (`text-wrap: balance`), so a short last
+word does not sit alone.
 
 Body copy: `text-muted`, `max-w-[60ch]` or tighter, 1rem to 1.125rem.
 
@@ -93,7 +101,7 @@ Body copy: `text-muted`, `max-w-[60ch]` or tighter, 1rem to 1.125rem.
   use `rounded-[12px]`. Nothing else.
 - Containers: `container-x` (1320px max, 20/32/48px gutters).
 - Section rhythm: `section-y` (104px mobile, 144px desktop). Use it on every
-  home section unless the layout is deliberately full-bleed.
+  section unless the layout is deliberately full-bleed or follows a page intro.
 - Prefer hairlines (`border-line`) and space over cards. A card exists only when
   elevation means something (a panel you act on, a navy feature block).
 - Shadow: `shadow-soft` only, tinted, used rarely.
@@ -111,6 +119,20 @@ One easing (`EASE = [0.22, 1, 0.36, 1]`, the CSS `ease-calm`), base duration
 | `ParallaxImage` | same | images unclip from a soft inset, then drift with scroll |
 | `Magnetic` | same | primary CTAs lean toward the pointer (mouse only) |
 | `SignalTrace` | `@/components/signal/SignalTrace` | the brand motif, see below |
+
+Reduced motion changes timing, never structure. Keep the same `initial` and
+target props on the server and on every client render, and under reduced
+motion make the transition instant (`duration: 0`). Never drop `initial` or
+`variants` once `useReducedMotion()` turns true after hydration: Motion then
+leaves the server's hidden state in place and the content stays invisible.
+The route template only animates client side navigations, so the first page
+is painted straight from the server HTML.
+
+Anchors: sections stop clear of the sticky header through
+`scroll-margin-top` on everything in `main` and `footer` (globals.css). Do not
+pass an offset to Lenis and do not add `scroll-padding` to `html`; Lenis
+already reads the margin, and html padding makes focusing a header control
+scroll the page.
 
 Scroll-linked moments (pinning, stacking, filling a progress line) use Motion's
 `useScroll({ target, offset })` + `useTransform` with CSS `position: sticky`.
@@ -152,25 +174,56 @@ is a real-looking trace, generated from physiology (`src/lib/signals.ts`):
 The single booking label everywhere is `site.bookLabel`
 ("Request an appointment"). Do not invent another label for the same intent.
 
-## 8. Home page plan
+## 8. Site map
 
-Layout families must not repeat. Eyebrows are rationed to four, never on
-neighbouring sections.
+**Every section has exactly one home.** The home page is the overview: it
+links to the inner pages and never re-renders their sections. Do not copy a
+section from an inner page onto the home page (or between inner pages) to
+"fill it out"; link to it instead. Navigation (header, footer, menu) is built
+from the one `nav` list in `site.ts`, so every menu lists the same pages in
+the same order.
+
+| Route | Sections, in order (id) |
+| --- | --- |
+| `/` | Hero, Focus statement, Services (`services`), A look inside (`look-inside`), Practice (`practice`) |
+| `/your-visit` | Page intro, Patient guide (`patient-guide`), Fees (`fees`), Questions (`questions`) |
+| `/for-doctors` | Page intro, Referral (`referring-doctors`) |
+| `/our-team` | Page intro, Team (`clinical-team`) |
+| `/locations` | Page intro, Locations (`locations`), Contact (`contact`) |
+| `/tests/eeg`, `/tests/ncs`, `/tests/emg` | Test intro, preparation guide, after your test, before your visit |
+
+The one deliberate repeat is the preparation guide: `/your-visit` shows all
+three in tabs and each test page shows its own. Both render from the single
+`guides` object in `site.ts`, so they cannot drift apart.
+
+### Home page
+
+Layout families must not repeat. Eyebrows are rationed: on the home page
+only the hero carries one, and never on two neighbouring sections.
 
 | # | Section (id) | Layout family | Eyebrow |
 | --- | --- | --- | --- |
 | 1 | Hero | full-width type over a wide image, live EEG between | yes |
 | 2 | Focus statement | scroll-lit statement | no (plain label) |
-| 3 | Services (`services`) | sticky stacking navy panels with live traces | no |
-| 4 | Referring doctors (`referring-doctors`) | sticky aside + steps with scroll-filled line | yes |
-| 5 | Team (`clinical-team`) | editorial statement + awaiting-approval profile | no |
-| 6 | Practice (`practice`) | image-led split with values | no |
-| 7 | Patient guide (`patient-guide`) | tabs + sticky navy essentials card | yes |
-| 8 | A look inside | full-bleed navy, image expands on scroll | no |
-| 9 | Questions (`questions`) | offset accordion | no |
-| 10 | Fees (`fees`) | horizontal timeline drawn on scroll | yes |
-| 11 | Locations (`locations`) | wide image with overlapping detail panel | no |
-| 12 | Contact (`contact`) | closing statement + info panel | no |
+| 3 | Services (`services`) | sticky stacking navy panels with live traces, each opening its test page | no |
+| 4 | A look inside (`look-inside`) | full-bleed navy, image expands on scroll | no |
+| 5 | Practice (`practice`) | image-led split with values, handing over to Your visit | no |
+
+### Inner pages
+
+Each opens with `PageIntro` (breadcrumb, eyebrow, H1, lede, live trace). The
+section directly beneath it takes `labelledBy` (the page H1 id) and drops its
+own eyebrow and headline, so the page never states its title twice.
+
+| Page | Section | Layout family |
+| --- | --- | --- |
+| Your visit | Patient guide | tabs + sticky navy essentials card |
+| Your visit | Fees | horizontal timeline drawn on scroll |
+| Your visit | Questions | offset accordion |
+| For doctors | Referral | sticky aside + steps with scroll-filled line |
+| Our team | Team | editorial statement + awaiting-approval profile |
+| Locations | Locations | wide image with overlapping detail panel |
+| Locations | Contact | closing statement + info panel |
 
 ## 9. Verifying your work
 

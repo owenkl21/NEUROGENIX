@@ -1,15 +1,17 @@
 "use client";
 
-import { gallery, lookInside } from "@/content/site";
+import { lookInside } from "@/content/site";
 import { useDialogs } from "@/components/dialogs/DialogProvider";
 import { ParallaxImage, Reveal } from "@/components/motion/primitives";
 import { SectionTitle, TextLink } from "@/components/ui";
 import { GalleryThumb } from "./GalleryThumb";
+import { thumbIndexes } from "./photos";
 
 /**
  * The unpinned version: phones, tablets and anyone who prefers reduced motion.
- * Copy, then the testing room, then the four photos as a contact sheet
- * (2 x 2 below 1024px; copy left and photos right above it).
+ * Copy, then the testing room, then the other practice photos as a contact
+ * strip of three under it (copy left and photographs right above 1024px).
+ * The testing room is not repeated in the strip.
  */
 export function InsideStatic() {
   const { openGallery } = useDialogs();
@@ -39,10 +41,10 @@ export function InsideStatic() {
             intensity={4}
             className="aspect-[4/3] rounded-surface bg-navy-2"
           />
-          <ul className="mt-3 grid grid-cols-2 gap-3 sm:mt-4 sm:gap-4 lg:grid-cols-4">
-            {gallery.photos.map((photo, i) => (
-              <li key={photo.src + i}>
-                <GalleryThumb index={i} sizes="(min-width: 1024px) 170px, 50vw" className="aspect-[4/3] w-full" />
+          <ul className="mt-3 grid grid-cols-3 gap-3 sm:mt-4 sm:gap-4">
+            {thumbIndexes.map((index) => (
+              <li key={index}>
+                <GalleryThumb index={index} sizes="(min-width: 1320px) 230px, (min-width: 1024px) 18vw, 33vw" className="aspect-[4/3] w-full" />
               </li>
             ))}
           </ul>

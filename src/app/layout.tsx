@@ -46,6 +46,10 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html lang="en-ZA" className={`${instrument.variable} ${dmMono.variable}`}>
       <body className="grain min-h-dvh">
+        {/* Without JS nothing would ever reveal, so show it as it would settle. */}
+        <noscript>
+          <style>{"[data-reveal]{opacity:1!important;transform:none!important}.mask-line{transform:none!important}"}</style>
+        </noscript>
         <a href="#main" className="skip-link rounded-full bg-navy px-5 py-3 text-sm font-medium text-on-navy">
           Skip to content
         </a>

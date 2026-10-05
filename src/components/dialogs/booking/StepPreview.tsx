@@ -7,7 +7,7 @@ import { CheckCircle, LockSimple } from "@phosphor-icons/react";
 import { booking } from "@/content/site";
 import { Button } from "@/components/ui";
 import { EASE } from "@/components/motion/primitives";
-import { Inset } from "./fields";
+import { ActionBar, Inset } from "./fields";
 import { formatPreferredDate, type BookingForm } from "./model";
 
 const list: Variants = {
@@ -75,14 +75,14 @@ export function StepPreview({
         {s.note}
       </Inset>
 
-      <div className="mt-8 flex flex-col-reverse gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <Button variant="outline" icon={null} onClick={onEdit} className="w-full sm:w-auto">
+      <ActionBar className="flex items-center justify-between gap-3">
+        <Button variant="outline" icon={null} onClick={onEdit}>
           {s.edit}
         </Button>
-        <Button icon={null} onClick={onDone} className="w-full sm:w-auto">
+        <Button icon={null} onClick={onDone} className="flex-1 sm:flex-none">
           {s.done}
         </Button>
-      </div>
+      </ActionBar>
     </div>
   );
 }

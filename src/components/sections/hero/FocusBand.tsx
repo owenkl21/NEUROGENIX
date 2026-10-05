@@ -4,7 +4,6 @@ import { Fragment, useRef, useSyncExternalStore } from "react";
 import { motion, useScroll, useTransform, type MotionValue } from "motion/react";
 import { useReducedMotion } from "@/components/motion/useReducedMotion";
 import { focus } from "@/content/site";
-import { TextLink } from "@/components/ui";
 
 /**
  * The scroll-lit statement. As the band travels up the viewport each word of
@@ -15,6 +14,9 @@ import { TextLink } from "@/components/ui";
  * The heading stays one ordinary sentence for assistive technology: words are
  * plain inline spans, only their opacity changes. The server (and readers
  * without JavaScript or with reduced motion) get every word at full strength.
+ *
+ * The band is a statement and nothing else. It carries no link: the one way
+ * on to Your visit from home is the practice section at the end of the page.
  */
 
 const DIM = 0.15;
@@ -69,9 +71,6 @@ export function FocusBand() {
             );
           })}
         </h2>
-        <TextLink href={focus.link.href} className="mt-10 min-h-11 md:mt-12">
-          {focus.link.label}
-        </TextLink>
       </div>
     </div>
   );

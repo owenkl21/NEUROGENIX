@@ -60,7 +60,7 @@ export function ReferralSteps() {
             {step.number}
           </StepNumeral>
           <Reveal className="mt-5 sm:mt-7">
-            <h3 className="title-3">{step.title}</h3>
+            <h2 className="title-3">{step.title}</h2>
             <p className="mt-3 max-w-[46ch] text-muted">{step.body}</p>
           </Reveal>
         </li>
@@ -94,7 +94,7 @@ function StepNumeral({
     <motion.span
       ref={setRef}
       aria-hidden="true"
-      className="numeral block text-[clamp(2.5rem,1.9rem+1.6vw,3.5rem)] leading-none motion-reduce:text-brass-ink!"
+      className="block font-sans text-[clamp(2.5rem,1.9rem+1.6vw,3.5rem)] font-normal leading-none tracking-[-0.03em] tabular-nums motion-reduce:text-brass-ink!"
       style={{ color }}
     >
       {children}

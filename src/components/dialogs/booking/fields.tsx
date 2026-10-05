@@ -14,9 +14,27 @@ import { EASE } from "@/components/motion/primitives";
  * clearly different from the resting state, and AA on both themes.
  */
 
+/**
+ * Resting outline of a form control. The hairline tokens are for decoration
+ * and sit near 1.7:1 on the panel; a control's edge has to reach 3:1 (WCAG
+ * 1.4.11), and muted at 75% gives 3.4:1 on light and 3.8:1 on dark.
+ */
+export const CONTROL_BORDER = "border-muted/75";
+
+/**
+ * Room a control keeps around itself when Tab or an error scrolls it into
+ * view, so it never lands under the panel's sticky bars. Above: the top bar
+ * (72px, 80px from md) plus the field's own label. Below: the action bar plus
+ * the field's message and the home indicator. These sit on the in-flow
+ * controls rather than as scroll padding on the panel, so a control that
+ * lives in a bar is already in view and focusing it never moves the step.
+ */
+export const SCROLL_CLEAR_BOTTOM = "scroll-mb-[calc(9rem+env(safe-area-inset-bottom))]";
+const CONTROL_SCROLL = `scroll-mt-30 ${SCROLL_CLEAR_BOTTOM}`;
+
 export function controlClass(invalid?: boolean) {
-  return `h-12 w-full scroll-mt-24 rounded-[12px] border bg-surface px-4 text-base transition-colors duration-300 ease-calm placeholder:text-muted ${
-    invalid ? "border-brass-ink" : "border-line-strong hover:border-ink-2"
+  return `h-12 w-full ${CONTROL_SCROLL} rounded-[12px] border bg-surface px-4 text-base transition-colors duration-300 ease-calm placeholder:text-muted ${
+    invalid ? "border-brass-ink" : `${CONTROL_BORDER} hover:border-ink-2`
   }`;
 }
 
@@ -99,7 +117,9 @@ export function Select({
   options,
   placeholder,
   invalid,
+  required,
   inputRef,
+  className = "",
 }: {
   id: string;
   value: string;
@@ -107,7 +127,9 @@ export function Select({
   options: readonly string[];
   placeholder?: string;
   invalid?: boolean;
+  required?: boolean;
   inputRef?: Ref<HTMLSelectElement>;
+  className?: string;
 }) {
   return (
     <div className="relative">
@@ -116,9 +138,10 @@ export function Select({
         ref={inputRef}
         value={value}
         onChange={(e) => onChange(e.target.value)}
+        aria-required={required || undefined}
         aria-invalid={invalid || undefined}
         aria-describedby={invalid ? errorId(id) : undefined}
-        className={`${controlClass(invalid)} cursor-pointer appearance-none pr-12 [&>option]:text-ink ${value === "" ? "text-muted" : "text-ink"}`}
+        className={`${controlClass(invalid)} cursor-pointer appearance-none pr-12 [&>option]:text-ink ${value === "" ? "text-muted" : "text-ink"} ${className}`}
       >
         {placeholder ? (
           <option value="" disabled>
@@ -136,13 +159,18 @@ export function Select({
   );
 }
 
-/** Custom 22px box over a real, visually hidden checkbox. The whole row is the target. */
+/**
+ * Custom 22px box drawn under a real, transparent checkbox that covers the
+ * whole row: the row is the target, and focus scrolling brings the full row
+ * and its message into view rather than a single hidden pixel.
+ */
 export function Checkbox({
   id,
   checked,
   onChange,
   label,
   invalid,
+  required,
   inputRef,
 }: {
   id: string;
@@ -150,6 +178,7 @@ export function Checkbox({
   onChange: (checked: boolean) => void;
   label: string;
   invalid?: boolean;
+  required?: boolean;
   inputRef?: Ref<HTMLInputElement>;
 }) {
   const reduce = useReducedMotion();
@@ -161,14 +190,15 @@ export function Checkbox({
         type="checkbox"
         checked={checked}
         onChange={(e) => onChange(e.target.checked)}
+        aria-required={required || undefined}
         aria-invalid={invalid || undefined}
         aria-describedby={invalid ? errorId(id) : undefined}
-        className="peer sr-only scroll-mt-24"
+        className={`peer absolute inset-0 z-[1] m-0 size-full cursor-pointer appearance-none opacity-0 scroll-mt-24 ${SCROLL_CLEAR_BOTTOM}`}
       />
       <span
         aria-hidden="true"
         className={`mt-[2px] grid size-[22px] shrink-0 place-items-center rounded-[6px] border transition-colors duration-300 ease-calm peer-focus-visible:outline-2 peer-focus-visible:outline-offset-3 peer-focus-visible:outline-brass-ink ${
-          checked ? "border-ink bg-ink text-surface" : invalid ? "border-brass-ink bg-surface" : "border-line-strong bg-surface group-hover:border-ink-2"
+          checked ? "border-ink bg-ink text-surface" : invalid ? "border-brass-ink bg-surface" : `${CONTROL_BORDER} bg-surface group-hover:border-ink-2`
         }`}
       >
         <AnimatePresence initial={false}>
@@ -188,6 +218,23 @@ export function Checkbox({
       </span>
       <span className="text-[0.9375rem] leading-relaxed text-ink">{label}</span>
     </label>
+  );
+}
+
+/**
+ * The step's actions. While the step is taller than the panel the bar holds
+ * to the bottom edge and the step scrolls beneath it, so the way forward is
+ * always in reach on a laptop or phone; at the end of the step it settles
+ * into place as the panel's footer. It runs edge to edge over the panel's
+ * side padding, and on phones it clears the home indicator.
+ */
+export function ActionBar({ className = "", children }: { className?: string; children: ReactNode }) {
+  return (
+    <div
+      className={`sticky bottom-0 z-10 -mx-6 mt-7 border-t border-line bg-surface px-6 pb-[calc(1rem+env(safe-area-inset-bottom))] pt-4 md:-mx-10 md:px-10 md:pb-7 md:pt-5 md:[@media(max-height:860px)]:mt-6 md:[@media(max-height:860px)]:pb-5 md:[@media(max-height:860px)]:pt-4 ${className}`}
+    >
+      {children}
+    </div>
   );
 }
 

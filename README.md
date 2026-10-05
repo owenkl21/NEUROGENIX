@@ -4,23 +4,27 @@ The website for Neurogenix, a clinical neurophysiology practice offering EEG,
 nerve conduction studies and EMG. It is written for two readers: patients
 preparing for a test, and the clinicians who refer them.
 
-This is the premium redesign of the approved wireframe. The content and page
-structure match the wireframe exactly. The visual and motion language is new,
-taken from the practice itself: a navy feature wall, brass signage and calm,
-warm rooms.
+This is the premium redesign of the approved wireframe. The wireframe's copy
+is kept word for word, reorganised from one long page into dedicated pages.
+The visual and motion language is new, taken from the practice itself: a navy
+feature wall, brass signage and calm, warm rooms.
 
 ## Pages
 
 | Route | What it is |
 | --- | --- |
-| `/` | Home: services, referring doctors, team, the practice, patient guide, a look inside, questions, fees, locations, contact |
+| `/` | Home: the overview. Hero, focus statement, the three tests, a look inside the practice, and the practice itself |
+| `/your-visit` | Your visit: preparation by test, appointment essentials, fees and medical aid, common questions |
+| `/for-doctors` | For referring doctors: referral steps, the draft referral form and open questions |
+| `/our-team` | The clinical team (profiles awaiting practice approval) |
+| `/locations` | Practice locations and how to take the next step |
 | `/tests/eeg` | Electroencephalography patient information |
 | `/tests/ncs` | Nerve conduction studies patient information |
 | `/tests/emg` | Electromyography patient information |
 
-The home page also has an appointment request walkthrough (preview only,
-nothing is sent), a photo gallery, a privacy notice and a printable patient
-preparation guide.
+Each section lives on exactly one page. The site also has an appointment
+request walkthrough (preview only, nothing is sent), a photo gallery and a
+privacy notice; each test page can be printed as a preparation guide.
 
 ## Stack
 
@@ -48,7 +52,8 @@ STATIC_EXPORT=1 npm run build   # fully static site in ./out
 
 - `src/content/site.ts`: every visible string. Edit copy here, not in components.
 - `src/app/globals.css`: colour tokens, type scale and utilities.
-- `src/components/sections`: one file per home page section.
+- `src/components/sections`: one file per page section.
+- `src/components/layout/PageIntro.tsx`: the shared opening of every inner page.
 - `src/components/test-page`: the test page template.
 - `src/components/dialogs`: appointment request, gallery and privacy dialogs.
 - `src/components/signal` and `src/lib/signals.ts`: the live signal trace,

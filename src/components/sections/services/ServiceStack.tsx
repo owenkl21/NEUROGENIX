@@ -1,6 +1,6 @@
 "use client";
 
-import { createRef, useMemo, type RefObject } from "react";
+import { createRef, useMemo, type CSSProperties, type RefObject } from "react";
 import { motion, useScroll, useTransform, type MotionStyle, type Variants } from "motion/react";
 import { useLenis } from "lenis/react";
 import { useReducedMotion } from "@/components/motion/useReducedMotion";
@@ -22,13 +22,23 @@ const PARK = 32;
 const STEP_Y = 20;
 const parkTop = (index: number) => HEADER_H + PARK + index * STEP_Y;
 
+/*
+ * Panel height. 78svh on ordinary screens, but never taller than the space
+ * under the last panel's park line (with a little air below it), so on a short
+ * laptop screen the whole parked deck still fits. 480px is the least the
+ * panel's copy and readout need.
+ */
+const panelHeight = (count: number) => `clamp(480px, min(78svh, calc(100svh - ${parkTop(count - 1) + 24}px)), 720px)`;
+
 /* How far a panel recedes for each panel laid over it. */
 const SCALE_STEP = 0.035;
 const DIM_FIRST = 0.5;
 const DIM_SECOND = 0.22;
 
-/* The navy steps so the stack reads as separate sheets. */
-const tones = ["bg-navy", "bg-navy-2", "bg-navy-3"];
+/* The navy steps so the stack reads as separate sheets. In dark mode navy-3
+   is darker than the page itself, so the last sheet goes back to navy there:
+   it still differs from the sheet it lands on, and never reads as a hole. */
+const tones = ["bg-navy", "bg-navy-2", "bg-navy-3 dark:bg-navy"];
 
 /*
  * The abbreviation rises out of a mask. Both variant sets share the same
@@ -52,13 +62,17 @@ const abbrStill: Variants = {
  * invisible markers that sit where each panel would be without sticking, so
  * the measurement never moves with the sticky element itself.
  * Small screens and reduced motion get a plain stack with a gap.
+ *
+ * The list ends in an empty box one stack gap tall, so the last panel has
+ * room to park too: the finished deck, all three edges showing, holds for a
+ * beat before it leaves together.
  */
 export function ServiceStack() {
   const items = services.items;
   const markers = useMemo<Marker[]>(() => items.map(() => createRef<HTMLSpanElement>()), [items]);
 
   return (
-    <div className="relative [--panel-h:clamp(540px,78svh,720px)] [--stack-gap:28svh]">
+    <div className="relative [--stack-gap:28svh]" style={{ "--panel-h": panelHeight(items.length) } as CSSProperties}>
       {items.map((item, i) => (
         <span
           key={item.slug}
@@ -68,7 +82,7 @@ export function ServiceStack() {
           style={{ top: `calc(${i} * (var(--panel-h) + var(--stack-gap)))` }}
         />
       ))}
-      <ol className="flex flex-col gap-4 sm:gap-6 lg:motion-safe:gap-(--stack-gap)">
+      <ol className="flex flex-col gap-4 sm:gap-6 lg:motion-safe:gap-(--stack-gap) lg:motion-safe:after:block lg:motion-safe:after:content-['']">
         {items.map((item, i) => (
           <ServicePanel key={item.slug} item={item} index={i} self={markers[i]} next={markers[i + 1]} after={markers[i + 2]} />
         ))}
@@ -120,10 +134,11 @@ function ServicePanel({ item, index, self, next, after }: { item: Item; index: n
         className={`on-navy relative flex flex-col overflow-hidden rounded-surface border border-on-navy-line text-on-navy ${tones[index % tones.length]} p-6 sm:p-10 lg:grid lg:h-(--panel-h) lg:origin-top lg:grid-cols-12 lg:grid-rows-[auto_1fr_auto] lg:gap-x-8 lg:p-12 xl:px-14 lg:motion-safe:[scale:var(--deck-scale,1)]`}
         style={{ "--deck-scale": scale, "--deck-dim": dim } as MotionStyle}
       >
-        <p className="flex items-center gap-4 font-mono text-[0.8125rem] leading-none lg:col-span-6 lg:col-start-1 lg:row-start-1">
-          <span className="numeral text-brass">{item.number}</span>
-          <span aria-hidden="true" className="h-px w-8 bg-on-navy-line" />
-          <span className="text-on-navy-muted">{item.type}</span>
+        {/* The tests are not a sequence, so the label is the type alone, led
+            in by a short brass rule like the focus band's label. */}
+        <p className="flex items-center gap-3 font-mono text-[0.8125rem] leading-none text-on-navy-muted lg:col-span-6 lg:col-start-1 lg:row-start-1">
+          <span aria-hidden="true" className="h-px w-6 bg-brass" />
+          {item.type}
         </p>
 
         <motion.span
@@ -142,7 +157,10 @@ function ServicePanel({ item, index, self, next, after }: { item: Item; index: n
           </motion.span>
         </motion.span>
 
-        <RevealGroup className="mt-8 lg:col-span-6 lg:col-start-1 lg:row-start-2 lg:mt-0 lg:self-end lg:pt-10">
+        {/* Both the gap above the title and the readout's height follow the
+            panel's own height, so a short panel (a short laptop screen) gives
+            up air first and its copy never runs under the readout. */}
+        <RevealGroup className="mt-8 lg:col-span-6 lg:col-start-1 lg:row-start-2 lg:mt-0 lg:self-end lg:pt-[clamp(8px,calc(var(--panel-h)_-_510px),40px)]">
           <RevealItem>
             <h3 id={titleId} className="display-3 max-sm:text-[clamp(1.375rem,6.6vw,1.75rem)]">
               {item.name}
@@ -158,7 +176,7 @@ function ServicePanel({ item, index, self, next, after }: { item: Item; index: n
           </RevealItem>
         </RevealGroup>
 
-        <div className="mt-8 h-24 lg:col-span-12 lg:row-start-3 lg:mt-10 lg:h-[clamp(112px,19svh,172px)]">
+        <div className="mt-8 h-24 lg:col-span-12 lg:row-start-3 lg:mt-10 lg:h-[clamp(96px,calc(var(--panel-h)_*_0.245),172px)]">
           <SignalTrace kind={item.slug} mode="live" height={96} baseline className="h-full!" />
         </div>
 

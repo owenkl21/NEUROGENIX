@@ -24,7 +24,7 @@ export function LocationStage() {
   const float = wide && !reduce;
 
   return (
-    <div ref={ref} className="mt-14 md:mt-20">
+    <div ref={ref}>
       <ParallaxImage
         src={locations.image.src}
         alt={locations.image.alt}
@@ -46,7 +46,7 @@ export function LocationStage() {
             {locations.status}
           </p>
 
-          <h3 className="title-3 mt-6 text-ink">{locations.heading}</h3>
+          <h2 className="title-3 mt-6 text-ink">{locations.heading}</h2>
 
           <RevealGroup as="dl" amount={0.4} className="mt-8 grid grid-cols-1 gap-x-10 gap-y-5 md:grid-cols-2 md:gap-y-7">
             {locations.fields.map((field) => (

@@ -8,7 +8,7 @@ import { booking } from "@/content/site";
 import { Button } from "@/components/ui";
 import { SignalTrace } from "@/components/signal/SignalTrace";
 import type { SignalKind } from "@/lib/signals";
-import { Field, FieldError, Select } from "./fields";
+import { ActionBar, Field, FieldError, SCROLL_CLEAR_BOTTOM, Select } from "./fields";
 import type { BookingErrors, BookingForm } from "./model";
 
 const TEST_ERROR_ID = "booking-test-error";
@@ -52,7 +52,16 @@ export function StepTest({
       </h3>
       <p className="mt-2 max-w-[58ch] text-[0.9375rem] leading-relaxed text-muted">{s.process}</p>
 
-      <fieldset className="mt-6" aria-describedby={errors.test ? TEST_ERROR_ID : undefined}>
+      {/* A radiogroup carries the required state for its radios (a native
+          required on each radio would be announced as invalid before anyone
+          has answered, since the form validates itself). */}
+      <fieldset
+        role="radiogroup"
+        aria-required="true"
+        aria-invalid={errors.test ? true : undefined}
+        aria-describedby={errors.test ? TEST_ERROR_ID : undefined}
+        className="mt-6 md:[@media(max-height:860px)]:mt-5"
+      >
         <legend className="sr-only">{s.heading}</legend>
         <div className="grid gap-3 min-[480px]:grid-cols-2">
           {s.choices.map((choice, i) => (
@@ -69,8 +78,13 @@ export function StepTest({
         <FieldError id={TEST_ERROR_ID} message={errors.test} />
       </fieldset>
 
-      <div className="mt-7 grid gap-6 sm:grid-cols-2 sm:items-start sm:gap-3">
-        <Field id="booking-referral" label={s.referralLabel} error={errors.referral}>
+      {/* From sm the referral question rides in the action bar beside
+          Continue, so the whole step can be answered without scrolling past
+          the cards. A phone is too narrow for both on one row, so there the
+          question closes the step and the bar carries Continue alone: each
+          bar steps aside (display: contents) where the other one applies. */}
+      <ActionBar className="max-sm:contents sm:grid sm:grid-cols-2 sm:items-start sm:gap-3">
+        <Field id="booking-referral" label={s.referralLabel} error={errors.referral} className="mt-7 sm:mt-0">
           <Select
             id="booking-referral"
             value={form.referral}
@@ -78,15 +92,20 @@ export function StepTest({
             options={s.referralOptions}
             placeholder={s.referralPlaceholder}
             invalid={Boolean(errors.referral)}
+            required
             inputRef={referralRef}
+            // In the action bar from sm it is always in view; no scroll room needed.
+            className="sm:scroll-m-0"
           />
         </Field>
-        <div className="sm:mt-8 sm:justify-self-end">
-          <Button type="submit" className="w-full sm:w-auto">
-            {s.continue}
-          </Button>
-        </div>
-      </div>
+        <ActionBar className="sm:contents">
+          <div className="sm:mt-8 sm:justify-self-end">
+            <Button type="submit" className="w-full sm:w-auto">
+              {s.continue}
+            </Button>
+          </div>
+        </ActionBar>
+      </ActionBar>
     </form>
   );
 }
@@ -117,11 +136,11 @@ function ChoiceCard({
         checked={checked}
         onChange={() => onSelect(choice.value)}
         aria-describedby={invalid ? TEST_ERROR_ID : undefined}
-        className="peer sr-only scroll-mt-28"
+        className={`peer absolute inset-0 z-[1] m-0 size-full cursor-pointer appearance-none rounded-surface opacity-0 scroll-mt-24 ${SCROLL_CLEAR_BOTTOM}`}
       />
       <span
-        className={`flex h-full flex-col rounded-surface border bg-surface px-5 pb-4 pt-5 transition-[border-color,box-shadow] duration-300 ease-calm peer-focus-visible:outline-2 peer-focus-visible:outline-offset-3 peer-focus-visible:outline-brass-ink ${
-          checked ? "border-ink shadow-[inset_0_0_0_1px_var(--ink)]" : invalid ? "border-line-strong" : "border-line group-hover:border-line-strong"
+        className={`flex h-full flex-col rounded-surface border bg-surface px-5 pb-4 pt-5 transition-[border-color,box-shadow] duration-300 ease-calm md:[@media(max-height:860px)]:pb-3 md:[@media(max-height:860px)]:pt-4 peer-focus-visible:outline-2 peer-focus-visible:outline-offset-3 peer-focus-visible:outline-brass-ink ${
+          checked ? "border-ink shadow-[inset_0_0_0_1px_var(--ink)]" : invalid ? "border-brass-ink" : "border-line-strong group-hover:border-ink-2"
         }`}
       >
         <span className="flex items-start justify-between gap-4">
@@ -130,7 +149,7 @@ function ChoiceCard({
             <span className="mt-1 block text-[0.875rem] leading-snug text-muted">{choice.sub}</span>
           </span>
           <span aria-hidden="true" className="relative grid size-6 shrink-0 place-items-center">
-            <Circle size={24} weight="light" className={`absolute inset-0 text-line-strong transition-opacity duration-300 ${checked ? "opacity-0" : "opacity-100"}`} />
+            <Circle size={24} weight="light" className={`absolute inset-0 text-muted transition-[opacity,color] group-hover:text-ink-2 duration-300 ${checked ? "opacity-0" : "opacity-100"}`} />
             <AnimatePresence initial={false}>
               {checked ? (
                 <motion.span
@@ -155,7 +174,7 @@ function ChoiceCard({
           amplitude={0.42}
           strokeWidth={checked ? 1.5 : 1.25}
           color={checked ? "var(--brass-ink)" : "var(--line-strong)"}
-          className="mt-4"
+          className="mt-4 md:[@media(max-height:860px)]:mt-3 md:[@media(max-height:860px)]:h-4!"
         />
       </span>
     </label>
