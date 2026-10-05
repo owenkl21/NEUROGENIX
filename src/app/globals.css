@@ -36,6 +36,10 @@
   --signal-logo: #3f86ce;
   /* The logo's NEURO and its line: brand blue on every ground. */
   --logo-auto-accent: var(--signal-logo);
+  /* The signal pulse that travels the logo: deep electric blue along the
+     line and a brand-blue wave across the brain outline on light grounds. */
+  --logo-pulse: #0b56d6;
+  --logo-pulse-brain: #2f7fe6;
 
   --shadow-tint: 35 31 32;
   --header-h: 72px;
@@ -67,6 +71,8 @@
     --signal-ink: #7fb4ec;
     --signal-logo: #6aa7e8;
     --logo-auto-accent: var(--signal-logo);
+    --logo-pulse: #e6f1ff;
+    --logo-pulse-brain: #6aa7e8;
 
     --shadow-tint: 0 0 0;
     color-scheme: dark;
@@ -258,6 +264,11 @@
   .on-deep .headline-soft {
     color: var(--signal);
   }
+  /* On brand-black blocks the pulse glows instead. */
+  .on-deep {
+    --logo-pulse: #e6f1ff;
+    --logo-pulse-brain: #5a9be0;
+  }
 
   /* Section rhythm: compact on phones, opening up on tablets, full air from
      1024px, where the desktop spacing is already right. */
@@ -330,6 +341,9 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .logo-pulse {
+    display: none;
+  }
   *,
   *::before,
   *::after {

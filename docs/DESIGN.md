@@ -173,6 +173,9 @@ is a real-looking trace, generated from physiology (`src/lib/signals.ts`):
   `color="var(--signal-ink)"` or `color="var(--ink)"`.
 - Use traces where a signal means something (a test, a transition between
   sections). Never as wallpaper behind text.
+- The logo carries the same idea: every 5 seconds a pulse travels its line,
+  lights the brain outline as it crosses it, and exits along the trace
+  (`layout/Logo.tsx`, SVG animation, hidden under reduced motion).
 
 ## 7. Building blocks (all in `src/components`)
 
