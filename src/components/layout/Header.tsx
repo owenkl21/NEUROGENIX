@@ -2,10 +2,11 @@
 
 import { useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
-import { AnimatePresence, motion, useMotionValueEvent, useReducedMotion, useScroll } from "motion/react";
+import { AnimatePresence, motion, useMotionValueEvent, useScroll } from "motion/react";
+import { useReducedMotion } from "@/components/motion/useReducedMotion";
 import { useLenis } from "lenis/react";
 import { ArrowRight } from "@phosphor-icons/react";
-import { nav, site } from "@/content/site";
+import { nav, routes, site } from "@/content/site";
 import { BookButton, SmartLink } from "@/components/ui";
 import { EASE } from "@/components/motion/primitives";
 import { Wordmark } from "./Wordmark";
@@ -13,8 +14,8 @@ import { Wordmark } from "./Wordmark";
 /**
  * Sticky header. Transparent over the hero, then settles onto a frosted paper
  * bar once the page moves. It steps out of the way while reading downwards and
- * returns the moment the reader scrolls back up. On the home page the current
- * section is marked with a sliding underline.
+ * returns the moment the reader scrolls back up. The current page is marked
+ * with a sliding brass underline.
  */
 export function Header() {
   const pathname = usePathname();
@@ -24,7 +25,7 @@ export function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [hidden, setHidden] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [active, setActive] = useState<string | null>(null);
+  const [servicesInView, setServicesInView] = useState(false);
   const lastY = useRef(0);
 
   useMotionValueEvent(scrollY, "change", (y) => {
@@ -37,23 +38,20 @@ export function Header() {
     if (nextHidden !== hidden) setHidden(nextHidden);
   });
 
+  // Services lives on the home page, so it lights up while that section is on
+  // screen (and on the test pages beneath it). Every other item is a page.
   useEffect(() => {
-    if (!isHome) {
-      setActive(null);
-      return;
-    }
-    const ids = nav.map((n) => n.href.split("#")[1]);
-    const sections = ids.map((id) => document.getElementById(id)).filter((el): el is HTMLElement => !!el);
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const visible = entries.filter((e) => e.isIntersecting).sort((a, b) => b.intersectionRatio - a.intersectionRatio);
-        if (visible[0]) setActive(visible[0].target.id);
-      },
-      { rootMargin: "-40% 0px -55% 0px", threshold: [0, 0.25, 0.5] },
-    );
-    sections.forEach((s) => observer.observe(s));
+    if (!isHome) return;
+    const el = document.getElementById("services");
+    if (!el) return;
+    const observer = new IntersectionObserver(([entry]) => setServicesInView(entry.isIntersecting), { rootMargin: "-35% 0px -55% 0px" });
+    observer.observe(el);
     return () => observer.disconnect();
   }, [isHome]);
+
+  const activeHref =
+    nav.find((n) => !n.href.includes("#") && (pathname === n.href || pathname.startsWith(`${n.href}/`)))?.href ??
+    ((isHome && servicesInView) || pathname.startsWith("/tests") ? routes.services : null);
 
   return (
     <>
@@ -65,19 +63,19 @@ export function Header() {
         transition={{ duration: 0.5, ease: EASE }}
       >
         <div className="container-x flex h-[var(--header-h)] items-center justify-between gap-6">
-          <SmartLink href="/#" className="rounded-md" aria-label={`${site.name} home`}>
+          <SmartLink href="/" className="rounded-md" aria-label={`${site.name} home`}>
             <Wordmark />
           </SmartLink>
 
-          <nav aria-label="Main navigation" className="hidden items-center gap-1 lg:flex">
+          <nav aria-label="Main navigation" className="hidden items-center gap-0.5 xl:flex">
             {nav.map((item) => {
-              const id = item.href.split("#")[1];
-              const isActive = active === id;
+              const isActive = activeHref === item.href;
               return (
                 <SmartLink
                   key={item.href}
                   href={item.href}
-                  className={`relative rounded-full px-3.5 py-2 text-[0.9375rem] transition-colors duration-300 ${isActive ? "text-ink" : "text-muted hover:text-ink"}`}
+                  aria-current={isActive && !item.href.includes("#") ? "page" : undefined}
+                  className={`relative whitespace-nowrap rounded-full px-3.5 py-2 text-[0.9375rem] transition-colors duration-300 ${isActive ? "text-ink" : "text-muted hover:text-ink"}`}
                 >
                   {item.label}
                   {isActive && (
@@ -89,10 +87,12 @@ export function Header() {
           </nav>
 
           <div className="flex items-center gap-3">
-            <BookButton className="hidden sm:inline-flex" />
+            <span className="hidden sm:block">
+              <BookButton />
+            </span>
             <button
               type="button"
-              className="group grid size-11 place-items-center rounded-full border border-line lg:hidden"
+              className="group grid size-11 place-items-center rounded-full border border-line xl:hidden"
               aria-label="Open navigation"
               aria-expanded={menuOpen}
               aria-controls="mobile-navigation"
@@ -126,7 +126,7 @@ function MobileMenu({ open, onClose }: { open: boolean; onClose: () => void }) {
   }, [open, lenis]);
 
   useEffect(() => {
-    const mq = window.matchMedia("(min-width: 1024px)");
+    const mq = window.matchMedia("(min-width: 1280px)");
     const onChange = () => mq.matches && onClose();
     mq.addEventListener("change", onChange);
     return () => mq.removeEventListener("change", onChange);
@@ -164,7 +164,7 @@ function MobileMenu({ open, onClose }: { open: boolean; onClose: () => void }) {
             transition={{ duration: 0.7, ease: EASE }}
           >
             <div className="container-x flex h-[var(--header-h)] shrink-0 items-center justify-between">
-              <SmartLink href="/#" onClick={onClose} aria-label={`${site.name} home`}>
+              <SmartLink href="/" onClick={onClose} aria-label={`${site.name} home`}>
                 <Wordmark />
               </SmartLink>
               <button type="button" onClick={onClose} aria-label="Close navigation" className="grid size-11 place-items-center rounded-full border border-line">

@@ -85,7 +85,6 @@
 
   /* Radius rule: interactive controls are full pills, surfaces are 24px
      (18px below md), inputs are 12px. Nothing else. */
-  --radius-surface: 24px;
   --radius-surface-sm: 18px;
   --radius-input: 12px;
 
@@ -102,6 +101,11 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     scroll-padding-top: calc(var(--header-h) + 24px);
+  }
+
+  html,
+  body {
+    overflow-x: clip;
   }
 
   body {
@@ -232,14 +236,6 @@
     }
   }
 
-  .rounded-surface {
-    border-radius: var(--radius-surface-sm);
-  }
-  @media (min-width: 768px) {
-    .rounded-surface {
-      border-radius: var(--radius-surface);
-    }
-  }
 
   .hairline {
     height: 1px;
@@ -250,6 +246,15 @@
     box-shadow:
       0 1px 0 rgb(var(--shadow-tint) / 0.04),
       0 24px 60px -32px rgb(var(--shadow-tint) / 0.28);
+  }
+}
+
+/* Surfaces: 18px on phones, 24px from md. Declared as a utility so it wins
+   responds to the breakpoint, which a plain theme token cannot. */
+@utility rounded-surface {
+  border-radius: 18px;
+  @media (width >= 48rem) {
+    border-radius: 24px;
   }
 }
 
@@ -302,8 +307,22 @@
   display: none;
 }
 @media print {
-  .grain::after {
-    display: none;
+  /* Paper is always light, whatever the screen theme. */
+  :root {
+    color-scheme: light;
+    --paper: #ffffff;
+    --paper-2: #f1f1ec;
+    --surface: #ffffff;
+    --ink: #12262f;
+    --ink-2: #3b5260;
+    --muted: #56656c;
+    --line: #d7d9d1;
+    --line-strong: #bfc3ba;
+    --brass-ink: #77592b;
+  }
+  .grain::after,
+  .skip-link {
+    display: none !important;
   }
   body.printing-guide > *:not(#print-guide) {
     display: none !important;

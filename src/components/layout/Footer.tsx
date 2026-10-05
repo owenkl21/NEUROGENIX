@@ -22,11 +22,11 @@ export function Footer() {
           </Reveal>
         </div>
 
-        <SignalTrace kind="eeg" height={88} amplitude={0.4} className="mt-16 md:mt-24" speed={0.8} />
+        <SignalTrace kind="eeg" bleed height={96} amplitude={0.36} className="mt-16 md:mt-24" />
 
         <div className="mt-10 grid gap-10 border-t border-on-navy-line pt-10 md:grid-cols-12">
           <div className="md:col-span-5">
-            <SmartLink href="/#" aria-label={`${site.name} home`} className="inline-flex rounded-md">
+            <SmartLink href="/" aria-label={`${site.name} home`} className="inline-flex rounded-md">
               <Wordmark tone="light" />
             </SmartLink>
           </div>

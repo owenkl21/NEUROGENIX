@@ -39,8 +39,8 @@ function eeg(t: number) {
   const envelope = 0.62 + 0.38 * noise(t * 0.7);
   const alpha = Math.sin(TAU * 10 * t + 0.8 * noise(t * 0.45)) * envelope * 0.56;
   const theta = Math.sin(TAU * 5.4 * t + 1.3) * (0.5 + 0.5 * noise(t * 0.32 + 9)) * 0.24;
-  const beta = Math.sin(TAU * 21 * t + 0.4) * 0.08;
-  const grain = noise(t * 38) * 0.14 + noise(t * 91 + 3) * 0.05;
+  const beta = Math.sin(TAU * 19 * t + 0.4) * 0.035;
+  const grain = noise(t * 26) * 0.05;
   return alpha + theta + beta + grain;
 }
 

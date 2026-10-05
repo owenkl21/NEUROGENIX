@@ -1,6 +1,7 @@
 "use client";
 
-import { motion, useReducedMotion } from "motion/react";
+import { motion } from "motion/react";
+import { useReducedMotion } from "@/components/motion/useReducedMotion";
 import { EASE } from "@/components/motion/primitives";
 
 /** Route change: the incoming page settles up into place. */

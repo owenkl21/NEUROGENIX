@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useRef, type ReactNode } from "react";
-import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+import { AnimatePresence, motion } from "motion/react";
+import { useReducedMotion } from "@/components/motion/useReducedMotion";
 import { useLenis } from "lenis/react";
 import { X } from "@phosphor-icons/react";
 import { EASE } from "@/components/motion/primitives";
@@ -83,7 +84,8 @@ export function Modal({ open, onClose, labelledBy, describedBy, children, varian
           ) : (
             <div key="panel-wrap" className="pointer-events-none fixed inset-0 flex items-end justify-center md:items-center md:p-6">
               <motion.div
-                className={`pointer-events-auto relative max-h-[calc(100dvh-24px)] w-full overflow-y-auto overscroll-contain rounded-t-[24px] bg-surface shadow-soft md:max-h-[calc(100dvh-48px)] md:rounded-[24px] ${panelClassName}`}
+                tabIndex={-1}
+                className={`pointer-events-auto relative outline-none max-h-[calc(100dvh-24px)] w-full overflow-y-auto overscroll-contain rounded-t-[24px] bg-surface shadow-soft md:max-h-[calc(100dvh-48px)] md:rounded-[24px] ${panelClassName}`}
                 {...panelMotion}
               >
                 {children}

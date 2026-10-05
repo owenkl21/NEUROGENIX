@@ -1,8 +1,14 @@
-// STUB: replaced by the section builder. Keep the export name and section id.
+import { FocusBand } from "./hero/FocusBand";
+
+/**
+ * A calm band between the hero and the services: one statement, lit word by
+ * word as it scrolls through, framed by hairlines. No eyebrow; the plain
+ * sentence-case label beside it is deliberately not an uppercase label.
+ */
 export function FocusStrip() {
   return (
-    <section className="section-y container-x">
-      <h2 className="display-2">FocusStrip</h2>
+    <section aria-labelledby="focus-heading" className="container-x">
+      <FocusBand />
     </section>
   );
 }

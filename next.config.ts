@@ -8,6 +8,8 @@ const isStaticExport = process.env.STATIC_EXPORT === "1";
 const nextConfig: NextConfig = isStaticExport
   ? { output: "export", trailingSlash: true, images: { unoptimized: true } }
   : {
+      // Lets phones and tablets on the same Wi-Fi load the dev server.
+      allowedDevOrigins: ["10.0.0.116", "Owens-MacBook-Pro.local", "*.local"],
       async redirects() {
         return [
           { source: "/tests/:slug.html", destination: "/tests/:slug", permanent: true },

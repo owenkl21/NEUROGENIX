@@ -1,31 +1,23 @@
 import { Hero } from "@/components/sections/Hero";
 import { FocusStrip } from "@/components/sections/FocusStrip";
 import { Services } from "@/components/sections/Services";
-import { Referral } from "@/components/sections/Referral";
-import { Team } from "@/components/sections/Team";
-import { Practice } from "@/components/sections/Practice";
-import { PatientGuide } from "@/components/sections/PatientGuide";
 import { LookInside } from "@/components/sections/LookInside";
-import { Faq } from "@/components/sections/Faq";
-import { Fees } from "@/components/sections/Fees";
-import { Locations } from "@/components/sections/Locations";
-import { Contact } from "@/components/sections/Contact";
+import { Practice } from "@/components/sections/Practice";
 
+/**
+ * Home is the overview and nothing on it is repeated elsewhere: what the
+ * practice does, the three tests (each opening its own page), a look inside,
+ * and the practice itself, which hands over to Your visit. Everything else
+ * has one home of its own: /your-visit, /for-doctors, /our-team, /locations.
+ */
 export default function Home() {
   return (
     <>
       <Hero />
       <FocusStrip />
       <Services />
-      <Referral />
-      <Team />
-      <Practice />
-      <PatientGuide />
       <LookInside />
-      <Faq />
-      <Fees />
-      <Locations />
-      <Contact />
+      <Practice />
     </>
   );
 }

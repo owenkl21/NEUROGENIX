@@ -25,19 +25,75 @@ export const previewBar = {
   test: ["Private website preview", "Clinical content awaiting practice approval."],
 };
 
+export const routes = {
+  home: "/",
+  services: "/#services",
+  team: "/our-team",
+  visit: "/your-visit",
+  doctors: "/for-doctors",
+  locations: "/locations",
+};
+
 export const nav = [
-  { label: "Services", href: "/#services" },
-  { label: "Our team", href: "/#clinical-team" },
-  { label: "Your visit", href: "/#patient-guide" },
-  { label: "For doctors", href: "/#referring-doctors" },
-  { label: "Locations", href: "/#locations" },
+  { label: "Services", href: routes.services },
+  { label: "Our team", href: routes.team },
+  { label: "Your visit", href: routes.visit },
+  { label: "For doctors", href: routes.doctors },
+  { label: "Locations", href: routes.locations },
 ];
+
+/**
+ * Page intros for the inner pages. Titles and lede paragraphs are the
+ * section headlines from the wireframe; eyebrows are the wireframe's own
+ * section labels.
+ */
+export type PageKey = "visit" | "doctors" | "team" | "locations";
+export const pages: Record<PageKey, { path: string; crumb: string; metaTitle: string; eyebrow: string; title: string[]; body: string; trace: "eeg" | "ncs" | "emg" | "calm" }> = {
+  visit: {
+    path: routes.visit,
+    crumb: "Your visit",
+    metaTitle: "Your visit | Neurogenix",
+    eyebrow: "Patient guide",
+    title: ["A little preparation.", "A lot more peace of mind."],
+    body: "Select your test for a simple guide to what happens and how to prepare. Always follow the specific instructions given by your care team.",
+    trace: "eeg",
+  },
+  doctors: {
+    path: routes.doctors,
+    crumb: "For doctors",
+    metaTitle: "For referring doctors | Neurogenix",
+    eyebrow: "For referring doctors",
+    title: ["A clear referral.", "A coordinated next step."],
+    body: "Information for clinicians arranging EEG, nerve conduction studies or EMG. Final services, eligibility and referral arrangements require practice confirmation.",
+    trace: "ncs",
+  },
+  team: {
+    path: routes.team,
+    crumb: "Our team",
+    metaTitle: "Our team | Neurogenix",
+    eyebrow: "The clinical team",
+    title: ["Know who is", "involved in your test."],
+    body: "Practitioner profiles will identify each team member’s registered profession, qualifications, role in testing and relevant clinical experience.",
+    trace: "eeg",
+  },
+  locations: {
+    path: routes.locations,
+    crumb: "Locations",
+    metaTitle: "Locations | Neurogenix",
+    eyebrow: "Practice locations",
+    title: ["Find the right practice.", "Plan your arrival."],
+    body: "Confirm which location performs your test. Location details will be added once the practice supplies and verifies them.",
+    trace: "calm",
+  },
+};
+
+export const breadcrumbHome = "Home";
 
 export const hero = {
   eyebrow: "The science of connection",
   title: ["Understanding the signals.", "Caring for the person."],
   body: "Brain, nerve and muscle testing, explained simply. Discover what your test involves and take the next step with confidence.",
-  secondary: { label: "Explore our services", href: "/#services" },
+  secondary: { label: "Explore our services", href: routes.services },
   note: "Information for patients and referring clinicians.",
   image: {
     src: "/images/waiting-room.jpg",
@@ -51,7 +107,7 @@ export const hero = {
 export const focus = {
   label: "Clinical neurophysiology",
   statement: ["Understanding the connections between your", "brain, nerves and muscles."],
-  link: { label: "New to neurophysiology?", href: "/#patient-guide" },
+  link: { label: "New to neurophysiology?", href: routes.visit },
 };
 
 export const services = {
@@ -116,7 +172,7 @@ export const referral = {
     title: ["Start with the", "right information."],
     body: "Review the proposed one-page referral form. The practice must approve its fields and submission instructions before clinical use.",
     download: { label: "Download draft referral form", href: "/documents/neurogenix-referral-draft.pdf" },
-    contact: { label: "Professional contact details", href: "/#contact" },
+    contact: { label: "Professional contact details", href: `${routes.locations}#contact` },
     note: "Draft for review only. Do not enter or send real patient information using this preview.",
   },
   facts: [
@@ -162,7 +218,7 @@ export const practice = {
     { number: "02", title: "Understand each step", body: "Explore how testing works before you arrive." },
     { number: "03", title: "Supporting your next step", body: "Test results help inform your clinician’s assessment." },
   ],
-  link: { label: "Get to know your visit", href: "/#patient-guide" },
+  link: { label: "Get to know your visit", href: routes.visit },
 };
 
 export type Guide = {
@@ -304,6 +360,9 @@ export const gallery = {
   ],
   previous: "Previous",
   next: "Next",
+  previousLabel: "Previous photo",
+  nextLabel: "Next photo",
+  openPhoto: "Open photo",
   close: "Close photo gallery",
 };
 
@@ -381,15 +440,17 @@ export const contact = {
     body: "The practice’s locations, telephone number, email address and opening hours are awaiting confirmation.",
     statusLabel: "For this review version",
     status: "Appointments are demonstrated only. No request is sent or booked.",
-    link: { label: "Read the patient guide", href: "/#patient-guide" },
+    link: { label: "Read the patient guide", href: routes.visit },
   },
 };
 
 export const footer = {
   links: [
-    { label: "Services", href: "/#services" },
-    { label: "For doctors", href: "/#referring-doctors" },
-    { label: "Locations", href: "/#locations" },
+    { label: "Services", href: routes.services },
+    { label: "Your visit", href: routes.visit },
+    { label: "For doctors", href: routes.doctors },
+    { label: "Our team", href: routes.team },
+    { label: "Locations", href: routes.locations },
   ],
   privacy: "Privacy information",
   rights: "Neurogenix. All rights reserved.",
@@ -482,7 +543,7 @@ export type TestPage = {
 const testShared = {
   eyebrow: "Patient information",
   otherTests: "Other tests",
-  breadcrumbRoot: { label: "Services", href: "/#services" },
+  breadcrumbRoot: { label: "Services", href: routes.services },
   footnote:
     "Your referring clinician determines whether this assessment is appropriate. Service availability and practice-specific instructions require confirmation.",
   print: "Print this page",
@@ -490,7 +551,7 @@ const testShared = {
     label: "After your test",
     title: ["Understanding", "your results."],
     body: "The results are considered alongside your symptoms, history and other investigations. Confirm the report arrangements and discuss the findings with your referring clinician.",
-    cta: { label: "Information for doctors", href: "/#referring-doctors" },
+    cta: { label: "Information for doctors", href: routes.doctors },
   },
   sources: {
     before: "General information: ",
@@ -505,8 +566,8 @@ const testShared = {
     title: "Before your visit.",
     body: "Confirm the test location, preparation, fees and authorisation requirements with reception.",
     links: [
-      { label: "Practice locations", href: "/#locations" },
-      { label: "Fees and medical aid", href: "/#fees" },
+      { label: "Practice locations", href: routes.locations },
+      { label: "Fees and medical aid", href: `${routes.visit}#fees` },
     ],
   },
 };

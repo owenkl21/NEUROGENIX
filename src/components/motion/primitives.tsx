@@ -2,15 +2,8 @@
 
 import { useRef, type ReactNode } from "react";
 import Image from "next/image";
-import {
-  motion,
-  useMotionValue,
-  useReducedMotion,
-  useScroll,
-  useSpring,
-  useTransform,
-  type Variants,
-} from "motion/react";
+import { motion, useMotionValue, useScroll, useSpring, useTransform, type Variants } from "motion/react";
+import { useReducedMotion } from "@/components/motion/useReducedMotion";
 
 /**
  * Motion grammar for the whole site. One easing, two durations, one stagger.
@@ -168,7 +161,7 @@ export function ParallaxImage({ src, alt, width, height, sizes, priority, classN
       transition={{ duration: 1.4, ease: EASE }}
     >
       <motion.div className="absolute inset-0" style={reduce ? undefined : { y, scale }}>
-        <Image src={src} alt={alt} width={width} height={height} sizes={sizes} priority={priority} className={`h-full w-full object-cover ${imgClassName}`} />
+        <Image src={src} alt={alt} width={width} height={height} sizes={sizes} loading={priority ? "eager" : undefined} fetchPriority={priority ? "high" : undefined} className={`h-full w-full object-cover ${imgClassName}`} />
       </motion.div>
     </motion.div>
   );

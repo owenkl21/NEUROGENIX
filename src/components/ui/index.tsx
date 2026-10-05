@@ -17,11 +17,13 @@ type LinkishProps = {
   download?: boolean;
   external?: boolean;
   onClick?: () => void;
+  onFocus?: () => void;
   "aria-label"?: string;
+  "aria-current"?: "page" | "location" | "step" | boolean;
 };
 
 /** Internal links glide to same-page anchors; external links open safely. */
-export function SmartLink({ href, children, className, download, external, onClick, ...rest }: LinkishProps) {
+export function SmartLink({ href, children, className, download, external, onClick, onFocus, ...rest }: LinkishProps) {
   const navigate = useHashNavigation();
   if (external || download) {
     return (
@@ -32,6 +34,7 @@ export function SmartLink({ href, children, className, download, external, onCli
         target={external ? "_blank" : undefined}
         rel={external ? "noopener noreferrer" : undefined}
         onClick={onClick}
+        onFocus={onFocus}
         aria-label={rest["aria-label"]}
       >
         {children}
@@ -43,6 +46,8 @@ export function SmartLink({ href, children, className, download, external, onCli
       href={href}
       className={className}
       aria-label={rest["aria-label"]}
+      aria-current={rest["aria-current"]}
+      onFocus={onFocus}
       onClick={(e: MouseEvent<HTMLAnchorElement>) => {
         onClick?.();
         if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
@@ -57,7 +62,8 @@ export function SmartLink({ href, children, className, download, external, onCli
 type ButtonVariant = "primary" | "brass" | "outline" | "outline-light";
 
 const variantClass: Record<ButtonVariant, string> = {
-  primary: "bg-navy text-on-navy hover:bg-navy-2",
+  // On the dark theme navy would sink into the page, so the primary action turns brass.
+  primary: "bg-navy text-on-navy hover:bg-navy-2 dark:bg-brass dark:text-navy-3 dark:hover:bg-brass dark:hover:brightness-[1.06]",
   brass: "bg-brass text-navy-3 hover:brightness-[1.06]",
   outline: "border border-line-strong text-ink hover:border-ink",
   "outline-light": "border border-on-navy-line text-on-navy hover:border-on-navy",
@@ -98,7 +104,7 @@ export function Button(props: ButtonProps) {
       {Icon && (
         <span
           className={`grid shrink-0 place-items-center rounded-full transition-transform duration-500 ease-calm group-hover:translate-x-0.5 ${size === "lg" ? "size-9" : "size-8"} ${
-            variant === "primary" ? "bg-on-navy/10" : variant === "brass" ? "bg-navy-3/10" : "bg-ink/5"
+            variant === "primary" ? "bg-on-navy/10 dark:bg-navy-3/10" : variant === "brass" ? "bg-navy-3/10" : "bg-ink/5"
           }`}
         >
           <Icon size={16} weight="regular" aria-hidden="true" />
@@ -142,6 +148,7 @@ export function TextLink({
   arrow = true,
   external,
   onClick,
+  onFocus,
   tone = "ink",
 }: {
   href?: string;
@@ -150,6 +157,7 @@ export function TextLink({
   arrow?: boolean;
   external?: boolean;
   onClick?: () => void;
+  onFocus?: () => void;
   tone?: "ink" | "light";
 }) {
   const body = (
@@ -171,16 +179,16 @@ export function TextLink({
         ))}
     </>
   );
-  const classes = `group inline-flex items-center gap-2 font-medium ${tone === "light" ? "text-on-navy" : "text-ink"} ${className}`;
+  const classes = `group inline-flex min-h-11 items-center gap-2 font-medium ${tone === "light" ? "text-on-navy" : "text-ink"} ${className}`;
   if (!href) {
     return (
-      <button type="button" onClick={onClick} className={classes}>
+      <button type="button" onClick={onClick} onFocus={onFocus} className={classes}>
         {body}
       </button>
     );
   }
   return (
-    <SmartLink href={href} className={classes} external={external} onClick={onClick}>
+    <SmartLink href={href} className={classes} external={external} onClick={onClick} onFocus={onFocus}>
       {body}
     </SmartLink>
   );
