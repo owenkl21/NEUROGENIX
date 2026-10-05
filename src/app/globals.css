@@ -132,7 +132,7 @@
      Lenis reads this margin too, so glides and native jumps land together. */
   main :where(*),
   footer :where(*) {
-    scroll-margin-top: calc(var(--header-h) + 24px);
+    scroll-margin-top: calc(var(--header-h) + 24px + env(safe-area-inset-top));
   }
 
   html,
@@ -199,16 +199,19 @@
     margin-inline: auto;
     width: 100%;
     max-width: 1320px;
-    padding-inline: 20px;
+    padding-left: max(20px, env(safe-area-inset-left));
+    padding-right: max(20px, env(safe-area-inset-right));
   }
   @media (min-width: 640px) {
     .container-x {
-      padding-inline: 32px;
+      padding-left: max(32px, env(safe-area-inset-left));
+      padding-right: max(32px, env(safe-area-inset-right));
     }
   }
   @media (min-width: 1024px) {
     .container-x {
-      padding-inline: 48px;
+      padding-left: max(48px, env(safe-area-inset-left));
+      padding-right: max(48px, env(safe-area-inset-right));
     }
   }
 

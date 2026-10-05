@@ -31,6 +31,7 @@ export function Header() {
   // Pinned: scrolled past the preview bar, so the header sits at the very top.
   const [stuck, setStuck] = useState(false);
   const barHeight = useRef(0);
+  const insetRef = useRef<HTMLDivElement>(null);
   const [hidden, setHidden] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [servicesInView, setServicesInView] = useState(false);
@@ -65,7 +66,9 @@ export function Header() {
     lastY.current = y;
     const nextScrolled = y > 24;
     if (nextScrolled !== scrolled) setScrolled(nextScrolled);
-    const nextStuck = y >= barHeight.current - 1;
+    // The header pins once the preview bar has scrolled up to the status bar.
+    const inset = insetRef.current?.offsetHeight ?? 0;
+    const nextStuck = y >= barHeight.current - inset - 1;
     if (nextStuck !== stuck) setStuck(nextStuck);
     if (menuOpen) return;
     // Near the top the header is always there. Further down it follows the
@@ -94,25 +97,27 @@ export function Header() {
 
   return (
     <>
+      {/* The status-bar area on phones with a notch or Dynamic Island (zero
+          height everywhere else). Once the page scrolls it is filled in the
+          header's frosted colour, so content never shows behind the clock and
+          the header always sits just below it; it stays when the header steps
+          away. At the top of the page the preview bar fills it instead. */}
+      <div
+        ref={insetRef}
+        data-safe-top=""
+        aria-hidden="true"
+        className={`pointer-events-none fixed inset-x-0 top-0 z-[45] h-[env(safe-area-inset-top)] bg-paper/85 backdrop-blur-xl backdrop-saturate-150 transition-opacity duration-300 ${
+          stuck ? "opacity-100" : "opacity-0"
+        }`}
+      />
       <motion.header
         ref={headerRef}
-        className={`sticky top-0 z-40 transition-[background-color,border-color,backdrop-filter] duration-500 ${
+        className={`sticky top-[env(safe-area-inset-top)] z-40 transition-[background-color,border-color,backdrop-filter] duration-500 ${
           scrolled ? "border-b border-line bg-paper/80 backdrop-blur-xl backdrop-saturate-150" : "border-b border-transparent"
         }`}
         animate={{ y: hidden && !reduce ? "-100%" : "0%" }}
         transition={{ duration: 0.5, ease: EASE }}
       >
-        {/* Newer iPhone Safari draws the page under a see-through status bar and
-            pins the header just below it, so scrolled content showed in the
-            strip above. This band, in the header's own frosted colour, fills
-            that strip while the header is pinned. Elsewhere it sits above the
-            window, out of sight. */}
-        <span
-          aria-hidden="true"
-          className={`pointer-events-none absolute inset-x-0 bottom-full h-32 bg-paper/80 backdrop-blur-xl backdrop-saturate-150 transition-opacity duration-300 ${
-            stuck && scrolled ? "opacity-100" : "opacity-0"
-          }`}
-        />
         <div className="container-x flex h-[var(--header-h)] items-center justify-between gap-6">
           <SmartLink href="/" className="rounded-md" aria-label={`${site.name} home`}>
             <Wordmark />
@@ -237,7 +242,7 @@ function MobileMenu({ open, top, onClose }: { open: boolean; top: number; onClos
               </button>
             </div>
             </div>
-            <nav aria-label="Main navigation" className="container-x flex flex-1 flex-col justify-center py-10">
+            <nav aria-label="Main navigation" className="container-x flex flex-1 flex-col justify-center pb-[calc(2.5rem+env(safe-area-inset-bottom))] pt-10">
               {/* Phones fill the width; from sm the list keeps a reading column and the CTA its own size. */}
               <ul className="flex flex-col sm:max-w-[560px]">
                 {nav.map((item, i) => (

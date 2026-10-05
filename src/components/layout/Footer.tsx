@@ -14,7 +14,7 @@ export function Footer() {
 
   return (
     <footer className="on-deep relative overflow-hidden bg-deep text-on-deep">
-      <div className="container-x pb-10 pt-16 md:pt-32">
+      <div className="container-x pb-[calc(2.5rem+env(safe-area-inset-bottom))] pt-16 md:pt-32">
         <div className="grid gap-8 md:grid-cols-12 md:items-end md:gap-10">
           <MaskLines as="p" lines={site.tagline} className="display-2 md:col-span-8" />
           <Reveal className="md:col-span-4 md:justify-self-end">

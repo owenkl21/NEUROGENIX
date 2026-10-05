@@ -36,6 +36,9 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
+  // Edge to edge on phones with a notch or Dynamic Island; the header, preview
+  // bar, footer and dialogs pad themselves with the safe-area insets.
+  viewportFit: "cover",
   themeColor: [
     { media: "(prefers-color-scheme: light)", color: "#f5f5f3" },
     { media: "(prefers-color-scheme: dark)", color: "#121011" },

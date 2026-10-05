@@ -99,14 +99,14 @@ export function Modal({ open, onClose, labelledBy, describedBy, children, varian
         )}
         {open &&
           (variant === "fullscreen" ? (
-            <motion.div key="panel" className={`fixed inset-0 ${panelClassName}`} {...panelMotion}>
+            <motion.div key="panel" className={`fixed inset-0 pb-[env(safe-area-inset-bottom)] pt-[env(safe-area-inset-top)] ${panelClassName}`} {...panelMotion}>
               {children}
             </motion.div>
           ) : (
             <div key="panel-wrap" className="pointer-events-none fixed inset-0 flex items-end justify-center md:items-center md:p-6 md:[@media(max-height:860px)]:p-4">
               <motion.div
                 tabIndex={-1}
-                className={`pointer-events-auto relative outline-none max-h-[calc(100dvh-24px)] w-full overflow-y-auto overscroll-contain rounded-t-[24px] bg-surface shadow-soft md:max-h-[calc(100dvh-48px)] md:rounded-[24px] md:[@media(max-height:860px)]:max-h-[calc(100dvh-32px)] ${panelClassName}`}
+                className={`pointer-events-auto relative outline-none max-h-[calc(100dvh-24px-env(safe-area-inset-top))] w-full overflow-y-auto overscroll-contain rounded-t-[24px] bg-surface pb-[env(safe-area-inset-bottom)] shadow-soft md:pb-0 md:max-h-[calc(100dvh-48px)] md:rounded-[24px] md:[@media(max-height:860px)]:max-h-[calc(100dvh-32px)] ${panelClassName}`}
                 {...panelMotion}
               >
                 {children}
