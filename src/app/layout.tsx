@@ -48,7 +48,11 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en-ZA" className={`${instrument.variable} ${dmMono.variable}`}>
-      <body className="grain min-h-dvh">
+      <body className="min-h-dvh">
+        {/* A real element rather than body::after: Safari 26 hit-tests the top
+            edge to colour its status bar, and a pseudo-element counts as the
+            body itself, hiding the header from it. */}
+        <div className="grain" aria-hidden="true" />
         {/* Without JS nothing would ever reveal, so show it as it would settle. */}
         <noscript>
           <style>{"[data-reveal]{opacity:1!important;transform:none!important}.mask-line{transform:none!important}"}</style>

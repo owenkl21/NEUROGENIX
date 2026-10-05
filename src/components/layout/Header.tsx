@@ -28,10 +28,8 @@ export function Header() {
   const reduce = useReducedMotion();
   const { scrollY } = useScroll();
   const [scrolled, setScrolled] = useState(false);
-  // Pinned: scrolled past the preview bar, so the header sits at the very top.
-  const [stuck, setStuck] = useState(false);
-  const barHeight = useRef(0);
-  const insetRef = useRef<HTMLDivElement>(null);
+  // Touch screens keep the header pinned (see the scroll handler).
+  const touch = useRef(false);
   const [hidden, setHidden] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [servicesInView, setServicesInView] = useState(false);
@@ -53,12 +51,13 @@ export function Header() {
   }, [pathname]);
 
   useEffect(() => {
-    const measure = () => {
-      barHeight.current = document.querySelector<HTMLElement>("[data-preview-bar]")?.offsetHeight ?? 0;
+    const mq = window.matchMedia("(hover: none) and (pointer: coarse)");
+    const update = () => {
+      touch.current = mq.matches;
     };
-    measure();
-    window.addEventListener("resize", measure);
-    return () => window.removeEventListener("resize", measure);
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
   }, []);
 
   useMotionValueEvent(scrollY, "change", (y) => {
@@ -66,11 +65,15 @@ export function Header() {
     lastY.current = y;
     const nextScrolled = y > 24;
     if (nextScrolled !== scrolled) setScrolled(nextScrolled);
-    // The header pins once the preview bar has scrolled up to the status bar.
-    const inset = insetRef.current?.offsetHeight ?? 0;
-    const nextStuck = y >= barHeight.current - inset - 1;
-    if (nextStuck !== stuck) setStuck(nextStuck);
     if (menuOpen) return;
+    // Phones and tablets keep the header pinned. iOS Safari 26 draws the page
+    // behind its status bar, so a header slid away by its own height still
+    // shows under the clock, and with no header at the top edge the page
+    // scrolls visibly behind the status bar.
+    if (touch.current) {
+      if (hidden) setHidden(false);
+      return;
+    }
     // Near the top the header is always there. Further down it follows the
     // reading direction, except for a jump this large: that is the page being
     // placed (an anchor, a route change), not someone reading, so it leaves
@@ -97,23 +100,14 @@ export function Header() {
 
   return (
     <>
-      {/* The status-bar area on phones with a notch or Dynamic Island (zero
-          height everywhere else). Once the page scrolls it is filled in the
-          header's frosted colour, so content never shows behind the clock and
-          the header always sits just below it; it stays when the header steps
-          away. At the top of the page the preview bar fills it instead. */}
-      <div
-        ref={insetRef}
-        data-safe-top=""
-        aria-hidden="true"
-        className={`pointer-events-none fixed inset-x-0 top-0 z-[45] h-[env(safe-area-inset-top)] bg-paper/85 backdrop-blur-xl backdrop-saturate-150 transition-opacity duration-300 ${
-          stuck ? "opacity-100" : "opacity-0"
-        }`}
-      />
       <motion.header
         ref={headerRef}
-        className={`sticky top-[env(safe-area-inset-top)] z-40 transition-[background-color,border-color,backdrop-filter] duration-500 ${
-          scrolled ? "border-b border-line bg-paper/80 backdrop-blur-xl backdrop-saturate-150" : "border-b border-transparent"
+        // Pinned, the header is a solid page colour on the element itself:
+        // iOS Safari 26 extends the background of a pinned element at the top
+        // edge into the status-bar area, but only a single solid colour, not
+        // a translucent or blurred one.
+        className={`sticky top-0 z-40 transition-[background-color,border-color] duration-500 ${
+          scrolled ? "border-b border-line bg-paper" : "border-b border-transparent"
         }`}
         animate={{ y: hidden && !reduce ? "-100%" : "0%" }}
         transition={{ duration: 0.5, ease: EASE }}

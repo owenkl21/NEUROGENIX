@@ -320,8 +320,7 @@
 }
 
 /* Film grain: fixed, non-interactive, never on a scrolling layer. */
-.grain::after {
-  content: "";
+.grain {
   position: fixed;
   inset: 0;
   z-index: 70;
@@ -331,7 +330,7 @@
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .6 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 @media (prefers-color-scheme: dark) {
-  .grain::after {
+  .grain {
     mix-blend-mode: screen;
     opacity: 0.03;
   }
@@ -398,7 +397,7 @@
     --signal-ink: #2a6cb2;
     --signal-logo: #3f86ce;
   }
-  .grain::after,
+  .grain,
   .skip-link {
     display: none !important;
   }
