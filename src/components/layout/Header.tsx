@@ -1,0 +1,203 @@
+"use client";
+
+import { useEffect, useRef, useState } from "react";
+import { usePathname } from "next/navigation";
+import { AnimatePresence, motion, useMotionValueEvent, useReducedMotion, useScroll } from "motion/react";
+import { useLenis } from "lenis/react";
+import { ArrowRight } from "@phosphor-icons/react";
+import { nav, site } from "@/content/site";
+import { BookButton, SmartLink } from "@/components/ui";
+import { EASE } from "@/components/motion/primitives";
+import { Wordmark } from "./Wordmark";
+
+/**
+ * Sticky header. Transparent over the hero, then settles onto a frosted paper
+ * bar once the page moves. It steps out of the way while reading downwards and
+ * returns the moment the reader scrolls back up. On the home page the current
+ * section is marked with a sliding underline.
+ */
+export function Header() {
+  const pathname = usePathname();
+  const isHome = pathname === "/";
+  const reduce = useReducedMotion();
+  const { scrollY } = useScroll();
+  const [scrolled, setScrolled] = useState(false);
+  const [hidden, setHidden] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [active, setActive] = useState<string | null>(null);
+  const lastY = useRef(0);
+
+  useMotionValueEvent(scrollY, "change", (y) => {
+    const delta = y - lastY.current;
+    lastY.current = y;
+    const nextScrolled = y > 24;
+    if (nextScrolled !== scrolled) setScrolled(nextScrolled);
+    if (menuOpen) return;
+    const nextHidden = y > 480 && delta > 4 ? true : delta < -4 || y < 480 ? false : hidden;
+    if (nextHidden !== hidden) setHidden(nextHidden);
+  });
+
+  useEffect(() => {
+    if (!isHome) {
+      setActive(null);
+      return;
+    }
+    const ids = nav.map((n) => n.href.split("#")[1]);
+    const sections = ids.map((id) => document.getElementById(id)).filter((el): el is HTMLElement => !!el);
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries.filter((e) => e.isIntersecting).sort((a, b) => b.intersectionRatio - a.intersectionRatio);
+        if (visible[0]) setActive(visible[0].target.id);
+      },
+      { rootMargin: "-40% 0px -55% 0px", threshold: [0, 0.25, 0.5] },
+    );
+    sections.forEach((s) => observer.observe(s));
+    return () => observer.disconnect();
+  }, [isHome]);
+
+  return (
+    <>
+      <motion.header
+        className={`sticky top-0 z-40 transition-[background-color,border-color,backdrop-filter] duration-500 ${
+          scrolled ? "border-b border-line bg-paper/80 backdrop-blur-xl backdrop-saturate-150" : "border-b border-transparent"
+        }`}
+        animate={{ y: hidden && !reduce ? "-100%" : "0%" }}
+        transition={{ duration: 0.5, ease: EASE }}
+      >
+        <div className="container-x flex h-[var(--header-h)] items-center justify-between gap-6">
+          <SmartLink href="/#" className="rounded-md" aria-label={`${site.name} home`}>
+            <Wordmark />
+          </SmartLink>
+
+          <nav aria-label="Main navigation" className="hidden items-center gap-1 lg:flex">
+            {nav.map((item) => {
+              const id = item.href.split("#")[1];
+              const isActive = active === id;
+              return (
+                <SmartLink
+                  key={item.href}
+                  href={item.href}
+                  className={`relative rounded-full px-3.5 py-2 text-[0.9375rem] transition-colors duration-300 ${isActive ? "text-ink" : "text-muted hover:text-ink"}`}
+                >
+                  {item.label}
+                  {isActive && (
+                    <motion.span layoutId="nav-active" className="absolute inset-x-3.5 -bottom-0.5 h-px bg-brass-ink" transition={{ type: "spring", stiffness: 380, damping: 34 }} />
+                  )}
+                </SmartLink>
+              );
+            })}
+          </nav>
+
+          <div className="flex items-center gap-3">
+            <BookButton className="hidden sm:inline-flex" />
+            <button
+              type="button"
+              className="group grid size-11 place-items-center rounded-full border border-line lg:hidden"
+              aria-label="Open navigation"
+              aria-expanded={menuOpen}
+              aria-controls="mobile-navigation"
+              onClick={() => setMenuOpen(true)}
+            >
+              <span aria-hidden="true" className="flex w-[18px] flex-col gap-[5px]">
+                <span className="h-px w-full bg-ink" />
+                <span className="h-px w-2/3 bg-ink transition-[width] duration-300 group-hover:w-full" />
+              </span>
+            </button>
+          </div>
+        </div>
+      </motion.header>
+      <MobileMenu open={menuOpen} onClose={() => setMenuOpen(false)} />
+    </>
+  );
+}
+
+function MobileMenu({ open, onClose }: { open: boolean; onClose: () => void }) {
+  const ref = useRef<HTMLDialogElement>(null);
+  const lenis = useLenis();
+  const reduce = useReducedMotion();
+
+  useEffect(() => {
+    const dialog = ref.current;
+    if (!dialog) return;
+    if (open && !dialog.open) {
+      dialog.showModal();
+      lenis?.stop();
+    }
+  }, [open, lenis]);
+
+  useEffect(() => {
+    const mq = window.matchMedia("(min-width: 1024px)");
+    const onChange = () => mq.matches && onClose();
+    mq.addEventListener("change", onChange);
+    return () => mq.removeEventListener("change", onChange);
+  }, [onClose]);
+
+  return (
+    <dialog
+      ref={ref}
+      id="mobile-navigation"
+      aria-label="Navigation"
+      data-lenis-prevent
+      onCancel={(e) => {
+        e.preventDefault();
+        onClose();
+      }}
+      onClose={() => {
+        if (open) onClose();
+        lenis?.start();
+      }}
+      className="fixed inset-0 m-0 h-dvh max-h-none w-full max-w-none bg-transparent p-0 text-ink open:block"
+    >
+      <AnimatePresence
+        onExitComplete={() => {
+          if (ref.current?.open) ref.current.close();
+          lenis?.start();
+        }}
+      >
+        {open && (
+          <motion.div
+            key="menu"
+            className="flex h-full flex-col overflow-y-auto bg-paper"
+            initial={reduce ? { opacity: 0 } : { clipPath: "inset(0 0 100% 0)" }}
+            animate={reduce ? { opacity: 1 } : { clipPath: "inset(0 0 0% 0)" }}
+            exit={reduce ? { opacity: 0 } : { clipPath: "inset(0 0 100% 0)" }}
+            transition={{ duration: 0.7, ease: EASE }}
+          >
+            <div className="container-x flex h-[var(--header-h)] shrink-0 items-center justify-between">
+              <SmartLink href="/#" onClick={onClose} aria-label={`${site.name} home`}>
+                <Wordmark />
+              </SmartLink>
+              <button type="button" onClick={onClose} aria-label="Close navigation" className="grid size-11 place-items-center rounded-full border border-line">
+                <span aria-hidden="true" className="relative block size-[18px]">
+                  <span className="absolute left-0 top-1/2 h-px w-full rotate-45 bg-ink" />
+                  <span className="absolute left-0 top-1/2 h-px w-full -rotate-45 bg-ink" />
+                </span>
+              </button>
+            </div>
+            <nav aria-label="Main navigation" className="container-x flex flex-1 flex-col justify-center py-10">
+              <ul className="flex flex-col">
+                {nav.map((item, i) => (
+                  <motion.li
+                    key={item.href}
+                    className="border-b border-line"
+                    initial={reduce ? false : { opacity: 0, y: 24 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.7, ease: EASE, delay: 0.18 + i * 0.06 }}
+                  >
+                    <SmartLink href={item.href} onClick={onClose} className="flex items-baseline justify-between py-5 text-[2rem] font-medium tracking-[-0.03em]">
+                      {item.label}
+                      <ArrowRight size={22} weight="light" aria-hidden="true" className="text-muted" />
+                    </SmartLink>
+                  </motion.li>
+                ))}
+              </ul>
+              <motion.div className="mt-10" initial={reduce ? false : { opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, ease: EASE, delay: 0.5 }}>
+                <BookButton size="lg" className="w-full justify-between" />
+              </motion.div>
+            </nav>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </dialog>
+  );
+}

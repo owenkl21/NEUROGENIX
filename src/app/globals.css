@@ -1,0 +1,347 @@
+@import "tailwindcss";
+@import "lenis/dist/lenis.css";
+
+/*
+ * Neurogenix design tokens.
+ * The palette is taken from the practice itself: the navy feature wall, the
+ * brass signage and the linen upholstery. Neutrals are kept cool so navy reads
+ * as the brand colour and brass stays a single, rationed accent.
+ * Every pairing below passes WCAG AA (checked in both themes).
+ */
+:root {
+  --paper: #f1f1ec;
+  --paper-2: #e7e8e2;
+  --surface: #f9f9f6;
+  --ink: #12262f;
+  --ink-2: #3b5260;
+  --muted: #56656c;
+  --line: #d7d9d1;
+  --line-strong: #bfc3ba;
+
+  --navy: #132a35;
+  --navy-2: #1b3744;
+  --navy-3: #0d1e26;
+  --on-navy: #eef0ea;
+  --on-navy-muted: #a9b8bd;
+  --on-navy-line: rgb(238 240 234 / 0.14);
+
+  --brass: #c4a56e;
+  --brass-ink: #77592b;
+
+  --shadow-tint: 19 42 53;
+  --header-h: 72px;
+  --ease-calm: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-swift: cubic-bezier(0.65, 0, 0.35, 1);
+
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: #0b1a21;
+    --paper-2: #0f222b;
+    --surface: #122a35;
+    --ink: #e8ebe5;
+    --ink-2: #b7c4c8;
+    --muted: #90a2a8;
+    --line: #22404c;
+    --line-strong: #2e5261;
+
+    --navy: #10252f;
+    --navy-2: #163240;
+    --navy-3: #081419;
+    --on-navy: #eef0ea;
+    --on-navy-muted: #a9b8bd;
+    --on-navy-line: rgb(238 240 234 / 0.12);
+
+    --brass: #cbae78;
+    --brass-ink: #d2b888;
+
+    --shadow-tint: 0 0 0;
+    color-scheme: dark;
+  }
+}
+
+@theme inline {
+  --font-sans: var(--font-instrument), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-dm-mono), ui-monospace, "SFMono-Regular", monospace;
+
+  --color-paper: var(--paper);
+  --color-paper-2: var(--paper-2);
+  --color-surface: var(--surface);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-navy: var(--navy);
+  --color-navy-2: var(--navy-2);
+  --color-navy-3: var(--navy-3);
+  --color-on-navy: var(--on-navy);
+  --color-on-navy-muted: var(--on-navy-muted);
+  --color-on-navy-line: var(--on-navy-line);
+  --color-brass: var(--brass);
+  --color-brass-ink: var(--brass-ink);
+
+  /* Radius rule: interactive controls are full pills, surfaces are 24px
+     (18px below md), inputs are 12px. Nothing else. */
+  --radius-surface: 24px;
+  --radius-surface-sm: 18px;
+  --radius-input: 12px;
+
+  --ease-calm: var(--ease-calm);
+  --ease-swift: var(--ease-swift);
+}
+
+@layer base {
+  html {
+    background: var(--paper);
+    color: var(--ink);
+    -webkit-text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    scroll-padding-top: calc(var(--header-h) + 24px);
+  }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    line-height: 1.65;
+    font-feature-settings: "ss01", "cv11";
+  }
+
+  ::selection {
+    background: var(--navy);
+    color: var(--on-navy);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--brass-ink);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  .on-navy :focus-visible,
+  .on-navy:focus-visible {
+    outline-color: var(--brass);
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-weight: 500;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  img {
+    user-select: none;
+  }
+
+  dialog::backdrop {
+    background: transparent;
+  }
+}
+
+@layer components {
+  .container-x {
+    margin-inline: auto;
+    width: 100%;
+    max-width: 1320px;
+    padding-inline: 20px;
+  }
+  @media (min-width: 640px) {
+    .container-x {
+      padding-inline: 32px;
+    }
+  }
+  @media (min-width: 1024px) {
+    .container-x {
+      padding-inline: 48px;
+    }
+  }
+
+  /* Type scale. Display sizes are fluid; italic second lines use 1.08 leading
+     minimum so descenders (g, p, y) never clip inside reveal masks. */
+  .display-1 {
+    font-size: clamp(2.75rem, 1.05rem + 5.4vw, 6rem);
+    line-height: 1.02;
+    letter-spacing: -0.04em;
+    font-weight: 500;
+  }
+  .display-2 {
+    font-size: clamp(2.25rem, 1.45rem + 2.7vw, 4rem);
+    line-height: 1.04;
+    letter-spacing: -0.035em;
+    font-weight: 500;
+  }
+  .display-3 {
+    font-size: clamp(1.75rem, 1.3rem + 1.4vw, 2.5rem);
+    line-height: 1.1;
+    letter-spacing: -0.025em;
+    font-weight: 500;
+  }
+  .title-3 {
+    font-size: clamp(1.25rem, 1.1rem + 0.45vw, 1.5rem);
+    line-height: 1.25;
+    letter-spacing: -0.015em;
+    font-weight: 500;
+  }
+  .lede {
+    font-size: clamp(1.0625rem, 1rem + 0.25vw, 1.1875rem);
+    line-height: 1.6;
+  }
+  .label {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    line-height: 1.4;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    font-weight: 400;
+  }
+  .numeral {
+    font-family: var(--font-mono);
+    font-feature-settings: "tnum";
+    letter-spacing: 0.02em;
+  }
+
+  /* The second sentence of every two-part headline: same family, italic,
+     softer ink. Never a different typeface. */
+  .headline-soft {
+    font-style: italic;
+    font-weight: 400;
+    color: var(--ink-2);
+  }
+  .on-navy .headline-soft {
+    color: var(--on-navy-muted);
+  }
+
+  .section-y {
+    padding-block: 104px;
+  }
+  @media (min-width: 768px) {
+    .section-y {
+      padding-block: 144px;
+    }
+  }
+
+  .rounded-surface {
+    border-radius: var(--radius-surface-sm);
+  }
+  @media (min-width: 768px) {
+    .rounded-surface {
+      border-radius: var(--radius-surface);
+    }
+  }
+
+  .hairline {
+    height: 1px;
+    background: var(--line);
+  }
+
+  .shadow-soft {
+    box-shadow:
+      0 1px 0 rgb(var(--shadow-tint) / 0.04),
+      0 24px 60px -32px rgb(var(--shadow-tint) / 0.28);
+  }
+}
+
+/* Film grain: fixed, non-interactive, never on a scrolling layer. */
+.grain::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  pointer-events: none;
+  opacity: 0.045;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .6 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+@media (prefers-color-scheme: dark) {
+  .grain::after {
+    mix-blend-mode: screen;
+    opacity: 0.03;
+  }
+}
+
+/* Z-index scale (documented, nothing else allowed):
+   10 sticky in-section elements, 40 header, 50 mobile menu, 60 dialogs, 70 grain, 80 skip link */
+.skip-link {
+  position: fixed;
+  left: 16px;
+  top: 12px;
+  z-index: 80;
+  transform: translateY(-160%);
+  transition: transform 0.3s var(--ease-calm);
+}
+.skip-link:focus-visible {
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Print: only the generated preparation guide is printed from the home page;
+   test pages print their own main content. */
+#print-guide {
+  display: none;
+}
+@media print {
+  .grain::after {
+    display: none;
+  }
+  body.printing-guide > *:not(#print-guide) {
+    display: none !important;
+  }
+  body.printing-guide #print-guide {
+    display: block !important;
+    color: #000;
+    background: #fff;
+    padding: 24px;
+    font-family: var(--font-sans);
+  }
+  #print-guide h1 {
+    font-size: 26px;
+    margin-bottom: 12px;
+  }
+  #print-guide h2 {
+    font-size: 20px;
+    margin: 20px 0 8px;
+  }
+  #print-guide h3 {
+    font-size: 16px;
+    margin: 16px 0 6px;
+  }
+  #print-guide p,
+  #print-guide li {
+    font-size: 13px;
+    line-height: 1.55;
+    color: #000;
+  }
+  #print-guide ul {
+    padding-left: 18px;
+  }
+  .print-hide {
+    display: none !important;
+  }
+  header,
+  footer,
+  [data-preview-bar] {
+    display: none !important;
+  }
+}
