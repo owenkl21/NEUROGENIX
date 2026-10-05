@@ -88,7 +88,7 @@ export function FaqAccordion({ items }: { items: Item[] }) {
                 aria-controls={panelId}
                 onClick={() => toggle(i)}
                 onKeyDown={(event) => onKeyDown(event, i)}
-                className="group flex min-h-11 w-full items-center justify-between gap-6 py-6 text-left md:gap-10 md:py-8"
+                className="group flex min-h-11 w-full items-center justify-between gap-6 py-5 text-left md:gap-10 md:py-8"
               >
                 <span className="transition-transform duration-500 ease-calm group-hover:translate-x-1 motion-reduce:group-hover:translate-x-0">
                   {item.q}
@@ -117,7 +117,7 @@ export function FaqAccordion({ items }: { items: Item[] }) {
                     exit={{ height: 0, opacity: 0, transition: v.panelOut }}
                   >
                     <motion.p
-                      className="max-w-[62ch] pb-8 pr-12 text-muted md:pb-10 md:pr-20"
+                      className="max-w-[62ch] pb-6 pr-12 text-muted md:pb-10 md:pr-20"
                       initial={{ y: -10 }}
                       animate={{ y: 0 }}
                       transition={v.settle}

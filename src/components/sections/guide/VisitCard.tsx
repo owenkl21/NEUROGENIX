@@ -10,7 +10,7 @@ export function VisitCard() {
   const { visit } = patientGuide;
   return (
     <div className="on-navy rounded-surface bg-navy p-7 text-on-navy sm:p-10 lg:p-9 dark:ring-1 dark:ring-on-navy-line">
-      <h2 className="display-3 mt-5">
+      <h2 className="display-3 md:mt-5">
         {visit.title.map((line, i) => (
           <span key={line} className={`block ${i > 0 ? "headline-soft" : ""}`}>
             {line}
@@ -19,7 +19,7 @@ export function VisitCard() {
       </h2>
 
       {/* Two columns wherever the card is wide enough (tablet, and beside the guide from 1280px); one in the narrower 1024px column. */}
-      <ul className="mt-9 border-y border-on-navy-line md:grid md:grid-cols-2 md:gap-x-10 lg:grid-cols-1 xl:grid-cols-2">
+      <ul className="mt-7 border-y border-on-navy-line md:mt-9 md:grid md:grid-cols-2 md:gap-x-10 lg:grid-cols-1 xl:grid-cols-2">
         {visit.items.map((item) => (
           <li
             key={item}
@@ -31,8 +31,8 @@ export function VisitCard() {
         ))}
       </ul>
 
-      <p className="mt-8 max-w-[44ch] text-[0.9375rem] leading-relaxed text-on-navy-muted">{visit.body}</p>
-      <BookButton variant="brass" className="mt-8" />
+      <p className="mt-6 max-w-[44ch] text-[0.9375rem] md:mt-8 leading-relaxed text-on-navy-muted">{visit.body}</p>
+      <BookButton variant="brass" className="mt-6 md:mt-8" />
     </div>
   );
 }

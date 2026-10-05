@@ -376,13 +376,93 @@ export const fees = {
   footnote: "Scheme participation, tariffs and payment terms are awaiting confirmation. Medical-aid cover is not guaranteed.",
 };
 
-export const locations = {
-  image: {
-    src: "/images/reception.jpg",
-    width: 1280,
-    height: 960,
-    alt: "A Neurogenix reception area; the associated practice address is awaiting confirmation",
+/**
+ * One practice on the /locations map. `label` is the short name on the map
+ * chip and `labelSide` keeps neighbouring chips (Rosebank and Menlyn sit
+ * close together at country zoom) from covering each other.
+ */
+export type Practice = {
+  id: string;
+  name: string;
+  label: string;
+  area: string;
+  city: string;
+  province: string;
+  /** Latitude, longitude. */
+  coords: [number, number];
+  tests: TestSlug[];
+  hours: string;
+  labelSide: "left" | "right";
+};
+
+/**
+ * SAMPLE DATA, NOT REAL PRACTICES. These four locations exist only so the
+ * /locations map can be reviewed. Their positions are suburb centres, not
+ * street addresses, and the hours are placeholders. Replace the whole list
+ * with the practice's confirmed details before launch; the page says so in
+ * `locations.sampleNote`.
+ */
+export const practices: Practice[] = [
+  {
+    id: "rosebank",
+    name: "Neurogenix Rosebank",
+    label: "Rosebank",
+    area: "Rosebank",
+    city: "Johannesburg",
+    province: "Gauteng",
+    coords: [-26.1459, 28.0432],
+    tests: ["eeg", "ncs", "emg"],
+    hours: "Mon to Fri, 08:00 to 17:00",
+    labelSide: "left",
   },
+  {
+    id: "menlyn",
+    name: "Neurogenix Menlyn",
+    label: "Menlyn",
+    area: "Menlyn",
+    city: "Pretoria",
+    province: "Gauteng",
+    coords: [-25.784, 28.277],
+    tests: ["eeg", "ncs"],
+    hours: "Mon to Fri, 08:00 to 16:30",
+    labelSide: "right",
+  },
+  {
+    id: "claremont",
+    name: "Neurogenix Claremont",
+    label: "Claremont",
+    area: "Claremont",
+    city: "Cape Town",
+    province: "Western Cape",
+    coords: [-33.9806, 18.4653],
+    tests: ["eeg", "ncs", "emg"],
+    hours: "Mon to Fri, 07:30 to 16:30",
+    labelSide: "right",
+  },
+  {
+    id: "umhlanga",
+    name: "Neurogenix Umhlanga",
+    label: "Umhlanga",
+    area: "Umhlanga",
+    city: "Durban",
+    province: "KwaZulu-Natal",
+    coords: [-29.7266, 31.0845],
+    tests: ["ncs", "emg"],
+    hours: "Mon to Thu, 08:00 to 16:00",
+    labelSide: "left",
+  },
+];
+
+export const locations = {
+  listHeading: "Practice locations",
+  sampleNote: "Sample locations for this preview. Confirmed practice addresses will replace them.",
+  mapLabel: "Map of sample Neurogenix practice locations in South Africa",
+  showAll: "Show all locations",
+  zoomIn: "Zoom in",
+  zoomOut: "Zoom out",
+  testsLabel: "Tests offered",
+  hoursLabel: "Hours",
+  closeDetails: "Close location details",
   status: "Locations awaiting confirmation",
   heading: "Your appointment location",
   fields: [

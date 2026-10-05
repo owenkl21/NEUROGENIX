@@ -16,9 +16,9 @@ import { ReferralFacts } from "./referral/ReferralFacts";
  */
 export function Referral({ labelledBy }: { labelledBy: string }) {
   return (
-    <section id="referring-doctors" aria-labelledby={labelledBy} className="section-y pt-12 md:pt-16">
+    <section id="referring-doctors" aria-labelledby={labelledBy} className="section-y pt-10 md:pt-16">
       <div className="container-x">
-        <div className="grid grid-cols-1 gap-16 lg:grid-cols-12 lg:gap-x-12">
+        <div className="grid grid-cols-1 gap-12 md:gap-16 lg:grid-cols-12 lg:gap-x-12">
           <div className="lg:col-span-6 lg:col-start-7 lg:row-start-1 lg:pt-2">
             <ReferralSteps />
           </div>
@@ -29,7 +29,7 @@ export function Referral({ labelledBy }: { labelledBy: string }) {
           </div>
         </div>
 
-        <div className="mt-20 md:mt-28 lg:mt-36">
+        <div className="mt-12 md:mt-28 lg:mt-36">
           <ReferralFacts />
         </div>
       </div>

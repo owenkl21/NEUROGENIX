@@ -82,14 +82,14 @@ export function TestPageView({ slug }: { slug: TestSlug }) {
               <Reveal delay={0.25} y={20}>
                 <p className="lede text-muted">{page.intro}</p>
               </Reveal>
-              <Reveal delay={0.35} y={20} className="print-hide mt-10 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
+              <Reveal delay={0.35} y={20} className="print-hide mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center md:mt-10">
                 <Magnetic className="w-full sm:w-auto">
                   <BookButton test={slug} size="lg" className="w-full justify-between! sm:w-auto" />
                 </Magnetic>
                 <PrintButton label={page.print} />
               </Reveal>
               <Reveal delay={0.45} y={20}>
-                <p className="mt-8 max-w-[48ch] text-[0.875rem] leading-relaxed text-muted">{page.footnote}</p>
+                <p className="mt-6 max-w-[48ch] text-[0.875rem] leading-relaxed text-muted md:mt-8">{page.footnote}</p>
               </Reveal>
             </div>
           </div>
@@ -98,10 +98,10 @@ export function TestPageView({ slug }: { slug: TestSlug }) {
 
       {/*
        * b) Signal band: this test's own recording, the page's hero visual. Its
-       * caption is set in sentence case like the home focus band label, not as
-       * a mono caps label: the eyebrow above already uses that voice.
+       * caption is set in sentence case like the home focus band label, never
+       * as a mono caps label (no eyebrows or kicker labels anywhere).
        */}
-      <div className="print-hide mt-16 border-y border-line md:mt-24">
+      <div className="print-hide mt-12 border-y border-line md:mt-24">
         <div className="container-x pt-5 md:pt-6">
           <p className="text-[0.875rem] leading-normal text-muted lowercase first-letter:uppercase">{guide.meta}</p>
         </div>
@@ -119,14 +119,14 @@ export function TestPageView({ slug }: { slug: TestSlug }) {
 
       {/* c) Detail: the preparation guide beside a sticky results card */}
       <div className="container-x section-y print:py-10">
-        <div className="grid gap-16 lg:grid-cols-12 lg:gap-x-10">
+        <div className="grid gap-12 md:gap-16 lg:grid-cols-12 lg:gap-x-10">
           <section aria-labelledby="guide-title" className="lg:col-span-7 xl:col-span-8 xl:pr-12">
             <MaskLines as="h2" id="guide-title" lines={[guide.title]} softFrom={1} className="display-3" />
             <Reveal>
               <p className="lede mt-6 max-w-[56ch] text-muted">{guide.intro}</p>
             </Reveal>
 
-            <div className="mt-14 grid gap-12 md:mt-16 md:grid-cols-2 md:gap-10">
+            <div className="mt-10 grid gap-8 md:mt-16 md:grid-cols-2 md:gap-10">
               <div className="border-t border-line pt-7">
                 <h3 className="title-3">{patientGuide.beforeHeading}</h3>
                 <RevealGroup as="ul" className="mt-6 space-y-5">
@@ -150,12 +150,12 @@ export function TestPageView({ slug }: { slug: TestSlug }) {
               </div>
             </div>
 
-            <Reveal className="mt-12 flex gap-3.5 border-t border-line pt-7 md:mt-14">
+            <Reveal className="mt-8 flex gap-3.5 border-t border-line pt-7 md:mt-14">
               <TestIcon name="info" size={20} className="mt-[3px] shrink-0 text-brass-ink" />
               <p className="text-ink">{guide.bottom}</p>
             </Reveal>
 
-            <p className="mt-10 max-w-[64ch] text-[0.8125rem] leading-relaxed text-muted">
+            <p className="mt-8 max-w-[64ch] text-[0.8125rem] leading-relaxed text-muted md:mt-10">
               {page.sources.before}
               {page.sources.links.map((link, i) => (
                 <Fragment key={link.href}>
@@ -176,7 +176,7 @@ export function TestPageView({ slug }: { slug: TestSlug }) {
 
           <aside aria-labelledby="after-title" className="lg:col-span-5 xl:col-span-4">
             <Reveal className="on-navy rounded-surface bg-navy p-8 text-on-navy dark:ring-1 dark:ring-on-navy-line md:p-10 lg:top-28 lg:motion-safe:sticky print:rounded-none print:border-t print:border-line print:bg-transparent print:px-0 print:pb-0 print:pt-8 print:text-ink print:[&_.headline-soft]:text-ink-2">
-              <MaskLines as="h2" id="after-title" lines={page.after.title} className="display-3 mt-6" />
+              <MaskLines as="h2" id="after-title" lines={page.after.title} className="display-3 md:mt-6" />
               <p className="mt-5 text-on-navy-muted print:text-muted">{page.after.body}</p>
               {/* A quiet way on, not a second primary action: the card is written for patients. */}
               <div className="print-hide mt-7">
@@ -191,7 +191,7 @@ export function TestPageView({ slug }: { slug: TestSlug }) {
 
       {/* d) Before your visit */}
       <section aria-labelledby="next-title" className="bg-paper-2">
-        <div className="container-x grid gap-12 py-24 md:py-32 lg:grid-cols-12 lg:items-end lg:gap-x-10 print:py-10">
+        <div className="container-x grid gap-10 py-16 md:gap-12 md:py-32 lg:grid-cols-12 lg:items-end lg:gap-x-10 print:py-10">
           <div className="lg:col-span-7">
             <MaskLines as="h2" id="next-title" lines={[page.next.title]} softFrom={1} className="display-2" />
             <Reveal>
@@ -211,7 +211,7 @@ export function TestPageView({ slug }: { slug: TestSlug }) {
       </section>
 
       {/* e) Other tests */}
-      <nav aria-label={page.otherTests} className="print-hide container-x py-20 md:py-28">
+      <nav aria-label={page.otherTests} className="print-hide container-x py-16 md:py-28">
         <RevealGroup className="grid border-y border-line md:grid-cols-2">
           {others.map((item, i) => (
             <RevealItem key={item.slug} className={i > 0 ? "border-t border-line md:border-l md:border-t-0" : ""}>
@@ -221,8 +221,9 @@ export function TestPageView({ slug }: { slug: TestSlug }) {
                 >
                   {item.abbr}
                 </span>
-                <span className="mt-6 block text-[0.9375rem] text-muted">{item.type}</span>
-                <span className="title-3 mt-1 block">{item.name}</span>
+                {/* The plain-English type follows the name as its subtitle, never above it as a kicker. */}
+                <span className="title-3 mt-6 block">{item.name}</span>
+                <span className="mt-1 block text-[0.9375rem] text-muted">{item.type}</span>
                 <SignalTrace kind={signalKind[item.slug]} mode="draw" height={64} strokeWidth={1.25} color="var(--brass-ink)" delay={0.15 + i * 0.2} className="mt-8" />
                 <span className="mt-8 inline-flex items-center gap-2 self-start font-medium text-ink">
                   <span className="bg-no-repeat pb-1 transition-[background-size] duration-500 ease-calm [background-image:linear-gradient(var(--line-strong),var(--line-strong)),linear-gradient(var(--ink),var(--ink))] [background-position:0_100%,0_100%] [background-size:100%_1px,0%_1px] group-hover:[background-size:100%_1px,100%_1px]">

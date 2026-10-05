@@ -12,8 +12,8 @@ import { TeamProfile } from "./team/TeamProfile";
  */
 export function Team({ labelledBy }: { labelledBy: string }) {
   return (
-    <section id="clinical-team" aria-labelledby={labelledBy} className="section-y pt-12 md:pt-16">
-      <div className="container-x grid grid-cols-1 gap-y-12 lg:grid-cols-12 lg:gap-x-8">
+    <section id="clinical-team" aria-labelledby={labelledBy} className="section-y pt-10 md:pt-16">
+      <div className="container-x grid grid-cols-1 gap-y-8 md:gap-y-12 lg:grid-cols-12 lg:gap-x-8">
         <div className="lg:col-span-7">
           <TeamProfile />
         </div>

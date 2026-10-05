@@ -5,7 +5,7 @@ import {SmartLink} from "@/components/ui";
 import { MaskLines, Reveal } from "@/components/motion/primitives";
 
 /**
- * Opening of every inner page: breadcrumb, eyebrow, the page H1 rising out of
+ * Opening of every inner page: breadcrumb, the page H1 rising out of
  * its masks and the lede. It is deliberately compact so the page's own content
  * (the guide, the referral steps, the profile, the location) starts on the
  * first screen. From 1024px the lede moves into the right-hand column and
@@ -34,7 +34,7 @@ export function PageIntro({ page }: { page: PageKey }) {
         </ol>
       </nav>
 
-      <div className="mt-8 grid grid-cols-1 gap-y-7 md:mt-12 lg:grid-cols-12 lg:items-end lg:gap-x-8">
+      <div className="mt-6 grid grid-cols-1 gap-y-6 md:mt-12 md:gap-y-7 lg:grid-cols-12 lg:items-end lg:gap-x-8">
         <div className="lg:col-span-7">
           <MaskLines as="h1" id={`${page}-heading`} trigger="mount" delay={0.08} lines={p.title} className="display-2" />
         </div>

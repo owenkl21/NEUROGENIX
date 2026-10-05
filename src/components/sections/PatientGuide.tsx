@@ -14,7 +14,7 @@ import { VisitCard } from "./guide/VisitCard";
  */
 export function PatientGuide({ labelledBy }: { labelledBy: string }) {
   return (
-    <section id="patient-guide" aria-labelledby={labelledBy} className="section-y pt-12 md:pt-16">
+    <section id="patient-guide" aria-labelledby={labelledBy} className="section-y pt-10 md:pt-16">
       <div className="container-x grid grid-cols-1 gap-6 md:gap-8 lg:grid-cols-12 lg:gap-x-8 xl:gap-x-10">
         <Reveal className="lg:col-span-6 lg:flex lg:flex-col" amount={0}>
           <GuideTabs />

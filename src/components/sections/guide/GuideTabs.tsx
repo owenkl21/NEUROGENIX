@@ -183,7 +183,8 @@ function GuidePanel({ guide, reduce }: { guide: Guide; reduce: boolean }) {
       <div className="mt-auto px-6 pb-7 sm:px-10 sm:pb-9 xl:px-12">
         <AnimatePresence mode="wait" initial={false}>
           <motion.div key={guide.slug} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={reduce ? INSTANT : FADE}>
-            <p className="label mt-10 text-brass-ink">{guide.meta}</p>
+            {/* The channel caption, set in sentence case like the test pages: no mono caps labels. */}
+            <p className="mt-8 text-[0.875rem] leading-normal text-muted lowercase first-letter:uppercase md:mt-10">{guide.meta}</p>
             <TraceWrite slug={guide.slug} reduce={reduce} />
           </motion.div>
         </AnimatePresence>

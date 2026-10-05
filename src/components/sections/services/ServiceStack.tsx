@@ -134,12 +134,9 @@ function ServicePanel({ item, index, self, next, after }: { item: Item; index: n
         className={`on-navy relative flex flex-col overflow-hidden rounded-surface border border-on-navy-line text-on-navy ${tones[index % tones.length]} p-6 sm:p-10 lg:grid lg:h-(--panel-h) lg:origin-top lg:grid-cols-12 lg:grid-rows-[auto_1fr_auto] lg:gap-x-8 lg:p-12 xl:px-14 lg:motion-safe:[scale:var(--deck-scale,1)]`}
         style={{ "--deck-scale": scale, "--deck-dim": dim } as MotionStyle}
       >
-        {/* The tests are not a sequence, so the label is the type alone. */}
-        <p className="font-mono text-[0.8125rem] leading-none text-on-navy-muted lg:col-span-6 lg:col-start-1 lg:row-start-1">{item.type}</p>
-
         <motion.span
           aria-hidden="true"
-          className="mt-10 block select-none overflow-hidden lg:col-span-6 lg:col-start-7 lg:row-span-2 lg:row-start-1 lg:mt-0 lg:self-start lg:justify-self-end"
+          className="block select-none overflow-hidden lg:col-span-6 lg:col-start-7 lg:row-span-2 lg:row-start-1 lg:mt-0 lg:self-start lg:justify-self-end"
           variants={abbrMask}
           initial="hidden"
           whileInView="show"
@@ -156,11 +153,15 @@ function ServicePanel({ item, index, self, next, after }: { item: Item; index: n
         {/* Both the gap above the title and the readout's height follow the
             panel's own height, so a short panel (a short laptop screen) gives
             up air first and its copy never runs under the readout. */}
-        <RevealGroup className="mt-8 lg:col-span-6 lg:col-start-1 lg:row-start-2 lg:mt-0 lg:self-end lg:pt-[clamp(8px,calc(var(--panel-h)_-_510px),40px)]">
+        <RevealGroup className="mt-6 md:mt-8 lg:col-span-6 lg:col-start-1 lg:row-start-2 lg:mt-0 lg:self-end lg:pt-[clamp(8px,calc(var(--panel-h)_-_510px),40px)]">
           <RevealItem>
             <h3 id={titleId} className="display-3 max-sm:text-[clamp(1.375rem,6.6vw,1.75rem)]">
               {item.name}
             </h3>
+          </RevealItem>
+          {/* The plain-English type is the title's subtitle, never a label above it. */}
+          <RevealItem as="p" className="mt-2 font-mono text-[0.8125rem] text-on-navy-muted">
+            {item.type}
           </RevealItem>
           <RevealItem as="p" className="mt-4 max-w-[44ch] text-on-navy-muted">
             {item.body}
@@ -172,7 +173,7 @@ function ServicePanel({ item, index, self, next, after }: { item: Item; index: n
           </RevealItem>
         </RevealGroup>
 
-        <div className="mt-8 h-24 lg:col-span-12 lg:row-start-3 lg:mt-10 lg:h-[clamp(96px,calc(var(--panel-h)_*_0.245),172px)]">
+        <div className="mt-4 h-20 md:mt-8 md:h-24 lg:col-span-12 lg:row-start-3 lg:mt-10 lg:h-[clamp(96px,calc(var(--panel-h)_*_0.245),172px)]">
           <SignalTrace kind={item.slug} mode="live" height={96} baseline className="h-full!" />
         </div>
 

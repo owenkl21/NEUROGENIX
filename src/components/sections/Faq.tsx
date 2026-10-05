@@ -11,7 +11,7 @@ import { FaqAccordion } from "./faq/FaqAccordion";
 export function Faq() {
   return (
     <section id="questions" aria-labelledby="faq-heading" className="section-y">
-      <div className="container-x grid grid-cols-1 gap-y-14 md:grid-cols-12 md:gap-x-8 md:gap-y-20 lg:gap-y-24">
+      <div className="container-x grid grid-cols-1 gap-y-10 md:grid-cols-12 md:gap-x-8 md:gap-y-20 lg:gap-y-24">
         <div className="md:col-span-7 lg:col-span-5">
           <SectionTitle id="faq-heading" lines={faq.title} />
           <Reveal as="p" delay={0.15} className="lede mt-6 max-w-[38ch] text-muted md:mt-8">

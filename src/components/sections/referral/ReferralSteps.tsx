@@ -48,7 +48,7 @@ export function ReferralSteps() {
       </span>
 
       {steps.map((step, i) => (
-        <li key={step.number} className={`relative pl-10 sm:pl-14 ${i < steps.length - 1 ? "pb-16 sm:pb-20 lg:min-h-[min(40vh,26rem)] lg:pb-24" : ""}`}>
+        <li key={step.number} className={`relative pl-10 sm:pl-14 ${i < steps.length - 1 ? "pb-12 md:pb-20 lg:min-h-[min(40vh,26rem)] lg:pb-24" : ""}`}>
           <StepNumeral
             index={i}
             progress={scrollYProgress}

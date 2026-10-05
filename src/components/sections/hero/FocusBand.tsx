@@ -4,6 +4,7 @@ import { Fragment, useRef, useSyncExternalStore } from "react";
 import { motion, useScroll, useTransform, type MotionValue } from "motion/react";
 import { useReducedMotion } from "@/components/motion/useReducedMotion";
 import { focus } from "@/content/site";
+import { Readout, type Channel } from "../focus/Readout";
 
 /**
  * The scroll-lit statement. As the band travels up the viewport each word of
@@ -11,9 +12,14 @@ import { focus } from "@/content/site";
  * through to "brain, nerves and muscles." It is the only scroll-lit text on
  * the site.
  *
+ * Beside it (above it on phones) a three channel readout follows the same
+ * progress: EEG, NCS and EMG each wake with a live sweep as "brain", "nerves"
+ * and "muscles" light, so the sentence and the instruments tell one story.
+ *
  * The heading stays one ordinary sentence for assistive technology: words are
  * plain inline spans, only their opacity changes. The server (and readers
- * without JavaScript or with reduced motion) get every word at full strength.
+ * without JavaScript or with reduced motion) get every word at full strength
+ * and every channel visible and still.
  *
  * The band is a statement and nothing else. It carries no link: the one way
  * on to Your visit from home is the practice section at the end of the page.
@@ -29,6 +35,21 @@ const tokens: Token[] = [
   ...focus.statement[0].split(" ").map((text) => ({ text, strong: false })),
   ...focus.statement[1].split(" ").map((text) => ({ text, strong: true })),
 ];
+const last = tokens.length - 1;
+
+/** Consecutive, slightly overlapping windows across the scroll range, one per word. */
+const wordRange = (i: number): [number, number] => {
+  const start = (i / last) * (1 - SPREAD);
+  return [start, start + SPREAD];
+};
+
+/*
+ * The channels follow the three things the second sentence names, in order:
+ * its first word (brain), its second (nerves) and its last (muscles), which
+ * is also the order of the tests in services.items (EEG, NCS, EMG).
+ */
+const strongStart = tokens.findIndex((token) => token.strong);
+const channels: Channel[] = [strongStart, strongStart + 1, last].map((i) => ({ range: wordRange(i) }));
 
 const subscribe = () => () => {};
 const useHydrated = () =>
@@ -47,29 +68,24 @@ export function FocusBand() {
   const hydrated = useHydrated();
   const lit = hydrated && !reduce;
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start 85%", "end 45%"] });
-  const last = tokens.length - 1;
 
   return (
-    <div className="grid gap-8 border-y border-line py-20 md:py-28 lg:grid-cols-12 lg:items-baseline lg:gap-x-6 lg:py-36">
-      <p className="text-[0.875rem] leading-normal text-muted lg:col-span-3">
-        <span aria-hidden="true" className="mr-3 inline-block h-px w-6 bg-brass-ink align-middle" />
-        {focus.label}
-      </p>
+    <div className="grid gap-12 border-y border-line py-16 md:gap-14 md:py-24 lg:grid-cols-12 lg:items-start lg:gap-x-6 lg:py-36">
+      {/* Columns 1 to 4 and 5 to 12, the same split as the hero's copy and image above. */}
+      <div className="lg:col-span-4 lg:pr-8 xl:pr-16">
+        <Readout progress={scrollYProgress} channels={channels} lit={lit} />
+      </div>
 
-      <div className="lg:col-span-9">
+      <div className="lg:col-span-8">
         <h2 ref={ref} id="focus-heading" className="display-2 max-w-[22ch]">
-          {tokens.map((token, i) => {
-            // Consecutive, slightly overlapping windows across the scroll range.
-            const start = (i / last) * (1 - SPREAD);
-            return (
-              <Fragment key={i}>
-                <Word progress={scrollYProgress} range={[start, start + SPREAD]} lit={lit} strong={token.strong}>
-                  {token.text}
-                </Word>
-                {i < last ? " " : null}
-              </Fragment>
-            );
-          })}
+          {tokens.map((token, i) => (
+            <Fragment key={i}>
+              <Word progress={scrollYProgress} range={wordRange(i)} lit={lit} strong={token.strong}>
+                {token.text}
+              </Word>
+              {i < last ? " " : null}
+            </Fragment>
+          ))}
         </h2>
       </div>
     </div>

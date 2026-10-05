@@ -12,7 +12,7 @@ export function Services() {
   return (
     <section id="services" aria-labelledby="services-heading" className="section-y">
       <div className="container-x">
-        <div className="mb-14 md:mb-20">
+        <div className="mb-10 md:mb-20">
           <SectionTitle id="services-heading" lines={services.title} />
           <Reveal as="p" delay={0.15} className="lede mt-6 max-w-[46ch] text-muted md:mt-8">
             {services.body}

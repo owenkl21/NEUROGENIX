@@ -89,7 +89,7 @@ export function FeesTimeline({ steps, className = "" }: { steps: Step[]; classNa
       />
 
       {steps.map((step, i) => (
-        <li key={step.number} className="relative grid grid-cols-[3rem_1fr] gap-x-5 pb-12 last:pb-0 sm:gap-x-7 lg:block lg:pb-0 lg:pr-16">
+        <li key={step.number} className="relative grid grid-cols-[3rem_1fr] gap-x-5 pb-10 last:pb-0 sm:gap-x-7 md:pb-12 lg:block lg:pb-0 lg:pr-16">
           {/* Brass leg from this node to the next, or the fading tail after the last. */}
           {i < last ? (
             <>

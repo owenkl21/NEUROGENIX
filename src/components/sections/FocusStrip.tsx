@@ -2,8 +2,9 @@ import { FocusBand } from "./hero/FocusBand";
 
 /**
  * A calm band between the hero and the services: one statement, lit word by
- * word as it scrolls through, framed by hairlines. No eyebrow; the plain
- * sentence-case label beside it is deliberately not an uppercase label.
+ * word as it scrolls through, framed by hairlines, with a three channel signal
+ * readout (EEG, NCS, EMG) that wakes in step with "brain, nerves and muscles".
+ * No eyebrow and no label above the statement.
  */
 export function FocusStrip() {
   return (

@@ -7,7 +7,7 @@ import { Stage } from "./Stage";
 /**
  * The waiting room, opened from a soft inset as the last beat of the hero's
  * entrance, then drifting gently with the scroll. Nothing sits under it: the
- * hero says its piece in the eyebrow, headline, lede and actions, and the
+ * hero says its piece in the headline, lede and actions, and the
  * photograph is left to speak for itself.
  */
 export function HeroFigure({ className = "" }: { className?: string }) {

@@ -1,0 +1,305 @@
+/*
+ * The practice map, themed. Leaflet's own class names are reached through
+ * :global() under .map (the Leaflet container), so nothing here leaks into
+ * the rest of the site. Colours come from the theme tokens; the only raw
+ * numbers are the CSS filter values that tint the map tiles toward the
+ * brand, which a token cannot express.
+ */
+
+/* Container: the site's type, a tile-coloured ground so loading tiles never
+   flash grey, and a focus ring drawn inside the rounded clip. */
+.map:global(.leaflet-container) {
+  font-family: inherit;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: var(--ink);
+  background: var(--paper-2);
+}
+.map:global(.leaflet-container):focus-visible {
+  outline: 2px solid var(--brass-ink);
+  outline-offset: -4px;
+}
+
+/*
+ * Base tiles, pulled from the provider's own colours toward the practice's
+ * cool linen land and a soft slate sea (light), or deep navy (dark). A filter
+ * takes numbers, not colours, so these raw values are unavoidable; every
+ * other colour in this file is a token.
+ *
+ * CARTO (with a key): Positron or Dark Matter land, place names on their own
+ * layer above, untinted. The CARTO values were fitted to Positron's and Dark
+ * Matter's published palettes. OpenStreetMap (the keyless fallback): one
+ * layer with the names baked in; mostly desaturated, so its pink motorways
+ * and green parks settle into the linen while the sea keeps a slate blue.
+ */
+.map :global(.ngx-carto) {
+  filter: saturate(1.6) brightness(0.92);
+}
+.map :global(.ngx-labels) {
+  filter: opacity(0.82);
+}
+.map :global(.ngx-osm) {
+  filter: grayscale(0.82) brightness(0.965) contrast(0.98);
+}
+
+/* Fractional zoom scales the tile grid, which can open hairline gaps between
+   tiles once a filter is applied. Each tile overlaps its neighbour by one
+   pixel instead (Leaflet sizes tiles inline, hence !important), and normal
+   blending keeps the overlap from doubling up. */
+.map :global(.leaflet-tile-container img.leaflet-tile) {
+  mix-blend-mode: normal;
+  width: 257px !important;
+  height: 257px !important;
+}
+
+@media (prefers-color-scheme: dark) {
+  .map:global(.leaflet-container) {
+    background: var(--navy);
+  }
+  /* Every grey becomes a shade of navy, and the final opacity lets the navy
+     ground show through, so the map is never pure black. OpenStreetMap is
+     light, so it is inverted first (its names turn pale on dark). */
+  .map :global(.ngx-carto) {
+    filter: grayscale(1) sepia(1) hue-rotate(162deg) saturate(1.6) brightness(0.75) contrast(1.1) opacity(0.65);
+  }
+  .map :global(.ngx-labels) {
+    filter: opacity(0.66);
+  }
+  .map :global(.ngx-osm) {
+    filter: invert(1) grayscale(1) sepia(1) hue-rotate(165deg) saturate(1.5) brightness(1.05) contrast(1.05) opacity(0.65);
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Markers. The pin is the signal motif: a brass point set in navy with a soft
+   ring. The selected practice breathes a slow pulse (none under reduced
+   motion). The same classes draw the matching glyph in the location list.
+   ------------------------------------------------------------------------ */
+
+.marker {
+  /* Leaflet sizes and positions this box; the pin fills it, the chip hangs off it. */
+  position: relative;
+  border-radius: 999px;
+}
+.marker:focus-visible {
+  outline: 2px solid var(--brass-ink);
+  outline-offset: 2px;
+}
+
+.pin {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  flex: none;
+}
+.pin::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--brass) 26%, transparent);
+  transform: scale(0.82);
+  transition:
+    transform 0.6s var(--ease-calm),
+    background-color 0.6s var(--ease-calm);
+}
+.dot {
+  position: relative;
+  width: 11px;
+  height: 11px;
+  border-radius: 999px;
+  background: var(--brass);
+  box-shadow:
+    0 0 0 2.5px var(--navy),
+    0 3px 8px rgb(var(--shadow-tint) / 0.35);
+  transition: transform 0.6s var(--ease-calm);
+}
+.pulse {
+  position: absolute;
+  inset: 0;
+  border-radius: 999px;
+  border: 1.5px solid var(--brass);
+  opacity: 0;
+}
+
+.isHover .pin::before,
+.marker:hover .pin::before,
+.marker:focus-visible .pin::before {
+  transform: scale(1);
+}
+.isActive .pin::before {
+  transform: scale(1.08);
+  background: color-mix(in srgb, var(--brass) 34%, transparent);
+}
+.isActive .dot {
+  transform: scale(1.12);
+}
+.isActive .pulse {
+  animation: pulse 2.6s var(--ease-calm) infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(0.7);
+    opacity: 0.85;
+  }
+  70%,
+  100% {
+    transform: scale(2.2);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .isActive .pulse {
+    animation: none;
+  }
+  .pin::before,
+  .dot {
+    transition: none;
+  }
+}
+
+/* Name chip beside each pin. Neighbouring practices put their chips on
+   opposite sides so they never cover each other. */
+.chip {
+  position: absolute;
+  top: 50%;
+  translate: 0 -50%;
+  white-space: nowrap;
+  padding: 6px 11px;
+  border-radius: 999px;
+  background: var(--navy);
+  color: var(--on-navy);
+  font-size: 0.78125rem;
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: -0.005em;
+  box-shadow: 0 8px 18px -10px rgb(var(--shadow-tint) / 0.6);
+  transition: background-color 0.4s var(--ease-calm);
+}
+.chipLeft {
+  right: calc(100% + 1px);
+}
+.chipRight {
+  left: calc(100% + 1px);
+}
+.isHover .chip,
+.marker:hover .chip,
+.isActive .chip {
+  background: var(--navy-2);
+}
+
+@media (prefers-color-scheme: dark) {
+  .chip {
+    box-shadow:
+      inset 0 0 0 1px var(--on-navy-line),
+      0 8px 18px -10px rgb(var(--shadow-tint) / 0.7);
+  }
+  .dot {
+    box-shadow:
+      0 0 0 2.5px var(--navy-3),
+      0 3px 8px rgb(var(--shadow-tint) / 0.5);
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Popup: a small surface in the site's own skin, no Leaflet chrome.
+   ------------------------------------------------------------------------ */
+
+.popup :global(.leaflet-popup-content-wrapper) {
+  padding: 0;
+  border-radius: 18px;
+  background: var(--surface);
+  color: var(--ink);
+  text-align: left;
+  box-shadow:
+    0 1px 0 rgb(var(--shadow-tint) / 0.04),
+    0 28px 60px -28px rgb(var(--shadow-tint) / 0.5);
+  animation: rise 0.55s var(--ease-calm);
+}
+.popup :global(.leaflet-popup-content) {
+  margin: 0;
+  font-size: inherit;
+  line-height: 1.5;
+  min-height: 0;
+}
+.popup :global(.leaflet-popup-content p) {
+  margin: 0;
+}
+.popup :global(.leaflet-popup-tip-container) {
+  margin-top: -1px;
+}
+.popup :global(.leaflet-popup-tip) {
+  background: var(--surface);
+  box-shadow: none;
+}
+
+@media (width >= 48rem) {
+  .popup :global(.leaflet-popup-content-wrapper) {
+    border-radius: 24px;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .popup :global(.leaflet-popup-content-wrapper) {
+    box-shadow:
+      inset 0 0 0 1px var(--line),
+      0 28px 60px -24px rgb(var(--shadow-tint) / 0.75);
+  }
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .popup :global(.leaflet-popup-content-wrapper) {
+    animation: none;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Controls: our own buttons sit in Leaflet's corners; the attribution is a
+   small frosted pill.
+   ------------------------------------------------------------------------ */
+
+.map :global(.leaflet-top) .control {
+  margin-top: 14px;
+}
+.map :global(.leaflet-left) .control {
+  margin-left: 14px;
+}
+.map :global(.leaflet-right) .control {
+  margin-right: 14px;
+}
+
+.map :global(.leaflet-control-container .leaflet-control-attribution) {
+  margin: 0 12px 12px 0;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--surface) 80%, transparent);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  color: var(--muted);
+  font-size: 0.65625rem;
+  line-height: 1.5;
+}
+.map :global(.leaflet-control-container .leaflet-control-attribution a) {
+  color: var(--ink-2);
+  text-decoration: none;
+}
+.map :global(.leaflet-control-container .leaflet-control-attribution a:hover) {
+  color: var(--ink);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}

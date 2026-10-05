@@ -7,7 +7,7 @@ import { EASE } from "@/components/motion/primitives";
 
 /**
  * One beat of the hero's entrance. Each beat has a cue (seconds after the
- * page mounts) so the eyebrow, headline, trace, copy and image land as one
+ * page mounts) so the headline, trace, copy and image land as one
  * composed sequence. A beat that is off screen at load (the image on a phone)
  * plays the moment it is scrolled to, without waiting out its cue.
  *

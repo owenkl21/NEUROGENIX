@@ -7,7 +7,7 @@ import { HeroFigure } from "./hero/HeroFigure";
 
 /**
  * Full-width type over a wide image, with a live EEG trace as the seam between
- * them. On load it plays as one composed entrance: eyebrow, the two headline
+ * them. On load it plays as one composed entrance: the two headline
  * sentences, the trace switching on, the copy and actions, then the image.
  *
  * Phones read in a different order (copy and actions straight after the
@@ -19,7 +19,7 @@ import { HeroFigure } from "./hero/HeroFigure";
  */
 export function Hero() {
   return (
-    <section aria-labelledby="hero-heading" className="container-x pb-24 pt-10 md:pb-32 lg:pt-14 lg:[@media(max-height:52rem)]:pt-8">
+    <section aria-labelledby="hero-heading" className="container-x pb-16 pt-10 md:pb-32 lg:pt-14 lg:[@media(max-height:52rem)]:pt-8">
       <div className="flex flex-col lg:grid lg:grid-cols-12 lg:gap-x-6">
         <div className="order-1 lg:order-none lg:col-span-12">
           <MaskLines
@@ -35,7 +35,7 @@ export function Hero() {
         {/* Edge to edge: the stage breaks out of the container so the sweep runs
             the full width of the screen. The trace keeps a constant rhythm per
             pixel, so one instance serves every screen size. */}
-        <Stage cue={0.5} effect="wipe" className="order-3 ml-[calc(50%-50vw)] mt-10 w-screen max-w-none md:mt-16 lg:order-none lg:col-span-12 lg:mb-10 lg:mt-9 lg:[@media(max-height:52rem)]:mb-6 lg:[@media(max-height:52rem)]:mt-5">
+        <Stage cue={0.5} effect="wipe" className="order-3 ml-[calc(50%-50vw)] mt-6 w-screen max-w-none md:mt-16 lg:order-none lg:col-span-12 lg:mb-10 lg:mt-9 lg:[@media(max-height:52rem)]:mb-6 lg:[@media(max-height:52rem)]:mt-5">
           <SignalTrace kind="eeg" height={84} amplitude={0.3} strokeWidth={1.35} color="var(--brass-ink)" />
         </Stage>
 
@@ -54,7 +54,7 @@ export function Hero() {
           </Stage>
         </div>
 
-        <HeroFigure className="order-4 mt-10 md:mt-12 lg:order-none lg:col-span-8 lg:mt-0" />
+        <HeroFigure className="order-4 mt-6 md:mt-12 lg:order-none lg:col-span-8 lg:mt-0" />
       </div>
     </section>
   );

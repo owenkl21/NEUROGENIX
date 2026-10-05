@@ -24,14 +24,14 @@ export function InsideStatic() {
           <Reveal className="mt-6 md:mt-8">
             <p className="lede max-w-[44ch] text-on-navy-muted">{lookInside.body}</p>
           </Reveal>
-          <Reveal className="mt-8" y={12}>
+          <Reveal className="mt-6 md:mt-8" y={12}>
             <TextLink tone="light" onClick={() => openGallery(0)} className="min-h-11">
               {lookInside.cta}
             </TextLink>
           </Reveal>
         </div>
 
-        <div className="mt-12 md:mt-16 lg:col-span-6 lg:mt-0 xl:col-span-7">
+        <div className="mt-10 md:mt-16 lg:col-span-6 lg:mt-0 xl:col-span-7">
           <ParallaxImage
             src={lookInside.image.src}
             alt={lookInside.image.alt}

@@ -30,11 +30,11 @@ export function Practice() {
             ))}
           </Reveal>
 
-          <div className="mt-12 md:mt-14">
+          <div className="mt-10 md:mt-14">
             <ValueRows values={practice.values} />
           </div>
 
-          <Reveal className="mt-10" y={12}>
+          <Reveal className="mt-8 md:mt-10" y={12}>
             <TextLink href={practice.link.href} className="min-h-11">
               {practice.link.label}
             </TextLink>
