@@ -475,10 +475,14 @@ export type TestPage = {
   after: { label: string; title: string[]; body: string; cta: { label: string; href: string } };
   sources: { before: string; links: { label: string; href: string }[]; joiner: string; after: string };
   next: { title: string; body: string; links: { label: string; href: string }[] };
+  otherTests: string;
+  breadcrumbRoot: { label: string; href: string };
 };
 
 const testShared = {
   eyebrow: "Patient information",
+  otherTests: "Other tests",
+  breadcrumbRoot: { label: "Services", href: "/#services" },
   footnote:
     "Your referring clinician determines whether this assessment is appropriate. Service availability and practice-specific instructions require confirmation.",
   print: "Print this page",
