@@ -1,5 +1,5 @@
 import { hero } from "@/content/site";
-import { BookButton, Eyebrow, TextLink } from "@/components/ui";
+import {BookButton, TextLink} from "@/components/ui";
 import { Magnetic, MaskLines } from "@/components/motion/primitives";
 import { SignalTrace } from "@/components/signal/SignalTrace";
 import { Stage } from "./hero/Stage";
@@ -22,16 +22,13 @@ export function Hero() {
     <section aria-labelledby="hero-heading" className="container-x pb-24 pt-10 md:pb-32 lg:pt-14 lg:[@media(max-height:52rem)]:pt-8">
       <div className="flex flex-col lg:grid lg:grid-cols-12 lg:gap-x-6">
         <div className="order-1 lg:order-none lg:col-span-12">
-          <Stage cue={0} effect="fade">
-            <Eyebrow>{hero.eyebrow}</Eyebrow>
-          </Stage>
           <MaskLines
             as="h1"
             id="hero-heading"
             trigger="mount"
             delay={0.12}
             lines={hero.title}
-            className="display-1 mt-6 lg:mt-7"
+            className="display-1"
           />
         </div>
 
@@ -50,7 +47,8 @@ export function Hero() {
             <Magnetic className="w-full sm:w-auto">
               <BookButton size="lg" className="w-full justify-between! sm:w-auto" />
             </Magnetic>
-            <TextLink href={hero.secondary.href} className="min-h-11 self-start">
+            {/* Stacked, the link starts where the button's label starts (28px in). */}
+            <TextLink href={hero.secondary.href} className="ml-7 min-h-11 self-start sm:ml-0 lg:ml-7">
               {hero.secondary.label}
             </TextLink>
           </Stage>

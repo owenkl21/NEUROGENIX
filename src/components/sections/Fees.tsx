@@ -1,5 +1,5 @@
 import { fees } from "@/content/site";
-import { Eyebrow, SectionTitle } from "@/components/ui";
+import {SectionTitle} from "@/components/ui";
 import { Reveal } from "@/components/motion/primitives";
 import { FeesTimeline } from "./fees/FeesTimeline";
 import { FeesNote } from "./fees/FeesNote";
@@ -17,10 +17,7 @@ export function Fees() {
     <section id="fees" aria-labelledby="fees-heading" className="section-y">
       <div className="container-x">
         <div className="max-w-[60rem]">
-          <Reveal y={10}>
-            <Eyebrow>{fees.eyebrow}</Eyebrow>
-          </Reveal>
-          <SectionTitle id="fees-heading" lines={fees.title} className="mt-7" />
+          <SectionTitle id="fees-heading" lines={fees.title} />
           <Reveal as="p" delay={0.15} className="lede mt-6 max-w-[52ch] text-muted md:mt-8">
             {fees.body}
           </Reveal>

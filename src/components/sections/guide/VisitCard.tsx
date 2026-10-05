@@ -10,7 +10,6 @@ export function VisitCard() {
   const { visit } = patientGuide;
   return (
     <div className="on-navy rounded-surface bg-navy p-7 text-on-navy sm:p-10 lg:p-9 dark:ring-1 dark:ring-on-navy-line">
-      <p className="label text-brass">{visit.label}</p>
       <h2 className="display-3 mt-5">
         {visit.title.map((line, i) => (
           <span key={line} className={`block ${i > 0 ? "headline-soft" : ""}`}>

@@ -194,19 +194,6 @@ export function TextLink({
   );
 }
 
-/**
- * Small mono label above a section headline. Rationed: at most one per three
- * sections, never on two neighbouring sections.
- */
-export function Eyebrow({ children, className = "", tone = "ink" }: { children: ReactNode; className?: string; tone?: "ink" | "light" }) {
-  return (
-    <p className={`label flex items-center gap-3 ${tone === "light" ? "text-brass" : "text-brass-ink"} ${className}`}>
-      <span aria-hidden="true" className="h-px w-8 bg-current" />
-      {children}
-    </p>
-  );
-}
-
 /** Two-part section headline: plain first sentence, soft italic second. */
 export function SectionTitle({
   lines,

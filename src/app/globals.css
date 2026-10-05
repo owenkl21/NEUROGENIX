@@ -247,10 +247,17 @@
     color: var(--on-navy-muted);
   }
 
+  /* Section rhythm: compact on phones, opening up on tablets, full air from
+     1024px, where the desktop spacing is already right. */
   .section-y {
-    padding-block: 104px;
+    padding-block: 64px;
   }
   @media (min-width: 768px) {
+    .section-y {
+      padding-block: 96px;
+    }
+  }
+  @media (min-width: 1024px) {
     .section-y {
       padding-block: 144px;
     }

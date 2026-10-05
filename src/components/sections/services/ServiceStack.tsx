@@ -134,12 +134,8 @@ function ServicePanel({ item, index, self, next, after }: { item: Item; index: n
         className={`on-navy relative flex flex-col overflow-hidden rounded-surface border border-on-navy-line text-on-navy ${tones[index % tones.length]} p-6 sm:p-10 lg:grid lg:h-(--panel-h) lg:origin-top lg:grid-cols-12 lg:grid-rows-[auto_1fr_auto] lg:gap-x-8 lg:p-12 xl:px-14 lg:motion-safe:[scale:var(--deck-scale,1)]`}
         style={{ "--deck-scale": scale, "--deck-dim": dim } as MotionStyle}
       >
-        {/* The tests are not a sequence, so the label is the type alone, led
-            in by a short brass rule like the focus band's label. */}
-        <p className="flex items-center gap-3 font-mono text-[0.8125rem] leading-none text-on-navy-muted lg:col-span-6 lg:col-start-1 lg:row-start-1">
-          <span aria-hidden="true" className="h-px w-6 bg-brass" />
-          {item.type}
-        </p>
+        {/* The tests are not a sequence, so the label is the type alone. */}
+        <p className="font-mono text-[0.8125rem] leading-none text-on-navy-muted lg:col-span-6 lg:col-start-1 lg:row-start-1">{item.type}</p>
 
         <motion.span
           aria-hidden="true"

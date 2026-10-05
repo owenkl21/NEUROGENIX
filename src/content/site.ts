@@ -49,16 +49,14 @@ export const nav = [
 
 /**
  * Page intros for the inner pages. Titles and lede paragraphs are the
- * section headlines from the wireframe; eyebrows are the wireframe's own
- * section labels.
+ * section headlines from the wireframe.
  */
 export type PageKey = "visit" | "doctors" | "team" | "locations";
-export const pages: Record<PageKey, { path: string; crumb: string; metaTitle: string; eyebrow: string; title: string[]; body: string; trace: "eeg" | "ncs" | "emg" | "calm" }> = {
+export const pages: Record<PageKey, { path: string; crumb: string; metaTitle: string; title: string[]; body: string; trace: "eeg" | "ncs" | "emg" | "calm" }> = {
   visit: {
     path: routes.visit,
     crumb: "Your visit",
     metaTitle: "Your visit | Neurogenix",
-    eyebrow: "Patient guide",
     title: ["A little preparation.", "A lot more peace of mind."],
     body: "Select your test for a simple guide to what happens and how to prepare. Always follow the specific instructions given by your care team.",
     trace: "eeg",
@@ -67,7 +65,6 @@ export const pages: Record<PageKey, { path: string; crumb: string; metaTitle: st
     path: routes.doctors,
     crumb: "For doctors",
     metaTitle: "For referring doctors | Neurogenix",
-    eyebrow: "For referring doctors",
     title: ["A clear referral.", "A coordinated next step."],
     body: "Information for clinicians arranging EEG, nerve conduction studies or EMG. Final services, eligibility and referral arrangements require practice confirmation.",
     trace: "ncs",
@@ -76,7 +73,6 @@ export const pages: Record<PageKey, { path: string; crumb: string; metaTitle: st
     path: routes.team,
     crumb: "Our team",
     metaTitle: "Our team | Neurogenix",
-    eyebrow: "The clinical team",
     title: ["Know who is involved in your test."],
     body: "Practitioner profiles will identify each team member’s registered profession, qualifications, role in testing and relevant clinical experience.",
     trace: "eeg",
@@ -85,7 +81,6 @@ export const pages: Record<PageKey, { path: string; crumb: string; metaTitle: st
     path: routes.locations,
     crumb: "Locations",
     metaTitle: "Locations | Neurogenix",
-    eyebrow: "Practice locations",
     title: ["Find the right practice.", "Plan your arrival."],
     body: "Confirm which location performs your test. Location details will be added once the practice supplies and verifies them.",
     trace: "calm",
@@ -95,7 +90,6 @@ export const pages: Record<PageKey, { path: string; crumb: string; metaTitle: st
 export const breadcrumbHome = "Home";
 
 export const hero = {
-  eyebrow: "The science of connection",
   title: ["Understanding the signals.", "Caring for the person."],
   body: "Brain, nerve and muscle testing, explained simply. Discover what your test involves and take the next step with confidence.",
   secondary: { label: "Explore our services", href: routes.services },
@@ -105,7 +99,6 @@ export const hero = {
     height: 1024,
     alt: "Neurogenix waiting room with navy walls, warm lighting and comfortable chairs",
   },
-  caption: { label: "Welcome to Neurogenix", text: ["Your test.", "Your next step."] },
 };
 
 export const focus = {
@@ -169,7 +162,6 @@ export const referral = {
     },
   ],
   pack: {
-    label: "Referral resources",
     title: ["Start with the right information."],
     body: "Review the proposed one-page referral form. The practice must approve its fields and submission instructions before clinical use.",
     download: { label: "Download draft referral form", href: "/documents/neurogenix-referral-draft.pdf" },
@@ -284,7 +276,6 @@ export const patientGuide = {
   beforeHeading: "Before your visit",
   duringHeading: "During the test",
   visit: {
-    label: "For every visit",
     title: ["Your appointment essentials."],
     items: ["Your referral letter", "A list of current medicines", "Relevant previous test results", "Any questions you’d like to ask"],
     body: "Ask the practice to confirm your appointment length and any additional documents needed.",
@@ -375,7 +366,6 @@ export const faq = {
 };
 
 export const fees = {
-  eyebrow: "Fees & medical aid",
   title: ["Understand the arrangements.", "Before your appointment."],
   body: "Fees and medical-aid benefits depend on your test and your cover. Ask the practice and your scheme to confirm the arrangements for your visit.",
   steps: [
@@ -430,7 +420,6 @@ export const notFound = {
 };
 
 export const privacy = {
-  label: "Website privacy",
   title: "Your information.",
   body: [
     "This is a private website review. The appointment form does not send details to the practice or save them in a database. Sample entries remain in the open page and are cleared when the appointment window closes.",
@@ -443,7 +432,6 @@ export const privacy = {
 };
 
 export const booking = {
-  label: "Your next step",
   title: "Request an appointment",
   notice: "Preview only. Use sample details to try the flow. Nothing is sent or booked.",
   closeLabel: "Close appointment request",
@@ -501,11 +489,10 @@ export type TestPage = {
   name: string;
   abbr: string;
   breadcrumb: string;
-  eyebrow: string;
   intro: string;
   footnote: string;
   print: string;
-  after: { label: string; title: string[]; body: string; cta: { label: string; href: string } };
+  after: { title: string[]; body: string; cta: { label: string; href: string } };
   sources: { before: string; links: { label: string; href: string }[]; joiner: string; after: string };
   next: { title: string; body: string; links: { label: string; href: string }[] };
   otherTests: string;
@@ -513,14 +500,12 @@ export type TestPage = {
 };
 
 const testShared = {
-  eyebrow: "Patient information",
   otherTests: "Other tests",
   breadcrumbRoot: { label: "Services", href: routes.services },
   footnote:
     "Your referring clinician determines whether this assessment is appropriate. Service availability and practice-specific instructions require confirmation.",
   print: "Print this page",
   after: {
-    label: "After your test",
     title: ["Understanding your results."],
     body: "The results are considered alongside your symptoms, history and other investigations. Confirm the report arrangements and discuss the findings with your referring clinician.",
     cta: { label: "Information for doctors", href: routes.doctors },

@@ -2,7 +2,7 @@ import { Fragment, type CSSProperties } from "react";
 import { guides, patientGuide, services, testPages, type TestSlug } from "@/content/site";
 import type { SignalKind } from "@/lib/signals";
 import { Magnetic, MaskLines, Reveal, RevealGroup, RevealItem } from "@/components/motion/primitives";
-import { BookButton, Eyebrow, SmartLink, TextLink } from "@/components/ui";
+import {BookButton, SmartLink, TextLink} from "@/components/ui";
 import { SignalTrace } from "@/components/signal/SignalTrace";
 import { GiantAbbr } from "./GiantAbbr";
 import { PrintButton } from "./PrintButton";
@@ -75,8 +75,7 @@ export function TestPageView({ slug }: { slug: TestSlug }) {
             className="print-hide absolute bottom-[calc(100%+0.625rem)] right-0 text-[length:min(11rem,calc(48vw/var(--abbr-w)))] leading-[0.74] font-medium tracking-[-0.02em] text-paper [font-variation-settings:'wdth'_75] [-webkit-text-stroke:2px_var(--line-strong)] [paint-order:stroke_fill] lg:bottom-0 lg:text-[clamp(16rem,25vw,23rem)]"
           />
           <div className="relative">
-            <Eyebrow>{page.eyebrow}</Eyebrow>
-            <div className="display-1 @container mt-6 md:mt-8" style={fit}>
+            <div className="display-1 @container" style={fit}>
               <MaskLines as="h1" id="test-title" trigger="mount" lines={[page.name]} softFrom={1} className="display-1 text-[length:min(1em,calc(100cqi/var(--fit)))]" />
             </div>
             <div className="mt-8 max-w-[52ch] md:mt-10">
@@ -177,7 +176,6 @@ export function TestPageView({ slug }: { slug: TestSlug }) {
 
           <aside aria-labelledby="after-title" className="lg:col-span-5 xl:col-span-4">
             <Reveal className="on-navy rounded-surface bg-navy p-8 text-on-navy dark:ring-1 dark:ring-on-navy-line md:p-10 lg:top-28 lg:motion-safe:sticky print:rounded-none print:border-t print:border-line print:bg-transparent print:px-0 print:pb-0 print:pt-8 print:text-ink print:[&_.headline-soft]:text-ink-2">
-              <p className="label text-brass print:text-brass-ink">{page.after.label}</p>
               <MaskLines as="h2" id="after-title" lines={page.after.title} className="display-3 mt-6" />
               <p className="mt-5 text-on-navy-muted print:text-muted">{page.after.body}</p>
               {/* A quiet way on, not a second primary action: the card is written for patients. */}

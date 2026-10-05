@@ -151,8 +151,7 @@ export function BookingDialog({ open, initialTest, onClose }: { open: boolean; i
     <Modal open={open} onClose={onClose} labelledBy="booking-title" describedBy="booking-description" panelClassName="md:max-w-[760px]">
       {/* No bottom padding: every step ends in its action bar, which is the panel's footer. */}
       <div ref={rootRef} className="px-6 md:px-10">
-        <div className="sticky top-0 z-10 -mx-6 flex items-center justify-between gap-6 bg-surface px-6 pb-2 pt-5 md:-mx-10 md:px-10 md:pt-7 md:[@media(max-height:860px)]:pt-5">
-          <p className="label text-brass-ink">{booking.label}</p>
+        <div className="sticky top-0 z-10 -mx-6 flex items-center justify-end gap-6 bg-surface px-6 pb-2 pt-5 md:-mx-10 md:px-10 md:pt-7 md:[@media(max-height:860px)]:pt-5">
           <CloseButton onClick={onClose} label={booking.closeLabel} />
         </div>
 

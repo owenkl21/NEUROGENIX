@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { CaretRight } from "@phosphor-icons/react/dist/ssr";
 import { breadcrumbHome, pages, type PageKey } from "@/content/site";
-import { Eyebrow, SmartLink } from "@/components/ui";
+import {SmartLink} from "@/components/ui";
 import { MaskLines, Reveal } from "@/components/motion/primitives";
 
 /**
@@ -36,10 +36,7 @@ export function PageIntro({ page }: { page: PageKey }) {
 
       <div className="mt-8 grid grid-cols-1 gap-y-7 md:mt-12 lg:grid-cols-12 lg:items-end lg:gap-x-8">
         <div className="lg:col-span-7">
-          <Reveal delay={0.05} y={10}>
-            <Eyebrow>{p.eyebrow}</Eyebrow>
-          </Reveal>
-          <MaskLines as="h1" id={`${page}-heading`} trigger="mount" delay={0.12} lines={p.title} className="display-2 mt-6" />
+          <MaskLines as="h1" id={`${page}-heading`} trigger="mount" delay={0.08} lines={p.title} className="display-2" />
         </div>
         <Reveal delay={0.4} y={16} className="lg:col-span-5 lg:col-start-8 xl:col-span-4 xl:col-start-9">
           <p className="lede max-w-[52ch] text-muted">{p.body}</p>

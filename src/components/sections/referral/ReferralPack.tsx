@@ -15,8 +15,7 @@ const { pack } = referral;
 export function ReferralPack() {
   return (
     <aside aria-labelledby="referral-pack-title" className="on-navy rounded-surface bg-navy p-7 text-on-navy sm:p-10 xl:p-12 dark:ring-1 dark:ring-on-navy-line">
-      <p className="label text-brass">{pack.label}</p>
-      <SectionTitle as="h2" size={3} id="referral-pack-title" lines={pack.title} className="mt-6" />
+      <SectionTitle as="h2" size={3} id="referral-pack-title" lines={pack.title} />
       <p className="mt-5 max-w-[44ch] text-on-navy-muted">{pack.body}</p>
 
       <div className="mt-9 flex flex-col items-start gap-4">
@@ -29,7 +28,8 @@ export function ReferralPack() {
         >
           {pack.download.label}
         </Button>
-        <TextLink tone="light" href={pack.contact.href} className="min-h-11">
+        {/* Starts where the button's label starts (24px in), on one text axis. */}
+        <TextLink tone="light" href={pack.contact.href} className="ml-6 min-h-11">
           {pack.contact.label}
         </TextLink>
       </div>
