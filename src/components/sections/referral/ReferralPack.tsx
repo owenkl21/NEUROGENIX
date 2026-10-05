@@ -7,20 +7,20 @@ import { referral } from "@/content/site";
 const { pack } = referral;
 
 /**
- * The referral pack: a navy panel the clinician acts on, kept at hand beside
+ * The referral pack: a deep panel the clinician acts on, kept at hand beside
  * the steps. On phones the download button takes the full width and its label
  * may wrap, so at 320px (400% zoom) it never forces the panel wider than the
  * screen.
  */
 export function ReferralPack() {
   return (
-    <aside aria-labelledby="referral-pack-title" className="on-navy rounded-surface bg-navy p-7 text-on-navy sm:p-10 xl:p-12 dark:ring-1 dark:ring-on-navy-line">
+    <aside aria-labelledby="referral-pack-title" className="on-deep rounded-surface bg-deep p-7 text-on-deep sm:p-10 xl:p-12 dark:ring-1 dark:ring-on-deep-line">
       <SectionTitle as="h2" size={3} id="referral-pack-title" lines={pack.title} />
-      <p className="mt-5 max-w-[44ch] text-on-navy-muted">{pack.body}</p>
+      <p className="mt-5 max-w-[44ch] text-on-deep-muted">{pack.body}</p>
 
       <div className="mt-9 flex flex-col items-start gap-4">
         <Button
-          variant="brass"
+          variant="signal"
           icon="download"
           href={pack.download.href}
           download
@@ -34,8 +34,8 @@ export function ReferralPack() {
         </TextLink>
       </div>
 
-      <p className="mt-8 flex gap-3 border-t border-on-navy-line pt-6 text-[0.8125rem] leading-relaxed text-on-navy-muted">
-        <Warning size={18} weight="light" aria-hidden="true" className="mt-px shrink-0 text-brass" />
+      <p className="mt-8 flex gap-3 border-t border-on-deep-line pt-6 text-[0.8125rem] leading-relaxed text-on-deep-muted">
+        <Warning size={18} weight="light" aria-hidden="true" className="mt-px shrink-0 text-signal" />
         <span>{pack.note}</span>
       </p>
     </aside>

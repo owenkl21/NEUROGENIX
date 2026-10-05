@@ -36,7 +36,7 @@ export function Hero() {
             the full width of the screen. The trace keeps a constant rhythm per
             pixel, so one instance serves every screen size. */}
         <Stage cue={0.5} effect="wipe" className="order-3 ml-[calc(50%-50vw)] mt-6 w-screen max-w-none md:mt-16 lg:order-none lg:col-span-12 lg:mb-10 lg:mt-9 lg:[@media(max-height:52rem)]:mb-6 lg:[@media(max-height:52rem)]:mt-5">
-          <SignalTrace kind="eeg" height={84} amplitude={0.3} strokeWidth={1.35} color="var(--brass-ink)" />
+          <SignalTrace kind="eeg" height={84} amplitude={0.3} strokeWidth={1.35} color="var(--signal-ink)" />
         </Stage>
 
         <div className="order-2 mt-8 lg:order-none lg:col-span-4 lg:mt-0">

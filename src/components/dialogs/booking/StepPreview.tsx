@@ -46,7 +46,7 @@ export function StepPreview({
   return (
     <div>
       <motion.div
-        className="text-brass-ink"
+        className="text-signal-ink"
         initial={reduce ? false : { scale: 0.5, opacity: 0, rotate: -12 }}
         animate={{ scale: 1, opacity: 1, rotate: 0 }}
         transition={reduce ? { duration: 0 } : { type: "spring", stiffness: 240, damping: 16, delay: 0.1 }}

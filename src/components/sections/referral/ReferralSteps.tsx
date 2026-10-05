@@ -8,14 +8,14 @@ import { referral } from "@/content/site";
 const steps = referral.steps;
 
 /**
- * The three referral steps beside a hairline track. A brass line fills the
+ * The three referral steps beside a hairline track. A signal line fills the
  * track top to bottom as the reader moves through the steps, and each numeral
- * warms from muted to brass the moment the fill reaches it. Positions are
+ * warms from muted to signal the moment the fill reaches it. Positions are
  * measured from the layout, so the numeral lights exactly as the line passes.
  *
  * Reduced motion is handled in CSS (motion-reduce variants) rather than by
  * branching on useReducedMotion(), so server and client markup always match:
- * the line shows fully drawn and every numeral rests in brass, with no motion.
+ * the line shows fully drawn and every numeral rests in signal, with no motion.
  */
 export function ReferralSteps() {
   const listRef = useRef<HTMLOListElement>(null);
@@ -44,7 +44,7 @@ export function ReferralSteps() {
   return (
     <ol ref={listRef} className="relative">
       <span aria-hidden="true" className="absolute bottom-0 left-0 top-0 w-px bg-line">
-        <motion.span className="absolute inset-0 origin-top bg-brass-ink motion-reduce:transform-none!" style={{ scaleY: scrollYProgress }} />
+        <motion.span className="absolute inset-0 origin-top bg-signal-ink motion-reduce:transform-none!" style={{ scaleY: scrollYProgress }} />
       </span>
 
       {steps.map((step, i) => (
@@ -82,19 +82,19 @@ function StepNumeral({
   setRef: (el: HTMLSpanElement | null) => void;
   children: string;
 }) {
-  // 0 to 100: how much brass is mixed into the numeral. Lights over a short
+  // 0 to 100: how much signal is mixed into the numeral. Lights over a short
   // stretch of scroll centred on the moment the fill reaches the numeral.
   const lit = useTransform(progress, (p) => {
     const at = thresholds.current[index] ?? 0;
     return Math.min(1, Math.max(0, (p - at + 0.015) / 0.04)) * 100;
   });
-  const color = useMotionTemplate`color-mix(in oklab, var(--brass-ink) ${lit}%, var(--muted))`;
+  const color = useMotionTemplate`color-mix(in oklab, var(--signal-ink) ${lit}%, var(--muted))`;
 
   return (
     <motion.span
       ref={setRef}
       aria-hidden="true"
-      className="block font-sans text-[clamp(2.5rem,1.9rem+1.6vw,3.5rem)] font-normal leading-none tracking-[-0.03em] tabular-nums motion-reduce:text-brass-ink!"
+      className="block font-sans text-[clamp(2.5rem,1.9rem+1.6vw,3.5rem)] font-normal leading-none tracking-[-0.03em] tabular-nums motion-reduce:text-signal-ink!"
       style={{ color }}
     >
       {children}

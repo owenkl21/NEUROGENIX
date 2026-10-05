@@ -3,8 +3,10 @@
 The site for Neurogenix, a clinical neurophysiology practice (EEG, nerve
 conduction studies, EMG). Its readers are anxious patients preparing for a test
 and the clinicians who refer them. The site has to feel calm, exact and
-expensive, the way the practice itself looks: a deep navy feature wall, brass
-signage, linen chairs, warm light.
+expensive. The identity comes from the practice's logo specification
+(`logo - Specifications.pdf`): the NEUROGENIX logo with its blue "NEURO", an
+underline that becomes a trace through a line-drawn brain, brand blue and
+brand black.
 
 **Design read:** a visual overhaul of an existing wireframe. The content is
 preserved exactly; the wireframe's single long page has been split into a
@@ -21,11 +23,11 @@ new. Trust first, premium second, motion everywhere but never loud.
 2. **Zero em dashes and zero en dashes** in anything a person reads, including
    alt text and aria labels. Use full stops, commas or brackets.
 3. **Tokens only.** Colours come from the theme (`bg-paper`, `text-ink`,
-   `bg-navy`, `text-brass-ink` ...). No raw hex in components. Dark mode then
+   `bg-deep`, `text-signal-ink` ...). No raw hex in components. Dark mode then
    works automatically through the CSS variables in `globals.css`.
 4. **Icons: Phosphor only** (`@phosphor-icons/react`). Never hand-draw an
    icon. The only hand-built SVG allowed is the signal trace engine and the
-   wordmark mark, both already written.
+   logo (`layout/Logo.tsx`, the original artwork paths), both already written.
 5. **No scroll listeners.** Use Motion (`useScroll`, `useTransform`,
    `whileInView`) or IntersectionObserver. Continuous values never go through
    React state.
@@ -40,29 +42,41 @@ new. Trust first, premium second, motion everywhere but never loud.
 9. **Accessibility:** semantic landmarks and headings in order, visible focus,
    44px minimum touch targets, labels above inputs, AA contrast (already true
    for every token pairing).
+10. **No eyebrows.** No small uppercase label, kicker, or short rule plus label
+   above a heading, anywhere (the client reads it as AI slop). A heading
+   stands on its own. Status pills that carry a real state are fine.
+11. **Secondary links under a button** start on the same left edge as the
+   button's label text, or sit beside the button.
 
 ## 2. Colour
 
-| Token | Light | Use |
-| --- | --- | --- |
-| `paper` | #f1f1ec | page background (cool linen, not cream) |
-| `paper-2` | #e7e8e2 | quiet alternate band |
-| `surface` | #f9f9f6 | raised panels, cards, dialogs |
-| `ink` | #12262f | text (navy-black) |
-| `ink-2` | #3b5260 | soft italic second line of headlines |
-| `muted` | #56656c | secondary text |
-| `line`, `line-strong` | | hairlines, borders |
-| `navy`, `navy-2`, `navy-3` | #132a35 ... | the brand blocks (feature wall) |
-| `on-navy`, `on-navy-muted`, `on-navy-line` | | text and lines on navy |
-| `brass` | #c4a56e | the single accent, on navy only |
-| `brass-ink` | #77592b | brass for text and lines on light |
+From the logo specification: brand blue (the logo artwork's #3f86ce; nominal
+#0080ff, Pantone Process Blue C) and brand black (#231f20).
 
-Brass has one job: it is the colour of signal (traces, the write head, active
-states, small labels). It is never a large fill on light backgrounds, apart from
-the brass button on navy.
+| Token | Light | Dark | Use |
+| --- | --- | --- | --- |
+| `paper` | #f5f5f3 | #121011 | page background |
+| `paper-2` | #ebebe8 | #181516 | quiet alternate band |
+| `surface` | #fcfcfb | #1e1a1b | raised panels, cards, dialogs |
+| `ink` | #231f20 | #f2f0ee | text (brand black) |
+| `ink-2` | #4d4748 | #c4bebc | secondary emphasis, "to be confirmed" values |
+| `muted` | #66605e | #a09997 | secondary text |
+| `line`, `line-strong` | | | hairlines, borders |
+| `deep`, `deep-2`, `deep-3` | #231f20 ... | #2a2526 ... | brand-black blocks, primary buttons, footer |
+| `on-deep`, `on-deep-muted`, `on-deep-line` | | | text and lines on deep blocks |
+| `signal` | #5a9be0 | #6aa7e8 | the accent on deep blocks (traces, buttons) |
+| `signal-ink` | #2a6cb2 | #7fb4ec | accent for small text and lines on light |
+| `signal-logo` | #3f86ce | #6aa7e8 | the exact logo blue: logo, large display type |
 
-Navy blocks: add the class `on-navy` to any navy container so focus rings and
-soft headlines adapt.
+Blue is the colour of signal: traces, the write head, active states, map
+pins, and the italic second line of two-part headlines (echoing NEURO and
+GENIX in the logo). The exact logo blue is only 3.5:1 on paper, so it is used
+for large type and graphics only; small text uses `signal-ink`.
+
+Deep blocks: add the class `on-deep` to any deep container so focus rings and
+the headline accent adapt. The logo keeps NEURO and the line through the brain
+in brand blue everywhere; the rest is brand black on light grounds and white
+on dark ones (`Wordmark` handles it).
 
 ## 3. Type
 
@@ -76,7 +90,7 @@ for small instrument labels and numerals.
 | `display-3` | panel and dialog titles |
 | `title-3` | card titles, H3 |
 | `lede` | the paragraph directly under a section headline |
-| `label` | mono uppercase label (rationed, see eyebrows) |
+| `label` | mono uppercase caption for metadata only, never above a heading |
 | `numeral` | mono tabular numerals (01, 02, 03) |
 | `headline-soft` | italic second sentence of a two-sentence headline |
 
@@ -103,7 +117,7 @@ Body copy: `text-muted`, `max-w-[60ch]` or tighter, 1rem to 1.125rem.
 - Section rhythm: `section-y` (104px mobile, 144px desktop). Use it on every
   section unless the layout is deliberately full-bleed or follows a page intro.
 - Prefer hairlines (`border-line`) and space over cards. A card exists only when
-  elevation means something (a panel you act on, a navy feature block).
+  elevation means something (a panel you act on, a brand-black feature block).
 - Shadow: `shadow-soft` only, tinted, used rarely.
 
 ## 5. Motion grammar
@@ -155,18 +169,18 @@ is a real-looking trace, generated from physiology (`src/lib/signals.ts`):
 
 - `mode="live"` sweeps like a monitor (only while on screen),
   `mode="draw"` draws once on entering view, `mode="still"` is static.
-- `color` defaults to `var(--brass)`. On light backgrounds use
-  `color="var(--brass-ink)"` or `color="var(--ink)"`.
+- `color` defaults to `var(--signal)`. On light backgrounds use
+  `color="var(--signal-ink)"` or `color="var(--ink)"`.
 - Use traces where a signal means something (a test, a transition between
   sections). Never as wallpaper behind text.
 
 ## 7. Building blocks (all in `src/components`)
 
-- `ui`: `Button` (variants `primary`, `brass`, `outline`, `outline-light`;
+- `ui`: `Button` (variants `primary`, `signal`, `outline`, `outline-light`;
   `href` or `onClick`; `icon` `arrow` | `external` | `download` | null),
   `BookButton` (opens the appointment dialog, optional `test`), `TextLink`
   (`tone` `ink` | `light`), `SmartLink` (internal links glide to same-page
-  anchors), `Eyebrow`, `SectionTitle`.
+  anchors), `SectionTitle`.
 - `dialogs`: `useDialogs()` gives `openBooking(test?)`, `openGallery(index?)`,
   `openPrivacy()`. `Modal` + `CloseButton` are the only dialog shell.
 - `layout`: header, footer, preview bar, smooth scroll (Lenis).
@@ -192,37 +206,35 @@ the same order.
 | `/locations` | Page intro, Locations (`locations`), Contact (`contact`) |
 | `/tests/eeg`, `/tests/ncs`, `/tests/emg` | Test intro, preparation guide, after your test, before your visit |
 
-The one deliberate repeat is the preparation guide: `/your-visit` shows all
-three in tabs and each test page shows its own. Both render from the single
-`guides` object in `site.ts`, so they cannot drift apart.
+The preparation guides live on the test pages. `/your-visit` shows a short
+summary per test that hands over to each test page, so nothing is repeated.
 
 ### Home page
 
-Layout families must not repeat. Eyebrows are rationed: on the home page
-only the hero carries one, and never on two neighbouring sections.
+Layout families must not repeat.
 
-| # | Section (id) | Layout family | Eyebrow |
-| --- | --- | --- | --- |
-| 1 | Hero | full-width type over a wide image, live EEG between | yes |
-| 2 | Focus statement | scroll-lit statement | no (plain label) |
-| 3 | Services (`services`) | sticky stacking navy panels with live traces, each opening its test page | no |
-| 4 | A look inside (`look-inside`) | full-bleed navy, image expands on scroll | no |
-| 5 | Practice (`practice`) | image-led split with values, handing over to Your visit | no |
+| # | Section (id) | Layout family |
+| --- | --- | --- |
+| 1 | Hero | full-width type over a wide image, live EEG between |
+| 2 | Focus statement | scroll-lit statement beside an EEG, NCS and EMG readout that wakes with its words |
+| 3 | Services (`services`) | sticky stacking brand-black panels with live traces, each opening its test page |
+| 4 | A look inside (`look-inside`) | full-bleed brand black, image expands on scroll |
+| 5 | Practice (`practice`) | editorial text split with values, handing over to Your visit |
 
 ### Inner pages
 
-Each opens with `PageIntro` (breadcrumb, eyebrow, H1, lede, live trace). The
-section directly beneath it takes `labelledBy` (the page H1 id) and drops its
-own eyebrow and headline, so the page never states its title twice.
+Each opens with `PageIntro` (breadcrumb, H1, lede). The section directly
+beneath it takes `labelledBy` (the page H1 id) and drops its own headline, so
+the page never states its title twice.
 
 | Page | Section | Layout family |
 | --- | --- | --- |
-| Your visit | Patient guide | tabs + sticky navy essentials card |
+| Your visit | Patient guide | test tabs with summaries + brand-black essentials card |
 | Your visit | Fees | horizontal timeline drawn on scroll |
 | Your visit | Questions | offset accordion |
 | For doctors | Referral | sticky aside + steps with scroll-filled line |
 | Our team | Team | editorial statement + awaiting-approval profile |
-| Locations | Locations | wide image with overlapping detail panel |
+| Locations | Locations | themed Leaflet map with a practice list that flies the map, plus the detail panel |
 | Locations | Contact | closing statement + info panel |
 
 ## 9. Verifying your work

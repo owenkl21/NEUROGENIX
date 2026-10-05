@@ -9,7 +9,7 @@ export default function NotFound() {
       <h1 className="display-2 max-w-[16ch]">
         {lead} <span className="headline-soft block">{soft}</span>
       </h1>
-      <SignalTrace kind="calm" mode="live" height={80} className="my-12 max-w-3xl" color="var(--brass-ink)" />
+      <SignalTrace kind="calm" mode="live" height={80} className="my-12 max-w-3xl" color="var(--signal-ink)" />
       <div>
         <Button href={notFound.cta.href}>{notFound.cta.label}</Button>
       </div>

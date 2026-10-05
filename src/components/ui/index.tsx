@@ -59,14 +59,14 @@ export function SmartLink({ href, children, className, download, external, onCli
   );
 }
 
-type ButtonVariant = "primary" | "brass" | "outline" | "outline-light";
+type ButtonVariant = "primary" | "signal" | "outline" | "outline-light";
 
 const variantClass: Record<ButtonVariant, string> = {
-  // On the dark theme navy would sink into the page, so the primary action turns brass.
-  primary: "bg-navy text-on-navy hover:bg-navy-2 dark:bg-brass dark:text-navy-3 dark:hover:bg-brass dark:hover:brightness-[1.06]",
-  brass: "bg-brass text-navy-3 hover:brightness-[1.06]",
+  // On the dark theme deep would sink into the page, so the primary action turns signal.
+  primary: "bg-deep text-on-deep hover:bg-deep-2 dark:bg-signal dark:text-deep-3 dark:hover:bg-signal dark:hover:brightness-[1.06]",
+  signal: "bg-signal text-deep-3 hover:brightness-[1.06]",
   outline: "border border-line-strong text-ink hover:border-ink",
-  "outline-light": "border border-on-navy-line text-on-navy hover:border-on-navy",
+  "outline-light": "border border-on-deep-line text-on-deep hover:border-on-deep",
 };
 
 const iconFor = { arrow: ArrowRight, external: ArrowUpRight, download: DownloadSimple } as const;
@@ -104,7 +104,7 @@ export function Button(props: ButtonProps) {
       {Icon && (
         <span
           className={`grid shrink-0 place-items-center rounded-full transition-transform duration-500 ease-calm group-hover:translate-x-0.5 ${size === "lg" ? "size-9" : "size-8"} ${
-            variant === "primary" ? "bg-on-navy/10 dark:bg-navy-3/10" : variant === "brass" ? "bg-navy-3/10" : "bg-ink/5"
+            variant === "primary" ? "bg-on-deep/10 dark:bg-deep-3/10" : variant === "signal" ? "bg-deep-3/10" : "bg-ink/5"
           }`}
         >
           <Icon size={16} weight="regular" aria-hidden="true" />
@@ -165,7 +165,7 @@ export function TextLink({
       <span
         className={`bg-no-repeat pb-1 transition-[background-size] duration-500 ease-calm [background-position:0_100%,0_100%] [background-size:100%_1px,0%_1px] group-hover:[background-size:100%_1px,100%_1px] ${
           tone === "light"
-            ? "[background-image:linear-gradient(rgb(238_240_234/0.3),rgb(238_240_234/0.3)),linear-gradient(var(--brass),var(--brass))]"
+            ? "[background-image:linear-gradient(rgb(245_244_242/0.3),rgb(245_244_242/0.3)),linear-gradient(var(--signal),var(--signal))]"
             : "[background-image:linear-gradient(var(--line-strong),var(--line-strong)),linear-gradient(var(--ink),var(--ink))]"
         }`}
       >
@@ -179,7 +179,7 @@ export function TextLink({
         ))}
     </>
   );
-  const classes = `group inline-flex min-h-11 items-center gap-2 font-medium ${tone === "light" ? "text-on-navy" : "text-ink"} ${className}`;
+  const classes = `group inline-flex min-h-11 items-center gap-2 font-medium ${tone === "light" ? "text-on-deep" : "text-ink"} ${className}`;
   if (!href) {
     return (
       <button type="button" onClick={onClick} onFocus={onFocus} className={classes}>

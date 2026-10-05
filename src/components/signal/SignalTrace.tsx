@@ -24,7 +24,7 @@ type Props = {
   /** Samples across the width for still and draw modes. Live mode sizes itself to the width. */
   points?: number;
   strokeWidth?: number;
-  /** Any CSS colour; defaults to the brass accent. */
+  /** Any CSS colour; defaults to the signal accent. */
   color?: string;
   /** Show the write head dot in live mode. */
   head?: boolean;
@@ -55,7 +55,7 @@ export function SignalTrace({
   speed = 1,
   points = 300,
   strokeWidth = 1.5,
-  color = "var(--brass)",
+  color = "var(--signal)",
   head = true,
   baseline = false,
   bleed = false,

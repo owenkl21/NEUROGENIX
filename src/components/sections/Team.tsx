@@ -20,7 +20,7 @@ export function Team({ labelledBy }: { labelledBy: string }) {
         <Reveal
           as="p"
           delay={0.1}
-          className="max-w-[48ch] border-l border-brass-ink pl-6 text-[0.9375rem] text-muted lg:col-span-5 lg:col-start-8 lg:mt-2 lg:self-start xl:col-span-4 xl:col-start-9"
+          className="max-w-[48ch] border-l border-signal-ink pl-6 text-[0.9375rem] text-muted lg:col-span-5 lg:col-start-8 lg:mt-2 lg:self-start xl:col-span-4 xl:col-start-9"
         >
           {team.body[1]}
         </Reveal>

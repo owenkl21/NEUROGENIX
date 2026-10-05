@@ -95,7 +95,7 @@ export function Modal({ open, onClose, labelledBy, describedBy, children, varian
     >
       <AnimatePresence onExitComplete={finishClose}>
         {open && (
-          <motion.div key="backdrop" className="fixed inset-0 bg-navy-3/60 backdrop-blur-[6px]" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.4 }} onClick={onClose} />
+          <motion.div key="backdrop" className="fixed inset-0 bg-deep-3/60 backdrop-blur-[6px]" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.4 }} onClick={onClose} />
         )}
         {open &&
           (variant === "fullscreen" ? (
@@ -125,7 +125,7 @@ export function CloseButton({ onClick, label, tone = "ink", className = "" }: { 
       onClick={onClick}
       aria-label={label}
       className={`group grid size-11 shrink-0 place-items-center rounded-full border transition-colors duration-300 ${
-        tone === "light" ? "border-on-navy-line text-on-navy hover:border-on-navy" : "border-line text-ink hover:border-ink"
+        tone === "light" ? "border-on-deep-line text-on-deep hover:border-on-deep" : "border-line text-ink hover:border-ink"
       } ${className}`}
     >
       <X size={18} aria-hidden="true" className="transition-transform duration-500 ease-calm group-hover:rotate-90" />

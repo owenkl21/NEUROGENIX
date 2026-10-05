@@ -84,7 +84,7 @@ export function NavButton({ direction, onClick, className = "" }: { direction: "
       type="button"
       onClick={onClick}
       aria-label={label}
-      className={`group size-11 shrink-0 place-items-center rounded-full md:size-12 border border-on-navy-line text-on-navy transition-[border-color,background-color] duration-300 ease-calm hover:border-on-navy hover:bg-on-navy/5 active:translate-y-px ${className}`}
+      className={`group size-11 shrink-0 place-items-center rounded-full md:size-12 border border-on-deep-line text-on-deep transition-[border-color,background-color] duration-300 ease-calm hover:border-on-deep hover:bg-on-deep/5 active:translate-y-px ${className}`}
     >
       <Icon
         size={20}
@@ -95,7 +95,7 @@ export function NavButton({ direction, onClick, className = "" }: { direction: "
   );
 }
 
-/** The four photos as small buttons. A brass ring glides to the active one. */
+/** The four photos as small buttons. A signal ring glides to the active one. */
 export function Thumbnails({ photos, current, onSelect }: { photos: readonly Photo[]; current: number; onSelect: (index: number) => void }) {
   const reduce = useReducedMotion();
   return (
@@ -108,7 +108,7 @@ export function Thumbnails({ photos, current, onSelect }: { photos: readonly Pho
               <motion.span
                 layoutId="gallery-thumb-ring"
                 aria-hidden="true"
-                className="pointer-events-none absolute -inset-[5px] rounded-[17px] border-[1.5px] border-brass"
+                className="pointer-events-none absolute -inset-[5px] rounded-[17px] border-[1.5px] border-signal"
                 transition={reduce ? { duration: 0 } : { type: "spring", stiffness: 380, damping: 34 }}
               />
             ) : null}

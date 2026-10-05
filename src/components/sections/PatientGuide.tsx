@@ -5,7 +5,7 @@ import { VisitCard } from "./guide/VisitCard";
 /**
  * The body of /your-visit, labelled by the page H1 (`labelledBy`). Choose your
  * test on the left (a short summary that hands over to the test's own page)
- * and, beside it on large screens, the navy card of essentials for every
+ * and, beside it on large screens, the deep card of essentials for every
  * visit. Below 1024px the card follows the tabs in the normal flow.
  *
  * Both reveals fire as soon as any part enters view: the tabs and the card's

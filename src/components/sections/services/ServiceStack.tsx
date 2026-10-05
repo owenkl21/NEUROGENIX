@@ -35,10 +35,10 @@ const SCALE_STEP = 0.035;
 const DIM_FIRST = 0.5;
 const DIM_SECOND = 0.22;
 
-/* The navy steps so the stack reads as separate sheets. In dark mode navy-3
-   is darker than the page itself, so the last sheet goes back to navy there:
+/* The deep steps so the stack reads as separate sheets. In dark mode deep-3
+   is darker than the page itself, so the last sheet goes back to deep there:
    it still differs from the sheet it lands on, and never reads as a hole. */
-const tones = ["bg-navy", "bg-navy-2", "bg-navy-3 dark:bg-navy"];
+const tones = ["bg-deep", "bg-deep-2", "bg-deep-3 dark:bg-deep"];
 
 /*
  * The abbreviation rises out of a mask. Both variant sets share the same
@@ -56,7 +56,7 @@ const abbrStill: Variants = {
 };
 
 /**
- * Three navy panels, one per test. On large screens with motion allowed they
+ * Three deep panels, one per test. On large screens with motion allowed they
  * are sticky: each one slides up over the last, and the panel underneath
  * steps back (scales down and dims) as it is covered. Progress is read from
  * invisible markers that sit where each panel would be without sticking, so
@@ -131,7 +131,7 @@ function ServicePanel({ item, index, self, next, after }: { item: Item; index: n
     <li className="lg:motion-safe:sticky" style={{ top: `calc(var(--header-h) + ${PARK + index * STEP_Y}px)` }} onFocus={onFocus}>
       <motion.article
         aria-labelledby={titleId}
-        className={`on-navy relative flex flex-col overflow-hidden rounded-surface border border-on-navy-line text-on-navy ${tones[index % tones.length]} p-6 sm:p-10 lg:grid lg:h-(--panel-h) lg:origin-top lg:grid-cols-12 lg:grid-rows-[auto_1fr_auto] lg:gap-x-8 lg:p-12 xl:px-14 lg:motion-safe:[scale:var(--deck-scale,1)]`}
+        className={`on-deep relative flex flex-col overflow-hidden rounded-surface border border-on-deep-line text-on-deep ${tones[index % tones.length]} p-6 sm:p-10 lg:grid lg:h-(--panel-h) lg:origin-top lg:grid-cols-12 lg:grid-rows-[auto_1fr_auto] lg:gap-x-8 lg:p-12 xl:px-14 lg:motion-safe:[scale:var(--deck-scale,1)]`}
         style={{ "--deck-scale": scale, "--deck-dim": dim } as MotionStyle}
       >
         <motion.span
@@ -143,7 +143,7 @@ function ServicePanel({ item, index, self, next, after }: { item: Item; index: n
           viewport={{ once: true, amount: 0.6 }}
         >
           <motion.span
-            className="block whitespace-nowrap text-[6rem] font-medium leading-[0.8] tracking-[-0.02em] text-on-navy/[0.13] [font-variation-settings:'wdth'_75] sm:text-[7.5rem] lg:text-[clamp(7rem,min(16vw,26svh),15rem)] motion-reduce:transform-none!"
+            className="block whitespace-nowrap text-[6rem] font-medium leading-[0.8] tracking-[-0.02em] text-on-deep/[0.13] [font-variation-settings:'wdth'_75] sm:text-[7.5rem] lg:text-[clamp(7rem,min(16vw,26svh),15rem)] motion-reduce:transform-none!"
             variants={reduce ? abbrStill : abbrRise}
           >
             {item.abbr}
@@ -160,10 +160,10 @@ function ServicePanel({ item, index, self, next, after }: { item: Item; index: n
             </h3>
           </RevealItem>
           {/* The plain-English type is the title's subtitle, never a label above it. */}
-          <RevealItem as="p" className="mt-2 font-mono text-[0.8125rem] text-on-navy-muted">
+          <RevealItem as="p" className="mt-2 font-mono text-[0.8125rem] text-on-deep-muted">
             {item.type}
           </RevealItem>
-          <RevealItem as="p" className="mt-4 max-w-[44ch] text-on-navy-muted">
+          <RevealItem as="p" className="mt-4 max-w-[44ch] text-on-deep-muted">
             {item.body}
           </RevealItem>
           <RevealItem className="mt-5">
@@ -177,7 +177,7 @@ function ServicePanel({ item, index, self, next, after }: { item: Item; index: n
           <SignalTrace kind={item.slug} mode="live" height={96} baseline className="h-full!" />
         </div>
 
-        <span aria-hidden="true" className="pointer-events-none absolute inset-0 bg-navy-3 opacity-0 lg:motion-safe:[opacity:var(--deck-dim,0)]" />
+        <span aria-hidden="true" className="pointer-events-none absolute inset-0 bg-deep-3 opacity-0 lg:motion-safe:[opacity:var(--deck-dim,0)]" />
       </motion.article>
     </li>
   );

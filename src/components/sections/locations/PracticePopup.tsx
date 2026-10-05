@@ -19,7 +19,7 @@ export function PracticePopup({ practice, onClose }: { practice: Practice; onClo
       <div className="mt-4 border-t border-line pt-4">
         <TestChips tests={practice.tests} />
         <p className="mt-3 flex items-center gap-2 text-[0.8125rem] text-muted">
-          <Clock size={16} weight="regular" aria-hidden="true" className="shrink-0 text-brass-ink" />
+          <Clock size={16} weight="regular" aria-hidden="true" className="shrink-0 text-signal-ink" />
           <span className="sr-only">{locations.hoursLabel}: </span>
           {practice.hours}
         </p>

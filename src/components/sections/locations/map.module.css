@@ -16,13 +16,14 @@
   background: var(--paper-2);
 }
 .map:global(.leaflet-container):focus-visible {
-  outline: 2px solid var(--brass-ink);
+  outline: 2px solid var(--signal-ink);
   outline-offset: -4px;
 }
 
 /*
- * Base tiles, pulled from the provider's own colours toward the practice's
- * cool linen land and a soft slate sea (light), or deep navy (dark). A filter
+ * Base tiles, pulled from the provider's own colours toward the brand: quiet
+ * off-white land with the sea keeping a hint of the brand blue (light), or
+ * a soft brand-black map with a dim blue sea (dark). A filter
  * takes numbers, not colours, so these raw values are unavoidable; every
  * other colour in this file is a token.
  *
@@ -30,7 +31,7 @@
  * layer above, untinted. The CARTO values were fitted to Positron's and Dark
  * Matter's published palettes. OpenStreetMap (the keyless fallback): one
  * layer with the names baked in; mostly desaturated, so its pink motorways
- * and green parks settle into the linen while the sea keeps a slate blue.
+ * and green parks settle into the neutrals while the sea keeps a little blue.
  */
 .map :global(.ngx-carto) {
   filter: saturate(1.6) brightness(0.92);
@@ -54,24 +55,25 @@
 
 @media (prefers-color-scheme: dark) {
   .map:global(.leaflet-container) {
-    background: var(--navy);
+    background: var(--deep);
   }
-  /* Every grey becomes a shade of navy, and the final opacity lets the navy
-     ground show through, so the map is never pure black. OpenStreetMap is
-     light, so it is inverted first (its names turn pale on dark). */
+  /* A soft brand-black map, never pure black: the final opacity lets the deep
+     ground show through. OpenStreetMap is light, so it is inverted first
+     (names turn pale) and turned back round the hue wheel so the sea reads
+     as a dim brand blue rather than orange. */
   .map :global(.ngx-carto) {
-    filter: grayscale(1) sepia(1) hue-rotate(162deg) saturate(1.6) brightness(0.75) contrast(1.1) opacity(0.65);
+    filter: grayscale(0.85) brightness(0.9) contrast(1.05) opacity(0.7);
   }
   .map :global(.ngx-labels) {
     filter: opacity(0.66);
   }
   .map :global(.ngx-osm) {
-    filter: invert(1) grayscale(1) sepia(1) hue-rotate(165deg) saturate(1.5) brightness(1.05) contrast(1.05) opacity(0.65);
+    filter: invert(1) hue-rotate(180deg) grayscale(0.8) brightness(0.92) contrast(0.95) opacity(0.72);
   }
 }
 
 /* ---------------------------------------------------------------------------
-   Markers. The pin is the signal motif: a brass point set in navy with a soft
+   Markers. The pin is the signal motif: a signal point set in deep with a soft
    ring. The selected practice breathes a slow pulse (none under reduced
    motion). The same classes draw the matching glyph in the location list.
    ------------------------------------------------------------------------ */
@@ -82,7 +84,7 @@
   border-radius: 999px;
 }
 .marker:focus-visible {
-  outline: 2px solid var(--brass-ink);
+  outline: 2px solid var(--signal-ink);
   outline-offset: 2px;
 }
 
@@ -99,7 +101,7 @@
   position: absolute;
   inset: 0;
   border-radius: 999px;
-  background: color-mix(in srgb, var(--brass) 26%, transparent);
+  background: color-mix(in srgb, var(--signal) 26%, transparent);
   transform: scale(0.82);
   transition:
     transform 0.6s var(--ease-calm),
@@ -110,9 +112,9 @@
   width: 11px;
   height: 11px;
   border-radius: 999px;
-  background: var(--brass);
+  background: var(--signal);
   box-shadow:
-    0 0 0 2.5px var(--navy),
+    0 0 0 2.5px var(--deep),
     0 3px 8px rgb(var(--shadow-tint) / 0.35);
   transition: transform 0.6s var(--ease-calm);
 }
@@ -120,7 +122,7 @@
   position: absolute;
   inset: 0;
   border-radius: 999px;
-  border: 1.5px solid var(--brass);
+  border: 1.5px solid var(--signal);
   opacity: 0;
 }
 
@@ -131,7 +133,7 @@
 }
 .isActive .pin::before {
   transform: scale(1.08);
-  background: color-mix(in srgb, var(--brass) 34%, transparent);
+  background: color-mix(in srgb, var(--signal) 34%, transparent);
 }
 .isActive .dot {
   transform: scale(1.12);
@@ -171,8 +173,8 @@
   white-space: nowrap;
   padding: 6px 11px;
   border-radius: 999px;
-  background: var(--navy);
-  color: var(--on-navy);
+  background: var(--deep);
+  color: var(--on-deep);
   font-size: 0.78125rem;
   font-weight: 500;
   line-height: 1;
@@ -189,18 +191,18 @@
 .isHover .chip,
 .marker:hover .chip,
 .isActive .chip {
-  background: var(--navy-2);
+  background: var(--deep-2);
 }
 
 @media (prefers-color-scheme: dark) {
   .chip {
     box-shadow:
-      inset 0 0 0 1px var(--on-navy-line),
+      inset 0 0 0 1px var(--on-deep-line),
       0 8px 18px -10px rgb(var(--shadow-tint) / 0.7);
   }
   .dot {
     box-shadow:
-      0 0 0 2.5px var(--navy-3),
+      0 0 0 2.5px var(--deep-3),
       0 3px 8px rgb(var(--shadow-tint) / 0.5);
   }
 }

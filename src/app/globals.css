@@ -3,32 +3,41 @@
 
 /*
  * Neurogenix design tokens.
- * The palette is taken from the practice itself: the navy feature wall, the
- * brass signage and the linen upholstery. Neutrals are kept cool so navy reads
- * as the brand colour and brass stays a single, rationed accent.
- * Every pairing below passes WCAG AA (checked in both themes).
+ * The palette comes from the practice's logo specification: brand blue
+ * (the logo's "NEURO", #3f86ce in the artwork) and brand black (#231f20).
+ * Blue is the colour of signal: traces, active states, the second line of
+ * headlines (echoing NEURO and GENIX) and the logo. Brand black carries the
+ * feature blocks, buttons and footer. Neutrals are quiet off-whites.
+ * Every pairing passes WCAG AA in both themes; the exact logo blue is used
+ * only for large display type, traces and the logo (3.5:1 on paper), with
+ * a deeper blue for small text and links.
  */
 :root {
-  --paper: #f1f1ec;
-  --paper-2: #e7e8e2;
-  --surface: #f9f9f6;
-  --ink: #12262f;
-  --ink-2: #3b5260;
-  --muted: #56656c;
-  --line: #d7d9d1;
-  --line-strong: #bfc3ba;
+  --paper: #f5f5f3;
+  --paper-2: #ebebe8;
+  --surface: #fcfcfb;
+  --ink: #231f20;
+  --ink-2: #4d4748;
+  --muted: #66605e;
+  --line: #dfddda;
+  --line-strong: #c7c3bf;
 
-  --navy: #132a35;
-  --navy-2: #1b3744;
-  --navy-3: #0d1e26;
-  --on-navy: #eef0ea;
-  --on-navy-muted: #a9b8bd;
-  --on-navy-line: rgb(238 240 234 / 0.14);
+  --deep: #231f20;
+  --deep-2: #2e292a;
+  --deep-3: #181516;
+  --on-deep: #f5f4f2;
+  --on-deep-muted: #aba5a3;
+  --on-deep-line: rgb(245 244 242 / 0.14);
 
-  --brass: #c4a56e;
-  --brass-ink: #77592b;
+  /* signal: accent on deep blocks. signal-ink: small text and lines on light.
+     signal-logo: the exact logo blue, for the logo and large display type. */
+  --signal: #5a9be0;
+  --signal-ink: #2a6cb2;
+  --signal-logo: #3f86ce;
+  /* The logo's NEURO and its line: brand blue on every ground. */
+  --logo-auto-accent: var(--signal-logo);
 
-  --shadow-tint: 19 42 53;
+  --shadow-tint: 35 31 32;
   --header-h: 72px;
   --ease-calm: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-swift: cubic-bezier(0.65, 0, 0.35, 1);
@@ -38,24 +47,26 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --paper: #0b1a21;
-    --paper-2: #0f222b;
-    --surface: #122a35;
-    --ink: #e8ebe5;
-    --ink-2: #b7c4c8;
-    --muted: #90a2a8;
-    --line: #22404c;
-    --line-strong: #2e5261;
+    --paper: #121011;
+    --paper-2: #181516;
+    --surface: #1e1a1b;
+    --ink: #f2f0ee;
+    --ink-2: #c4bebc;
+    --muted: #a09997;
+    --line: #332d2e;
+    --line-strong: #463f40;
 
-    --navy: #183a4b;
-    --navy-2: #1f4659;
-    --navy-3: #081419;
-    --on-navy: #eef0ea;
-    --on-navy-muted: #a9b8bd;
-    --on-navy-line: rgb(238 240 234 / 0.12);
+    --deep: #2a2526;
+    --deep-2: #332d2e;
+    --deep-3: #0c0a0b;
+    --on-deep: #f5f4f2;
+    --on-deep-muted: #b3adab;
+    --on-deep-line: rgb(245 244 242 / 0.12);
 
-    --brass: #cbae78;
-    --brass-ink: #d2b888;
+    --signal: #6aa7e8;
+    --signal-ink: #7fb4ec;
+    --signal-logo: #6aa7e8;
+    --logo-auto-accent: var(--signal-logo);
 
     --shadow-tint: 0 0 0;
     color-scheme: dark;
@@ -74,14 +85,15 @@
   --color-muted: var(--muted);
   --color-line: var(--line);
   --color-line-strong: var(--line-strong);
-  --color-navy: var(--navy);
-  --color-navy-2: var(--navy-2);
-  --color-navy-3: var(--navy-3);
-  --color-on-navy: var(--on-navy);
-  --color-on-navy-muted: var(--on-navy-muted);
-  --color-on-navy-line: var(--on-navy-line);
-  --color-brass: var(--brass);
-  --color-brass-ink: var(--brass-ink);
+  --color-deep: var(--deep);
+  --color-deep-2: var(--deep-2);
+  --color-deep-3: var(--deep-3);
+  --color-on-deep: var(--on-deep);
+  --color-on-deep-muted: var(--on-deep-muted);
+  --color-on-deep-line: var(--on-deep-line);
+  --color-signal: var(--signal);
+  --color-signal-ink: var(--signal-ink);
+  --color-signal-logo: var(--signal-logo);
 
   /* Radius rule: interactive controls are full pills, surfaces are 24px
      (18px below md), inputs are 12px. Nothing else. */
@@ -132,19 +144,19 @@
   }
 
   ::selection {
-    background: var(--navy);
-    color: var(--on-navy);
+    background: var(--deep);
+    color: var(--on-deep);
   }
 
   :focus-visible {
-    outline: 2px solid var(--brass-ink);
+    outline: 2px solid var(--signal-ink);
     outline-offset: 3px;
     border-radius: 4px;
   }
 
-  .on-navy :focus-visible,
-  .on-navy:focus-visible {
-    outline-color: var(--brass);
+  .on-deep :focus-visible,
+  .on-deep:focus-visible {
+    outline-color: var(--signal);
   }
 
   h1,
@@ -241,10 +253,10 @@
   .headline-soft {
     font-style: italic;
     font-weight: 400;
-    color: var(--ink-2);
+    color: var(--signal-logo);
   }
-  .on-navy .headline-soft {
-    color: var(--on-navy-muted);
+  .on-deep .headline-soft {
+    color: var(--signal);
   }
 
   /* Section rhythm: compact on phones, opening up on tablets, full air from
@@ -342,14 +354,15 @@
   :root {
     color-scheme: light;
     --paper: #ffffff;
-    --paper-2: #f1f1ec;
+    --paper-2: #f1f1ef;
     --surface: #ffffff;
-    --ink: #12262f;
-    --ink-2: #3b5260;
-    --muted: #56656c;
-    --line: #d7d9d1;
-    --line-strong: #bfc3ba;
-    --brass-ink: #77592b;
+    --ink: #231f20;
+    --ink-2: #4d4748;
+    --muted: #66605e;
+    --line: #dfddda;
+    --line-strong: #c7c3bf;
+    --signal-ink: #2a6cb2;
+    --signal-logo: #3f86ce;
   }
   .grain::after,
   .skip-link {

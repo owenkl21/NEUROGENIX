@@ -66,7 +66,7 @@ const timeline: Variants = { hidden: {}, show: {} };
 
 /**
  * Three steps on a hairline track. From 1024px the steps sit in a row and the
- * brass line draws left to right through their nodes. Below that (phones and
+ * signal line draws left to right through their nodes. Below that (phones and
  * portrait tablets) the track runs down the left edge and the nodes stack.
  */
 export function FeesTimeline({ steps, className = "" }: { steps: Step[]; className?: string }) {
@@ -90,30 +90,30 @@ export function FeesTimeline({ steps, className = "" }: { steps: Step[]; classNa
 
       {steps.map((step, i) => (
         <li key={step.number} className="relative grid grid-cols-[3rem_1fr] gap-x-5 pb-10 last:pb-0 sm:gap-x-7 md:pb-12 lg:block lg:pb-0 lg:pr-16">
-          {/* Brass leg from this node to the next, or the fading tail after the last. */}
+          {/* Signal leg from this node to the next, or the fading tail after the last. */}
           {i < last ? (
             <>
-              <motion.span aria-hidden="true" variants={v.legX} custom={i} className="absolute left-6 top-6 hidden h-px w-full origin-left bg-brass-ink lg:block" />
+              <motion.span aria-hidden="true" variants={v.legX} custom={i} className="absolute left-6 top-6 hidden h-px w-full origin-left bg-signal-ink lg:block" />
               <span aria-hidden="true" className="absolute -bottom-6 left-6 top-6 w-px bg-line lg:hidden" />
-              <motion.span aria-hidden="true" variants={v.legY} custom={i} className="absolute -bottom-6 left-6 top-6 w-px origin-top bg-brass-ink lg:hidden" />
+              <motion.span aria-hidden="true" variants={v.legY} custom={i} className="absolute -bottom-6 left-6 top-6 w-px origin-top bg-signal-ink lg:hidden" />
             </>
           ) : (
             <motion.span
               aria-hidden="true"
               variants={v.tail}
               custom={i}
-              className="absolute left-6 right-0 top-6 hidden h-px origin-left bg-brass-ink [mask-image:linear-gradient(to_right,var(--ink)_20%,transparent)] lg:block"
+              className="absolute left-6 right-0 top-6 hidden h-px origin-left bg-signal-ink [mask-image:linear-gradient(to_right,var(--ink)_20%,transparent)] lg:block"
             />
           )}
 
           {/* The list carries the order for assistive tech, so the numerals are visual only. */}
           <div aria-hidden="true" className="relative size-12">
             <span className="numeral absolute inset-0 grid place-items-center rounded-full border border-line bg-paper text-[0.8125rem] text-muted">{step.number}</span>
-            <motion.span variants={v.halo} custom={i} className="absolute inset-0 rounded-full border border-brass-ink opacity-0" />
+            <motion.span variants={v.halo} custom={i} className="absolute inset-0 rounded-full border border-signal-ink opacity-0" />
             <motion.span
               variants={v.lit}
               custom={i}
-              className="numeral absolute inset-0 grid place-items-center rounded-full border border-brass-ink bg-paper text-[0.8125rem] text-brass-ink"
+              className="numeral absolute inset-0 grid place-items-center rounded-full border border-signal-ink bg-paper text-[0.8125rem] text-signal-ink"
             >
               {step.number}
             </motion.span>

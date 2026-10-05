@@ -9,7 +9,7 @@ import type { Step } from "./model";
 
 /**
  * Three numbered rings joined by hairlines. As the reader advances, the line
- * behind them fills with brass ink, like a signal travelling to the next
+ * behind them fills with signal ink, like a signal travelling to the next
  * electrode, and the ring it leaves resolves into a check.
  * Phones: labels sit under the rings. From md: labels sit beside them.
  */
@@ -31,7 +31,7 @@ export function Progress({ step }: { step: Step }) {
             <span
               aria-hidden="true"
               className={`relative grid size-8 shrink-0 place-items-center rounded-full border transition-colors duration-500 ease-calm ${
-                current ? "border-ink bg-ink text-surface delay-300" : done ? "border-brass-ink text-brass-ink" : "border-line-strong text-muted"
+                current ? "border-ink bg-ink text-surface delay-300" : done ? "border-signal-ink text-signal-ink" : "border-line-strong text-muted"
               }`}
             >
               <AnimatePresence initial={false} mode="popLayout">
@@ -57,7 +57,7 @@ export function Progress({ step }: { step: Step }) {
             {i < last ? (
               <span aria-hidden="true" className="absolute left-[calc(2rem+10px)] right-2.5 top-4 h-px bg-line md:relative md:inset-auto md:mx-5 md:flex-1">
                 <motion.span
-                  className="absolute inset-0 origin-left bg-brass-ink"
+                  className="absolute inset-0 origin-left bg-signal-ink"
                   initial={false}
                   animate={{ scaleX: done ? 1 : 0 }}
                   transition={{ duration: reduce ? 0 : 0.9, ease: EASE }}

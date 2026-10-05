@@ -37,8 +37,8 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#f1f1ec" },
-    { media: "(prefers-color-scheme: dark)", color: "#0b1a21" },
+    { media: "(prefers-color-scheme: light)", color: "#f5f5f3" },
+    { media: "(prefers-color-scheme: dark)", color: "#121011" },
   ],
 };
 
@@ -50,7 +50,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <noscript>
           <style>{"[data-reveal]{opacity:1!important;transform:none!important}.mask-line{transform:none!important}"}</style>
         </noscript>
-        <a href="#main" className="skip-link rounded-full bg-navy px-5 py-3 text-sm font-medium text-on-navy">
+        <a href="#main" className="skip-link rounded-full bg-deep px-5 py-3 text-sm font-medium text-on-deep">
           Skip to content
         </a>
         <SmoothScroll>

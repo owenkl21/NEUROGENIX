@@ -5,8 +5,8 @@ import { ReferralFacts } from "./referral/ReferralFacts";
 
 /**
  * The body of /for-doctors, labelled by the page H1 (`labelledBy`). The
- * referral pack waits in a sticky navy aside while the three steps fill a
- * brass line as they are read. The open questions close the section as ruled
+ * referral pack waits in a sticky deep aside while the three steps fill a
+ * signal line as they are read. The open questions close the section as ruled
  * rows whose two columns line up with the pack and the steps above.
  *
  * Below 1024px everything stacks in reading order: steps (line on the left),

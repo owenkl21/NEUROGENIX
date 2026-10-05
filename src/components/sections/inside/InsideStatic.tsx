@@ -22,7 +22,7 @@ export function InsideStatic() {
         <div className="lg:col-span-6 xl:col-span-5">
           <SectionTitle id="inside-heading" lines={lookInside.title} />
           <Reveal className="mt-6 md:mt-8">
-            <p className="lede max-w-[44ch] text-on-navy-muted">{lookInside.body}</p>
+            <p className="lede max-w-[44ch] text-on-deep-muted">{lookInside.body}</p>
           </Reveal>
           <Reveal className="mt-6 md:mt-8" y={12}>
             <TextLink tone="light" onClick={() => openGallery(0)} className="min-h-11">
@@ -39,7 +39,7 @@ export function InsideStatic() {
             height={lookInside.image.height}
             sizes="(min-width: 1320px) 720px, (min-width: 1024px) 56vw, 100vw"
             intensity={4}
-            className="aspect-[4/3] rounded-surface bg-navy-2"
+            className="aspect-[4/3] rounded-surface bg-deep-2"
           />
           <ul className="mt-3 grid grid-cols-3 gap-3 sm:mt-4 sm:gap-4">
             {thumbIndexes.map((index) => (

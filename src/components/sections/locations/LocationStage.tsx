@@ -66,7 +66,7 @@ export function LocationStage() {
           <div className="lg:col-span-5">
             <h2 className="title-3 text-ink">{locations.heading}</h2>
             <p className="mt-4 inline-flex min-h-8 items-center gap-2 rounded-full border border-line py-1 pl-2.5 pr-3.5 text-[0.8125rem] leading-none text-muted">
-              <Clock size={16} weight="regular" aria-hidden="true" className="shrink-0 text-brass-ink" />
+              <Clock size={16} weight="regular" aria-hidden="true" className="shrink-0 text-signal-ink" />
               {locations.status}
             </p>
           </div>

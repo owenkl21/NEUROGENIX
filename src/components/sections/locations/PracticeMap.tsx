@@ -328,7 +328,7 @@ export function PracticeMap({ active, setActive, ref, className = "" }: Props) {
       {portals &&
         createPortal(
           <button type="button" onClick={showAll} className={`${control} h-10 gap-2 px-4 text-[0.875rem] font-medium [grid-auto-flow:column]`}>
-            <CornersOut size={16} weight="regular" aria-hidden="true" className="text-brass-ink" />
+            <CornersOut size={16} weight="regular" aria-hidden="true" className="text-signal-ink" />
             {locations.showAll}
           </button>,
           portals.frame,

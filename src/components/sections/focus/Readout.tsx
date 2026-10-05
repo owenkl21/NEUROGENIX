@@ -94,7 +94,7 @@ function Row({
           amplitude={AMPLITUDE[kind]}
           height={36}
           strokeWidth={1.25}
-          color="var(--brass-ink)"
+          color="var(--signal-ink)"
         />
       </div>
     </motion.div>

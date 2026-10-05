@@ -10,7 +10,7 @@ import { EASE } from "@/components/motion/primitives";
  * Form building blocks for the request walkthrough. Labels sit above their
  * controls, every control is 48px tall with the 12px input radius, and an
  * error is announced through aria-describedby on the field it belongs to.
- * There is no red in the palette, so errors use brass ink with an icon: calm,
+ * There is no red in the palette, so errors use signal ink with an icon: calm,
  * clearly different from the resting state, and AA on both themes.
  */
 
@@ -34,7 +34,7 @@ const CONTROL_SCROLL = `scroll-mt-30 ${SCROLL_CLEAR_BOTTOM}`;
 
 export function controlClass(invalid?: boolean) {
   return `h-12 w-full ${CONTROL_SCROLL} rounded-[12px] border bg-surface px-4 text-base transition-colors duration-300 ease-calm placeholder:text-muted ${
-    invalid ? "border-brass-ink" : `${CONTROL_BORDER} hover:border-ink-2`
+    invalid ? "border-signal-ink" : `${CONTROL_BORDER} hover:border-ink-2`
   }`;
 }
 
@@ -50,7 +50,7 @@ export function FieldError({ id, message }: { id: string; message?: string }) {
         <motion.p
           key="error"
           id={id}
-          className="flex items-start gap-2 pt-2 text-[0.875rem] leading-snug text-brass-ink"
+          className="flex items-start gap-2 pt-2 text-[0.875rem] leading-snug text-signal-ink"
           initial={reduce ? { opacity: 0 } : { opacity: 0, y: -4 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, transition: { duration: 0.15 } }}
@@ -197,8 +197,8 @@ export function Checkbox({
       />
       <span
         aria-hidden="true"
-        className={`mt-[2px] grid size-[22px] shrink-0 place-items-center rounded-[6px] border transition-colors duration-300 ease-calm peer-focus-visible:outline-2 peer-focus-visible:outline-offset-3 peer-focus-visible:outline-brass-ink ${
-          checked ? "border-ink bg-ink text-surface" : invalid ? "border-brass-ink bg-surface" : `${CONTROL_BORDER} bg-surface group-hover:border-ink-2`
+        className={`mt-[2px] grid size-[22px] shrink-0 place-items-center rounded-[6px] border transition-colors duration-300 ease-calm peer-focus-visible:outline-2 peer-focus-visible:outline-offset-3 peer-focus-visible:outline-signal-ink ${
+          checked ? "border-ink bg-ink text-surface" : invalid ? "border-signal-ink bg-surface" : `${CONTROL_BORDER} bg-surface group-hover:border-ink-2`
         }`}
       >
         <AnimatePresence initial={false}>

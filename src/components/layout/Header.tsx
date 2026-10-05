@@ -20,7 +20,7 @@ const NAV_QUERY = "(min-width: 67.5rem)";
  * Sticky header. Transparent over the hero, then settles onto a frosted paper
  * bar once the page moves. It steps out of the way while reading downwards and
  * returns the moment the reader scrolls back up. The current page is marked
- * with a sliding brass underline.
+ * with a sliding signal underline.
  */
 export function Header() {
   const pathname = usePathname();
@@ -105,7 +105,7 @@ export function Header() {
                 >
                   {item.label}
                   {isActive && (
-                    <motion.span layoutId="nav-active" className="absolute inset-x-3.5 -bottom-0.5 h-px bg-brass-ink" transition={{ type: "spring", stiffness: 380, damping: 34 }} />
+                    <motion.span layoutId="nav-active" className="absolute inset-x-3.5 -bottom-0.5 h-px bg-signal-ink" transition={{ type: "spring", stiffness: 380, damping: 34 }} />
                   )}
                 </SmartLink>
               );

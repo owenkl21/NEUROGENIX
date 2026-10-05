@@ -15,7 +15,7 @@ const testLink = Object.fromEntries(services.items.map((item) => [item.slug, ite
  * Choose your test: a WAI-ARIA tab set with automatic activation. Each panel
  * is a short summary of the test (what it is and what it records) that hands
  * over to the test's own page, where the full preparation guide lives once.
- * A navy pill slides behind the chosen test, the outgoing summary lifts away,
+ * A deep pill slides behind the chosen test, the outgoing summary lifts away,
  * the sheet eases to the new summary's height (so the page below never jumps)
  * and the incoming summary settles in while its own signal draws.
  */
@@ -76,14 +76,14 @@ export function GuideTabs() {
                 onClick={() => setActive(slug)}
                 onKeyDown={(event) => onKeyDown(event, index)}
                 className={`relative h-11 flex-auto whitespace-nowrap rounded-full px-4 text-[0.9375rem] font-medium transition-colors duration-500 ease-calm sm:flex-none sm:px-6 ${
-                  selected ? "text-on-navy dark:text-paper" : "text-muted hover:text-ink"
+                  selected ? "text-on-deep dark:text-paper" : "text-muted hover:text-ink"
                 }`}
               >
                 {selected && (
                   <motion.span
                     layoutId="guide-tab-indicator"
                     aria-hidden="true"
-                    className="absolute inset-0 rounded-full bg-navy dark:bg-ink"
+                    className="absolute inset-0 rounded-full bg-deep dark:bg-ink"
                     transition={reduce ? { duration: 0 } : { duration: 0.55, ease: EASE }}
                   />
                 )}
@@ -236,7 +236,7 @@ function TraceWrite({ slug, reduce }: { slug: TestSlug; reduce: boolean }) {
         animate={{ clipPath: inView ? SHOWN : HIDDEN }}
         transition={reduce ? INSTANT : { duration: 1.8, delay: 0.15, ease: [0.65, 0, 0.35, 1] }}
       >
-        <SignalTrace kind={slug} mode="still" height={72} color="var(--brass-ink)" strokeWidth={1.25} />
+        <SignalTrace kind={slug} mode="still" height={72} color="var(--signal-ink)" strokeWidth={1.25} />
       </motion.div>
     </div>
   );

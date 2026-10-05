@@ -120,13 +120,13 @@ export function InsidePinned() {
         <div className="container-x grid h-full grid-cols-12 items-center gap-x-10">
           <motion.div className="col-span-6 xl:col-span-5" style={{ opacity: copyOpacity, x: copyX }}>
             <SectionTitle id="inside-heading" lines={lookInside.title} />
-            <p className="lede mt-8 max-w-[40ch] text-on-navy-muted">{lookInside.body}</p>
+            <p className="lede mt-8 max-w-[40ch] text-on-deep-muted">{lookInside.body}</p>
           </motion.div>
           <div ref={slotRef} aria-hidden="true" className="col-span-6 col-start-7 aspect-[5/4] max-h-[76dvh] xl:col-span-7 xl:col-start-6" />
         </div>
 
         {/* The testing room. */}
-        <motion.div className="absolute inset-0 overflow-hidden bg-navy-2" style={{ clipPath }}>
+        <motion.div className="absolute inset-0 overflow-hidden bg-deep-2" style={{ clipPath }}>
           <motion.div className="absolute inset-0 will-change-transform" style={{ x: imageX, scale: imageScale }}>
             <Image src={lookInside.image.src} alt={lookInside.image.alt} fill sizes="100vw" className="object-cover object-[45%_55%]" />
           </motion.div>
@@ -135,7 +135,7 @@ export function InsidePinned() {
         {/* Scrim and the photo row, once the room fills the screen. */}
         <motion.div
           aria-hidden="true"
-          className="pointer-events-none absolute inset-x-0 bottom-0 h-[58%] bg-linear-to-t from-navy-3/90 via-navy-3/45 to-transparent"
+          className="pointer-events-none absolute inset-x-0 bottom-0 h-[58%] bg-linear-to-t from-deep-3/90 via-deep-3/45 to-transparent"
           style={{ opacity: rowOpacity }}
         />
         <motion.div className="absolute inset-x-0 bottom-0" style={{ opacity: rowOpacity, y: rowY, pointerEvents: rowEvents }}>

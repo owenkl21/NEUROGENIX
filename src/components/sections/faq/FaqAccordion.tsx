@@ -96,7 +96,7 @@ export function FaqAccordion({ items }: { items: Item[] }) {
                 <span
                   aria-hidden="true"
                   className={`grid size-10 shrink-0 place-items-center rounded-full border transition-colors duration-300 ${
-                    isOpen ? "border-brass-ink text-brass-ink" : "border-line-strong text-ink group-hover:border-ink"
+                    isOpen ? "border-signal-ink text-signal-ink" : "border-line-strong text-ink group-hover:border-ink"
                   }`}
                 >
                   <Plus size={16} weight="regular" className={`transition-transform duration-500 ease-calm ${isOpen ? "rotate-45" : "rotate-0"}`} />

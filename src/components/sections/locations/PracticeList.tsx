@@ -48,7 +48,7 @@ export function PracticeList({ active, onSelect, onHighlight, className = "" }: 
                 <span className="mt-3 flex flex-col items-start gap-2.5 lg:flex-row lg:flex-wrap lg:items-center lg:gap-x-4">
                   <TestChips tests={p.tests} />
                   <span className="inline-flex items-center gap-1.5 text-[0.8125rem] text-muted">
-                    <Clock size={16} weight="regular" aria-hidden="true" className="shrink-0 text-brass-ink" />
+                    <Clock size={16} weight="regular" aria-hidden="true" className="shrink-0 text-signal-ink" />
                     <span className="sr-only">{locations.hoursLabel}: </span>
                     {p.hours}
                   </span>

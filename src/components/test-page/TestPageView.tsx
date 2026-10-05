@@ -111,7 +111,7 @@ export function TestPageView({ slug }: { slug: TestSlug }) {
           height={184}
           amplitude={bandAmplitude[slug]}
           points={360}
-          color="var(--brass-ink)"
+          color="var(--signal-ink)"
           baseline
           className="mb-3 h-[120px]! md:mb-4 md:h-[184px]!"
         />
@@ -132,7 +132,7 @@ export function TestPageView({ slug }: { slug: TestSlug }) {
                 <RevealGroup as="ul" className="mt-6 space-y-5">
                   {guide.before.map((item) => (
                     <RevealItem as="li" key={item} className="flex gap-3.5 text-muted">
-                      <TestIcon name="check" size={20} className="mt-[3px] shrink-0 text-brass-ink" />
+                      <TestIcon name="check" size={20} className="mt-[3px] shrink-0 text-signal-ink" />
                       <span>{item}</span>
                     </RevealItem>
                   ))}
@@ -151,7 +151,7 @@ export function TestPageView({ slug }: { slug: TestSlug }) {
             </div>
 
             <Reveal className="mt-8 flex gap-3.5 border-t border-line pt-7 md:mt-14">
-              <TestIcon name="info" size={20} className="mt-[3px] shrink-0 text-brass-ink" />
+              <TestIcon name="info" size={20} className="mt-[3px] shrink-0 text-signal-ink" />
               <p className="text-ink">{guide.bottom}</p>
             </Reveal>
 
@@ -175,9 +175,9 @@ export function TestPageView({ slug }: { slug: TestSlug }) {
           </section>
 
           <aside aria-labelledby="after-title" className="lg:col-span-5 xl:col-span-4">
-            <Reveal className="on-navy rounded-surface bg-navy p-8 text-on-navy dark:ring-1 dark:ring-on-navy-line md:p-10 lg:top-28 lg:motion-safe:sticky print:rounded-none print:border-t print:border-line print:bg-transparent print:px-0 print:pb-0 print:pt-8 print:text-ink print:[&_.headline-soft]:text-ink-2">
+            <Reveal className="on-deep rounded-surface bg-deep p-8 text-on-deep dark:ring-1 dark:ring-on-deep-line md:p-10 lg:top-28 lg:motion-safe:sticky print:rounded-none print:border-t print:border-line print:bg-transparent print:px-0 print:pb-0 print:pt-8 print:text-ink print:[&_.headline-soft]:text-ink-2">
               <MaskLines as="h2" id="after-title" lines={page.after.title} className="display-3 md:mt-6" />
-              <p className="mt-5 text-on-navy-muted print:text-muted">{page.after.body}</p>
+              <p className="mt-5 text-on-deep-muted print:text-muted">{page.after.body}</p>
               {/* A quiet way on, not a second primary action: the card is written for patients. */}
               <div className="print-hide mt-7">
                 <TextLink tone="light" href={page.after.cta.href}>
@@ -224,7 +224,7 @@ export function TestPageView({ slug }: { slug: TestSlug }) {
                 {/* The plain-English type follows the name as its subtitle, never above it as a kicker. */}
                 <span className="title-3 mt-6 block">{item.name}</span>
                 <span className="mt-1 block text-[0.9375rem] text-muted">{item.type}</span>
-                <SignalTrace kind={signalKind[item.slug]} mode="draw" height={64} strokeWidth={1.25} color="var(--brass-ink)" delay={0.15 + i * 0.2} className="mt-8" />
+                <SignalTrace kind={signalKind[item.slug]} mode="draw" height={64} strokeWidth={1.25} color="var(--signal-ink)" delay={0.15 + i * 0.2} className="mt-8" />
                 <span className="mt-8 inline-flex items-center gap-2 self-start font-medium text-ink">
                   <span className="bg-no-repeat pb-1 transition-[background-size] duration-500 ease-calm [background-image:linear-gradient(var(--line-strong),var(--line-strong)),linear-gradient(var(--ink),var(--ink))] [background-position:0_100%,0_100%] [background-size:100%_1px,0%_1px] group-hover:[background-size:100%_1px,100%_1px]">
                     {item.link}

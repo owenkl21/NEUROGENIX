@@ -7,7 +7,7 @@ import { Reveal } from "@/components/motion/primitives";
  * lede, with its one way on to the patient guide, settles on the headline's
  * last line from 1024px, the same two columns the page opens with.
  *
- * It carries no booking button of its own: the footer's brass "Request an
+ * It carries no booking button of its own: the footer's signal "Request an
  * appointment" follows directly on every page, so a second one here would be
  * the same closing statement twice. The practice details are not repeated
  * either; the location panel above already lists them as awaiting

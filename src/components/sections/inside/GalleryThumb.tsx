@@ -23,7 +23,7 @@ export function GalleryThumb({ index, sizes, className = "", onFocus }: Props) {
       onClick={() => openGallery(index)}
       onFocus={onFocus}
       aria-label={`${gallery.openPhoto}: ${photo.caption}`}
-      className={`group relative isolate block overflow-hidden rounded-surface-sm bg-navy-2 ${className}`}
+      className={`group relative isolate block overflow-hidden rounded-surface-sm bg-deep-2 ${className}`}
     >
       <Image
         src={photo.src}
@@ -35,7 +35,7 @@ export function GalleryThumb({ index, sizes, className = "", onFocus }: Props) {
       />
       <span
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 rounded-[inherit] ring-1 ring-inset ring-on-navy/15 transition-[box-shadow] duration-500 ease-calm group-hover:ring-on-navy/55"
+        className="pointer-events-none absolute inset-0 rounded-[inherit] ring-1 ring-inset ring-on-deep/15 transition-[box-shadow] duration-500 ease-calm group-hover:ring-on-deep/55"
       />
     </button>
   );

@@ -5,7 +5,7 @@ import { ServiceStack } from "./services/ServiceStack";
 import { ServicesFootnote } from "./services/ServicesFootnote";
 
 /**
- * The three tests as a deck of navy panels, each with its own live readout.
+ * The three tests as a deck of deep panels, each with its own live readout.
  * The header stays a server component; motion lives in the leaf components.
  */
 export function Services() {

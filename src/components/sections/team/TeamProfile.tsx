@@ -16,14 +16,14 @@ const { profile } = team;
 export function TeamProfile() {
   return (
     <Reveal className="rounded-surface border border-line bg-surface p-7 shadow-soft sm:p-10">
-      <SignalTrace kind="calm" mode="live" height={40} amplitude={0.1} speed={0.6} strokeWidth={1.25} color="var(--brass-ink)" baseline />
+      <SignalTrace kind="calm" mode="live" height={40} amplitude={0.1} speed={0.6} strokeWidth={1.25} color="var(--signal-ink)" baseline />
 
       <h2 className="title-3 mt-7">{profile.title}</h2>
       <p className="mt-3 max-w-[42ch] text-muted">{profile.body}</p>
 
       {/* The status follows the heading as a fact about the fields below, never as a label above it. */}
       <p className="mt-6 inline-flex min-h-8 items-center gap-2 rounded-full border border-line px-3.5 py-1 text-[0.8125rem] text-ink-2">
-        <Clock size={16} aria-hidden="true" className="shrink-0 text-brass-ink" />
+        <Clock size={16} aria-hidden="true" className="shrink-0 text-signal-ink" />
         {profile.status}
       </p>
 

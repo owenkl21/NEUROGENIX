@@ -17,7 +17,7 @@ type Choice = (typeof booking.step1.choices)[number];
 /**
  * Step one: which test is on the referral. Each choice carries the signal its
  * test records. At rest the trace is a still pencil line; once chosen it is
- * recorded again in brass ink, so the selection is felt as well as seen.
+ * recorded again in signal ink, so the selection is felt as well as seen.
  */
 export function StepTest({
   form,
@@ -139,8 +139,8 @@ function ChoiceCard({
         className={`peer absolute inset-0 z-[1] m-0 size-full cursor-pointer appearance-none rounded-surface opacity-0 scroll-mt-24 ${SCROLL_CLEAR_BOTTOM}`}
       />
       <span
-        className={`flex h-full flex-col rounded-surface border bg-surface px-5 pb-4 pt-5 transition-[border-color,box-shadow] duration-300 ease-calm md:[@media(max-height:860px)]:pb-3 md:[@media(max-height:860px)]:pt-4 peer-focus-visible:outline-2 peer-focus-visible:outline-offset-3 peer-focus-visible:outline-brass-ink ${
-          checked ? "border-ink shadow-[inset_0_0_0_1px_var(--ink)]" : invalid ? "border-brass-ink" : "border-line-strong group-hover:border-ink-2"
+        className={`flex h-full flex-col rounded-surface border bg-surface px-5 pb-4 pt-5 transition-[border-color,box-shadow] duration-300 ease-calm md:[@media(max-height:860px)]:pb-3 md:[@media(max-height:860px)]:pt-4 peer-focus-visible:outline-2 peer-focus-visible:outline-offset-3 peer-focus-visible:outline-signal-ink ${
+          checked ? "border-ink shadow-[inset_0_0_0_1px_var(--ink)]" : invalid ? "border-signal-ink" : "border-line-strong group-hover:border-ink-2"
         }`}
       >
         <span className="flex items-start justify-between gap-4">
@@ -173,7 +173,7 @@ function ChoiceCard({
           height={22}
           amplitude={0.42}
           strokeWidth={checked ? 1.5 : 1.25}
-          color={checked ? "var(--brass-ink)" : "var(--line-strong)"}
+          color={checked ? "var(--signal-ink)" : "var(--line-strong)"}
           className="mt-4 md:[@media(max-height:860px)]:mt-3 md:[@media(max-height:860px)]:h-4!"
         />
       </span>

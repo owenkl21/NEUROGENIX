@@ -6,8 +6,8 @@ preparing for a test, and the clinicians who refer them.
 
 This is the premium redesign of the approved wireframe. The wireframe's copy
 is kept word for word, reorganised from one long page into dedicated pages.
-The visual and motion language is new, taken from the practice itself: a navy
-feature wall, brass signage and calm, warm rooms.
+The visual and motion language is new, built on the practice's logo
+specification: the NEUROGENIX logo, brand blue and brand black.
 
 ## Pages
 

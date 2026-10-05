@@ -9,7 +9,7 @@ import { CloseButton, Modal } from "./Modal";
 import { NavButton, Preload, Slide, Thumbnails } from "./gallery/parts";
 
 /**
- * Full-screen photo viewer on the deepest navy, like a dimmed room. Photos
+ * Full-screen photo viewer on the deepest deep, like a dimmed room. Photos
  * turn with the arrow buttons, the arrow keys, a sideways drag or the
  * thumbnail strip, and always move in the direction you asked them to.
  */
@@ -46,7 +46,7 @@ export function GalleryDialog({ open, index, onIndexChange, onClose }: { open: b
   const description = rest.join(" · ");
 
   return (
-    <Modal open={open} onClose={onClose} onKeyDown={onKeyDown} labelledBy="gallery-title" variant="fullscreen" panelClassName="on-navy bg-navy-3 text-on-navy">
+    <Modal open={open} onClose={onClose} onKeyDown={onKeyDown} labelledBy="gallery-title" variant="fullscreen" panelClassName="on-deep bg-deep-3 text-on-deep">
       <div className="flex h-full flex-col">
         <div className="container-x flex h-[72px] shrink-0 items-center justify-between gap-4 sm:gap-6">
           <h2 id="gallery-title" className="title-3 min-w-0">
@@ -54,8 +54,8 @@ export function GalleryDialog({ open, index, onIndexChange, onClose }: { open: b
           </h2>
           <div className="flex items-center gap-4 sm:gap-5 md:gap-7">
             {/* Announces the position and the room, so a turn by key or swipe is heard as well as seen. */}
-            <p aria-live="polite" aria-atomic="true" className="numeral whitespace-nowrap text-[0.875rem] text-on-navy-muted">
-              <span className="text-brass">{current + 1}</span> / {count}
+            <p aria-live="polite" aria-atomic="true" className="numeral whitespace-nowrap text-[0.875rem] text-on-deep-muted">
+              <span className="text-signal">{current + 1}</span> / {count}
               <span className="sr-only">{`, ${place}`}</span>
             </p>
             <CloseButton onClick={onClose} label={gallery.close} tone="light" />
@@ -86,14 +86,14 @@ export function GalleryDialog({ open, index, onIndexChange, onClose }: { open: b
               >
                 {description ? (
                   <>
-                    <span className="text-on-navy">{place}</span>
-                    <span className="text-on-navy-muted">
+                    <span className="text-on-deep">{place}</span>
+                    <span className="text-on-deep-muted">
                       {" · "}
                       {description}
                     </span>
                   </>
                 ) : (
-                  <span className="text-on-navy-muted">{photo.caption}</span>
+                  <span className="text-on-deep-muted">{photo.caption}</span>
                 )}
               </motion.span>
             </AnimatePresence>
