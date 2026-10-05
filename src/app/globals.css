@@ -149,6 +149,14 @@
     font-feature-settings: "ss01", "cv11";
   }
 
+  /* No grey flash on tap (iOS and Android); focus rings still show for keyboards. */
+  a,
+  button,
+  summary,
+  [role="button"] {
+    -webkit-tap-highlight-color: transparent;
+  }
+
   ::selection {
     background: var(--deep);
     color: var(--on-deep);
@@ -328,15 +336,24 @@
 
 /* Z-index scale (documented, nothing else allowed):
    10 sticky in-section elements, 40 header, 50 mobile menu, 60 dialogs, 70 grain, 80 skip link */
+/* Hidden until a keyboard focuses it. Opacity as well as the slide, because
+   iPhone Safari can show the area above the page, where the slid-away link
+   would otherwise peek out under the status bar. */
 .skip-link {
   position: fixed;
   left: 16px;
   top: 12px;
   z-index: 80;
+  opacity: 0;
+  pointer-events: none;
   transform: translateY(-160%);
-  transition: transform 0.3s var(--ease-calm);
+  transition:
+    transform 0.3s var(--ease-calm),
+    opacity 0.2s;
 }
 .skip-link:focus-visible {
+  opacity: 1;
+  pointer-events: auto;
   transform: translateY(0);
 }
 

@@ -28,6 +28,9 @@ export function Header() {
   const reduce = useReducedMotion();
   const { scrollY } = useScroll();
   const [scrolled, setScrolled] = useState(false);
+  // Pinned: scrolled past the preview bar, so the header sits at the very top.
+  const [stuck, setStuck] = useState(false);
+  const barHeight = useRef(0);
   const [hidden, setHidden] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [servicesInView, setServicesInView] = useState(false);
@@ -48,11 +51,22 @@ export function Header() {
     lastY.current = window.scrollY;
   }, [pathname]);
 
+  useEffect(() => {
+    const measure = () => {
+      barHeight.current = document.querySelector<HTMLElement>("[data-preview-bar]")?.offsetHeight ?? 0;
+    };
+    measure();
+    window.addEventListener("resize", measure);
+    return () => window.removeEventListener("resize", measure);
+  }, []);
+
   useMotionValueEvent(scrollY, "change", (y) => {
     const delta = y - lastY.current;
     lastY.current = y;
     const nextScrolled = y > 24;
     if (nextScrolled !== scrolled) setScrolled(nextScrolled);
+    const nextStuck = y >= barHeight.current - 1;
+    if (nextStuck !== stuck) setStuck(nextStuck);
     if (menuOpen) return;
     // Near the top the header is always there. Further down it follows the
     // reading direction, except for a jump this large: that is the page being
@@ -88,6 +102,17 @@ export function Header() {
         animate={{ y: hidden && !reduce ? "-100%" : "0%" }}
         transition={{ duration: 0.5, ease: EASE }}
       >
+        {/* Newer iPhone Safari draws the page under a see-through status bar and
+            pins the header just below it, so scrolled content showed in the
+            strip above. This band, in the header's own frosted colour, fills
+            that strip while the header is pinned. Elsewhere it sits above the
+            window, out of sight. */}
+        <span
+          aria-hidden="true"
+          className={`pointer-events-none absolute inset-x-0 bottom-full h-32 bg-paper/80 backdrop-blur-xl backdrop-saturate-150 transition-opacity duration-300 ${
+            stuck && scrolled ? "opacity-100" : "opacity-0"
+          }`}
+        />
         <div className="container-x flex h-[var(--header-h)] items-center justify-between gap-6">
           <SmartLink href="/" className="rounded-md" aria-label={`${site.name} home`}>
             <Wordmark />
@@ -142,6 +167,7 @@ export function Header() {
 
 function MobileMenu({ open, top, onClose }: { open: boolean; top: number; onClose: () => void }) {
   const ref = useRef<HTMLDialogElement>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
   const lenis = useLenis();
   const { openBooking } = useDialogs();
   const reduce = useReducedMotion();
@@ -151,6 +177,9 @@ function MobileMenu({ open, top, onClose }: { open: boolean; top: number; onClos
     if (!dialog) return;
     if (open && !dialog.open) {
       dialog.showModal();
+      // The panel takes focus, not its first link (the logo), so opening the
+      // menu never outlines the logo; Tab still reaches every link.
+      panelRef.current?.focus({ preventScroll: true });
       lenis?.stop();
     }
   }, [open, lenis]);
@@ -187,7 +216,9 @@ function MobileMenu({ open, top, onClose }: { open: boolean; top: number; onClos
         {open && (
           <motion.div
             key="menu"
-            className="flex h-full flex-col overflow-y-auto bg-paper"
+            ref={panelRef}
+            tabIndex={-1}
+            className="flex h-full flex-col overflow-y-auto bg-paper outline-none"
             initial={reduce ? { opacity: 0 } : { clipPath: "inset(0 0 100% 0)" }}
             animate={reduce ? { opacity: 1 } : { clipPath: "inset(0 0 0% 0)" }}
             exit={reduce ? { opacity: 0 } : { clipPath: "inset(0 0 100% 0)" }}
